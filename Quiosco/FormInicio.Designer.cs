@@ -556,7 +556,7 @@
             ClientSize = new Size(1463, 671);
             Controls.Add(tabControl1);
             Name = "FormInicio";
-            Text = "Form3";
+            Text = "Software Comercial";
             Load += FormInicio_Load;
             tabControl1.ResumeLayout(false);
             tabInicio.ResumeLayout(false);
