@@ -35,48 +35,48 @@
             label11 = new Label();
             VENTA = new Label();
             pictureBox1 = new PictureBox();
-            btRegistrarVenta = new Button();
-            btRegistrarProducto = new Button();
+            btnRegistrarVenta = new Button();
+            btnRegistrarProducto = new Button();
             label2 = new Label();
             tabMisProductos = new TabPage();
-            textBox1 = new TextBox();
+            txtEliminarStockProductos = new TextBox();
             label3 = new Label();
             label5 = new Label();
-            textBox2 = new TextBox();
-            button1 = new Button();
-            button2 = new Button();
+            txtBuscarStockProductos = new TextBox();
+            btnBuscarProductos = new Button();
+            btnEliminarProductos = new Button();
             label6 = new Label();
-            dataGridView1 = new DataGridView();
+            dgvStockProductos = new DataGridView();
             tabMisVentas = new TabPage();
-            textBox3 = new TextBox();
+            txtEliminarDetalleVenta = new TextBox();
             label7 = new Label();
             label8 = new Label();
-            textBox4 = new TextBox();
-            button3 = new Button();
-            button4 = new Button();
+            txtBuscarDetalleVenta = new TextBox();
+            btnBuscarDetalleVenta = new Button();
+            btnEliminarDetalleVenta = new Button();
             label9 = new Label();
-            dataGridView2 = new DataGridView();
+            dgvDetalleVenta = new DataGridView();
             tabDeudores = new TabPage();
-            txtEliminarProducto = new TextBox();
+            txtEliminarDeudor = new TextBox();
             lblEliminarProducto = new Label();
             label4 = new Label();
-            txtBuscarProducto = new TextBox();
-            btnBuscarProducto = new Button();
-            btnEliminarProducto = new Button();
+            txtBuscarDeudor = new TextBox();
+            btnBuscarDeudor = new Button();
+            btnEliminarDeudor = new Button();
             label1 = new Label();
-            dgvProducto = new DataGridView();
-            btnModificarCaja = new Button();
-            btnCargaCaja = new Button();
-            btnCancelarCaja = new Button();
+            dgvDeudor = new DataGridView();
+            btnModificarDeudor = new Button();
+            btnPagarDeudor = new Button();
+            btnCancelarDeudor = new Button();
             tabControl1.SuspendLayout();
             tabInicio.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tabMisProductos.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvStockProductos).BeginInit();
             tabMisVentas.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDetalleVenta).BeginInit();
             tabDeudores.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvProducto).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDeudor).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -100,8 +100,8 @@
             tabInicio.Controls.Add(label11);
             tabInicio.Controls.Add(VENTA);
             tabInicio.Controls.Add(pictureBox1);
-            tabInicio.Controls.Add(btRegistrarVenta);
-            tabInicio.Controls.Add(btRegistrarProducto);
+            tabInicio.Controls.Add(btnRegistrarVenta);
+            tabInicio.Controls.Add(btnRegistrarProducto);
             tabInicio.Controls.Add(label2);
             tabInicio.Location = new Point(4, 24);
             tabInicio.Name = "tabInicio";
@@ -161,37 +161,37 @@
             pictureBox1.TabStop = false;
             pictureBox1.UseWaitCursor = true;
             // 
-            // btRegistrarVenta
+            // btnRegistrarVenta
             // 
-            btRegistrarVenta.BackColor = Color.Red;
-            btRegistrarVenta.BackgroundImageLayout = ImageLayout.Center;
-            btRegistrarVenta.Cursor = Cursors.Hand;
-            btRegistrarVenta.FlatStyle = FlatStyle.Popup;
-            btRegistrarVenta.Font = new Font("Impact", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            btRegistrarVenta.ForeColor = SystemColors.ActiveCaptionText;
-            btRegistrarVenta.Location = new Point(981, 336);
-            btRegistrarVenta.Name = "btRegistrarVenta";
-            btRegistrarVenta.Size = new Size(220, 42);
-            btRegistrarVenta.TabIndex = 12;
-            btRegistrarVenta.Text = "REGISTRAR VENTA";
-            btRegistrarVenta.UseVisualStyleBackColor = false;
-            btRegistrarVenta.Click += btRegistrarVenta_Click;
+            btnRegistrarVenta.BackColor = Color.Red;
+            btnRegistrarVenta.BackgroundImageLayout = ImageLayout.Center;
+            btnRegistrarVenta.Cursor = Cursors.Hand;
+            btnRegistrarVenta.FlatStyle = FlatStyle.Popup;
+            btnRegistrarVenta.Font = new Font("Impact", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btnRegistrarVenta.ForeColor = SystemColors.ActiveCaptionText;
+            btnRegistrarVenta.Location = new Point(981, 336);
+            btnRegistrarVenta.Name = "btnRegistrarVenta";
+            btnRegistrarVenta.Size = new Size(220, 42);
+            btnRegistrarVenta.TabIndex = 12;
+            btnRegistrarVenta.Text = "REGISTRAR VENTA";
+            btnRegistrarVenta.UseVisualStyleBackColor = false;
+            btnRegistrarVenta.Click += btnRegistrarVenta_Click;
             // 
-            // btRegistrarProducto
+            // btnRegistrarProducto
             // 
-            btRegistrarProducto.BackColor = Color.Red;
-            btRegistrarProducto.BackgroundImageLayout = ImageLayout.Center;
-            btRegistrarProducto.Cursor = Cursors.Hand;
-            btRegistrarProducto.FlatStyle = FlatStyle.Popup;
-            btRegistrarProducto.Font = new Font("Impact", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
-            btRegistrarProducto.ForeColor = SystemColors.ActiveCaptionText;
-            btRegistrarProducto.Location = new Point(981, 204);
-            btRegistrarProducto.Name = "btRegistrarProducto";
-            btRegistrarProducto.Size = new Size(220, 42);
-            btRegistrarProducto.TabIndex = 11;
-            btRegistrarProducto.Text = "REGISTRAR PRODUCTO";
-            btRegistrarProducto.UseVisualStyleBackColor = false;
-            btRegistrarProducto.Click += button1_Click;
+            btnRegistrarProducto.BackColor = Color.Red;
+            btnRegistrarProducto.BackgroundImageLayout = ImageLayout.Center;
+            btnRegistrarProducto.Cursor = Cursors.Hand;
+            btnRegistrarProducto.FlatStyle = FlatStyle.Popup;
+            btnRegistrarProducto.Font = new Font("Impact", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
+            btnRegistrarProducto.ForeColor = SystemColors.ActiveCaptionText;
+            btnRegistrarProducto.Location = new Point(981, 204);
+            btnRegistrarProducto.Name = "btnRegistrarProducto";
+            btnRegistrarProducto.Size = new Size(220, 42);
+            btnRegistrarProducto.TabIndex = 11;
+            btnRegistrarProducto.Text = "REGISTRAR PRODUCTO";
+            btnRegistrarProducto.UseVisualStyleBackColor = false;
+            btnRegistrarProducto.Click += btnRegistrarProducto_Click;
             // 
             // label2
             // 
@@ -210,14 +210,14 @@
             tabMisProductos.BackgroundImage = (Image)resources.GetObject("tabMisProductos.BackgroundImage");
             tabMisProductos.BackgroundImageLayout = ImageLayout.Stretch;
             tabMisProductos.BorderStyle = BorderStyle.Fixed3D;
-            tabMisProductos.Controls.Add(textBox1);
+            tabMisProductos.Controls.Add(txtEliminarStockProductos);
             tabMisProductos.Controls.Add(label3);
             tabMisProductos.Controls.Add(label5);
-            tabMisProductos.Controls.Add(textBox2);
-            tabMisProductos.Controls.Add(button1);
-            tabMisProductos.Controls.Add(button2);
+            tabMisProductos.Controls.Add(txtBuscarStockProductos);
+            tabMisProductos.Controls.Add(btnBuscarProductos);
+            tabMisProductos.Controls.Add(btnEliminarProductos);
             tabMisProductos.Controls.Add(label6);
-            tabMisProductos.Controls.Add(dataGridView1);
+            tabMisProductos.Controls.Add(dgvStockProductos);
             tabMisProductos.Cursor = Cursors.Hand;
             tabMisProductos.Font = new Font("Ebrima", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             tabMisProductos.ForeColor = SystemColors.ActiveCaptionText;
@@ -230,12 +230,12 @@
             tabMisProductos.Text = "Mis Productos";
             tabMisProductos.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtEliminarStockProductos
             // 
-            textBox1.Location = new Point(770, 532);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(134, 27);
-            textBox1.TabIndex = 61;
+            txtEliminarStockProductos.Location = new Point(770, 532);
+            txtEliminarStockProductos.Name = "txtEliminarStockProductos";
+            txtEliminarStockProductos.Size = new Size(134, 27);
+            txtEliminarStockProductos.TabIndex = 61;
             // 
             // label3
             // 
@@ -259,32 +259,32 @@
             label5.TabIndex = 59;
             label5.Text = "Buscar";
             // 
-            // textBox2
+            // txtBuscarStockProductos
             // 
-            textBox2.Location = new Point(420, 533);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(155, 27);
-            textBox2.TabIndex = 58;
+            txtBuscarStockProductos.Location = new Point(420, 533);
+            txtBuscarStockProductos.Name = "txtBuscarStockProductos";
+            txtBuscarStockProductos.Size = new Size(155, 27);
+            txtBuscarStockProductos.TabIndex = 58;
             // 
-            // button1
+            // btnBuscarProductos
             // 
-            button1.BackColor = Color.Gold;
-            button1.Location = new Point(581, 524);
-            button1.Name = "button1";
-            button1.Size = new Size(84, 36);
-            button1.TabIndex = 57;
-            button1.Text = "Buscar";
-            button1.UseVisualStyleBackColor = false;
+            btnBuscarProductos.BackColor = Color.Gold;
+            btnBuscarProductos.Location = new Point(581, 524);
+            btnBuscarProductos.Name = "btnBuscarProductos";
+            btnBuscarProductos.Size = new Size(84, 36);
+            btnBuscarProductos.TabIndex = 57;
+            btnBuscarProductos.Text = "Buscar";
+            btnBuscarProductos.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // btnEliminarProductos
             // 
-            button2.BackColor = Color.Gold;
-            button2.Location = new Point(917, 526);
-            button2.Name = "button2";
-            button2.Size = new Size(84, 36);
-            button2.TabIndex = 56;
-            button2.Text = "Eliminar";
-            button2.UseVisualStyleBackColor = false;
+            btnEliminarProductos.BackColor = Color.Gold;
+            btnEliminarProductos.Location = new Point(917, 526);
+            btnEliminarProductos.Name = "btnEliminarProductos";
+            btnEliminarProductos.Size = new Size(84, 36);
+            btnEliminarProductos.TabIndex = 56;
+            btnEliminarProductos.Text = "Eliminar";
+            btnEliminarProductos.UseVisualStyleBackColor = false;
             // 
             // label6
             // 
@@ -298,31 +298,31 @@
             label6.Text = "MIS PRODUCTOS";
             label6.Click += label6_Click;
             // 
-            // dataGridView1
+            // dgvStockProductos
             // 
-            dataGridView1.BackgroundColor = SystemColors.GradientActiveCaption;
-            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Cursor = Cursors.Hand;
-            dataGridView1.Location = new Point(206, 93);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.Size = new Size(989, 408);
-            dataGridView1.TabIndex = 54;
+            dgvStockProductos.BackgroundColor = SystemColors.GradientActiveCaption;
+            dgvStockProductos.BorderStyle = BorderStyle.Fixed3D;
+            dgvStockProductos.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
+            dgvStockProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvStockProductos.Cursor = Cursors.Hand;
+            dgvStockProductos.Location = new Point(206, 93);
+            dgvStockProductos.Name = "dgvStockProductos";
+            dgvStockProductos.Size = new Size(989, 408);
+            dgvStockProductos.TabIndex = 54;
             // 
             // tabMisVentas
             // 
             tabMisVentas.BackgroundImage = (Image)resources.GetObject("tabMisVentas.BackgroundImage");
             tabMisVentas.BackgroundImageLayout = ImageLayout.Stretch;
             tabMisVentas.BorderStyle = BorderStyle.Fixed3D;
-            tabMisVentas.Controls.Add(textBox3);
+            tabMisVentas.Controls.Add(txtEliminarDetalleVenta);
             tabMisVentas.Controls.Add(label7);
             tabMisVentas.Controls.Add(label8);
-            tabMisVentas.Controls.Add(textBox4);
-            tabMisVentas.Controls.Add(button3);
-            tabMisVentas.Controls.Add(button4);
+            tabMisVentas.Controls.Add(txtBuscarDetalleVenta);
+            tabMisVentas.Controls.Add(btnBuscarDetalleVenta);
+            tabMisVentas.Controls.Add(btnEliminarDetalleVenta);
             tabMisVentas.Controls.Add(label9);
-            tabMisVentas.Controls.Add(dataGridView2);
+            tabMisVentas.Controls.Add(dgvDetalleVenta);
             tabMisVentas.Cursor = Cursors.Hand;
             tabMisVentas.Font = new Font("Ebrima", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             tabMisVentas.Location = new Point(4, 24);
@@ -334,12 +334,12 @@
             tabMisVentas.Text = "Mis Ventas";
             tabMisVentas.UseVisualStyleBackColor = true;
             // 
-            // textBox3
+            // txtEliminarDetalleVenta
             // 
-            textBox3.Location = new Point(755, 520);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(134, 27);
-            textBox3.TabIndex = 92;
+            txtEliminarDetalleVenta.Location = new Point(755, 520);
+            txtEliminarDetalleVenta.Name = "txtEliminarDetalleVenta";
+            txtEliminarDetalleVenta.Size = new Size(134, 27);
+            txtEliminarDetalleVenta.TabIndex = 92;
             // 
             // label7
             // 
@@ -363,32 +363,32 @@
             label8.TabIndex = 90;
             label8.Text = "Buscar";
             // 
-            // textBox4
+            // txtBuscarDetalleVenta
             // 
-            textBox4.Location = new Point(404, 523);
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(155, 27);
-            textBox4.TabIndex = 89;
+            txtBuscarDetalleVenta.Location = new Point(404, 523);
+            txtBuscarDetalleVenta.Name = "txtBuscarDetalleVenta";
+            txtBuscarDetalleVenta.Size = new Size(155, 27);
+            txtBuscarDetalleVenta.TabIndex = 89;
             // 
-            // button3
+            // btnBuscarDetalleVenta
             // 
-            button3.BackColor = Color.Gold;
-            button3.Location = new Point(565, 514);
-            button3.Name = "button3";
-            button3.Size = new Size(84, 36);
-            button3.TabIndex = 88;
-            button3.Text = "Buscar";
-            button3.UseVisualStyleBackColor = false;
+            btnBuscarDetalleVenta.BackColor = Color.Gold;
+            btnBuscarDetalleVenta.Location = new Point(565, 514);
+            btnBuscarDetalleVenta.Name = "btnBuscarDetalleVenta";
+            btnBuscarDetalleVenta.Size = new Size(84, 36);
+            btnBuscarDetalleVenta.TabIndex = 88;
+            btnBuscarDetalleVenta.Text = "Buscar";
+            btnBuscarDetalleVenta.UseVisualStyleBackColor = false;
             // 
-            // button4
+            // btnEliminarDetalleVenta
             // 
-            button4.BackColor = Color.Gold;
-            button4.Location = new Point(902, 514);
-            button4.Name = "button4";
-            button4.Size = new Size(84, 36);
-            button4.TabIndex = 87;
-            button4.Text = "Eliminar";
-            button4.UseVisualStyleBackColor = false;
+            btnEliminarDetalleVenta.BackColor = Color.Gold;
+            btnEliminarDetalleVenta.Location = new Point(902, 514);
+            btnEliminarDetalleVenta.Name = "btnEliminarDetalleVenta";
+            btnEliminarDetalleVenta.Size = new Size(84, 36);
+            btnEliminarDetalleVenta.TabIndex = 87;
+            btnEliminarDetalleVenta.Text = "Eliminar";
+            btnEliminarDetalleVenta.UseVisualStyleBackColor = false;
             // 
             // label9
             // 
@@ -401,34 +401,34 @@
             label9.TabIndex = 86;
             label9.Text = "MIS VENTAS";
             // 
-            // dataGridView2
+            // dgvDetalleVenta
             // 
-            dataGridView2.BackgroundColor = SystemColors.GradientActiveCaption;
-            dataGridView2.BorderStyle = BorderStyle.Fixed3D;
-            dataGridView2.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.Cursor = Cursors.Hand;
-            dataGridView2.Location = new Point(170, 75);
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.Size = new Size(994, 408);
-            dataGridView2.TabIndex = 85;
+            dgvDetalleVenta.BackgroundColor = SystemColors.GradientActiveCaption;
+            dgvDetalleVenta.BorderStyle = BorderStyle.Fixed3D;
+            dgvDetalleVenta.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
+            dgvDetalleVenta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDetalleVenta.Cursor = Cursors.Hand;
+            dgvDetalleVenta.Location = new Point(170, 75);
+            dgvDetalleVenta.Name = "dgvDetalleVenta";
+            dgvDetalleVenta.Size = new Size(994, 408);
+            dgvDetalleVenta.TabIndex = 85;
             // 
             // tabDeudores
             // 
             tabDeudores.BackgroundImage = (Image)resources.GetObject("tabDeudores.BackgroundImage");
             tabDeudores.BackgroundImageLayout = ImageLayout.Stretch;
             tabDeudores.BorderStyle = BorderStyle.Fixed3D;
-            tabDeudores.Controls.Add(txtEliminarProducto);
+            tabDeudores.Controls.Add(txtEliminarDeudor);
             tabDeudores.Controls.Add(lblEliminarProducto);
             tabDeudores.Controls.Add(label4);
-            tabDeudores.Controls.Add(txtBuscarProducto);
-            tabDeudores.Controls.Add(btnBuscarProducto);
-            tabDeudores.Controls.Add(btnEliminarProducto);
+            tabDeudores.Controls.Add(txtBuscarDeudor);
+            tabDeudores.Controls.Add(btnBuscarDeudor);
+            tabDeudores.Controls.Add(btnEliminarDeudor);
             tabDeudores.Controls.Add(label1);
-            tabDeudores.Controls.Add(dgvProducto);
-            tabDeudores.Controls.Add(btnModificarCaja);
-            tabDeudores.Controls.Add(btnCargaCaja);
-            tabDeudores.Controls.Add(btnCancelarCaja);
+            tabDeudores.Controls.Add(dgvDeudor);
+            tabDeudores.Controls.Add(btnModificarDeudor);
+            tabDeudores.Controls.Add(btnPagarDeudor);
+            tabDeudores.Controls.Add(btnCancelarDeudor);
             tabDeudores.Cursor = Cursors.Hand;
             tabDeudores.Font = new Font("Ebrima", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             tabDeudores.Location = new Point(4, 24);
@@ -439,12 +439,12 @@
             tabDeudores.Text = "Deudores";
             tabDeudores.UseVisualStyleBackColor = true;
             // 
-            // txtEliminarProducto
+            // txtEliminarDeudor
             // 
-            txtEliminarProducto.Location = new Point(816, 521);
-            txtEliminarProducto.Name = "txtEliminarProducto";
-            txtEliminarProducto.Size = new Size(134, 27);
-            txtEliminarProducto.TabIndex = 92;
+            txtEliminarDeudor.Location = new Point(816, 521);
+            txtEliminarDeudor.Name = "txtEliminarDeudor";
+            txtEliminarDeudor.Size = new Size(134, 27);
+            txtEliminarDeudor.TabIndex = 92;
             // 
             // lblEliminarProducto
             // 
@@ -468,32 +468,32 @@
             label4.TabIndex = 90;
             label4.Text = "Buscar";
             // 
-            // txtBuscarProducto
+            // txtBuscarDeudor
             // 
-            txtBuscarProducto.Location = new Point(472, 522);
-            txtBuscarProducto.Name = "txtBuscarProducto";
-            txtBuscarProducto.Size = new Size(155, 27);
-            txtBuscarProducto.TabIndex = 89;
+            txtBuscarDeudor.Location = new Point(472, 522);
+            txtBuscarDeudor.Name = "txtBuscarDeudor";
+            txtBuscarDeudor.Size = new Size(155, 27);
+            txtBuscarDeudor.TabIndex = 89;
             // 
-            // btnBuscarProducto
+            // btnBuscarDeudor
             // 
-            btnBuscarProducto.BackColor = Color.Gold;
-            btnBuscarProducto.Location = new Point(633, 513);
-            btnBuscarProducto.Name = "btnBuscarProducto";
-            btnBuscarProducto.Size = new Size(84, 36);
-            btnBuscarProducto.TabIndex = 88;
-            btnBuscarProducto.Text = "Buscar";
-            btnBuscarProducto.UseVisualStyleBackColor = false;
+            btnBuscarDeudor.BackColor = Color.Gold;
+            btnBuscarDeudor.Location = new Point(633, 513);
+            btnBuscarDeudor.Name = "btnBuscarDeudor";
+            btnBuscarDeudor.Size = new Size(84, 36);
+            btnBuscarDeudor.TabIndex = 88;
+            btnBuscarDeudor.Text = "Buscar";
+            btnBuscarDeudor.UseVisualStyleBackColor = false;
             // 
-            // btnEliminarProducto
+            // btnEliminarDeudor
             // 
-            btnEliminarProducto.BackColor = Color.Gold;
-            btnEliminarProducto.Location = new Point(963, 515);
-            btnEliminarProducto.Name = "btnEliminarProducto";
-            btnEliminarProducto.Size = new Size(84, 36);
-            btnEliminarProducto.TabIndex = 87;
-            btnEliminarProducto.Text = "Eliminar";
-            btnEliminarProducto.UseVisualStyleBackColor = false;
+            btnEliminarDeudor.BackColor = Color.Gold;
+            btnEliminarDeudor.Location = new Point(963, 515);
+            btnEliminarDeudor.Name = "btnEliminarDeudor";
+            btnEliminarDeudor.Size = new Size(84, 36);
+            btnEliminarDeudor.TabIndex = 87;
+            btnEliminarDeudor.Text = "Eliminar";
+            btnEliminarDeudor.UseVisualStyleBackColor = false;
             // 
             // label1
             // 
@@ -506,48 +506,48 @@
             label1.TabIndex = 86;
             label1.Text = "DEUDORES";
             // 
-            // dgvProducto
+            // dgvDeudor
             // 
-            dgvProducto.BackgroundColor = SystemColors.GradientActiveCaption;
-            dgvProducto.BorderStyle = BorderStyle.Fixed3D;
-            dgvProducto.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
-            dgvProducto.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvProducto.Cursor = Cursors.Hand;
-            dgvProducto.Location = new Point(329, 72);
-            dgvProducto.Name = "dgvProducto";
-            dgvProducto.Size = new Size(799, 408);
-            dgvProducto.TabIndex = 85;
+            dgvDeudor.BackgroundColor = SystemColors.GradientActiveCaption;
+            dgvDeudor.BorderStyle = BorderStyle.Fixed3D;
+            dgvDeudor.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
+            dgvDeudor.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvDeudor.Cursor = Cursors.Hand;
+            dgvDeudor.Location = new Point(329, 72);
+            dgvDeudor.Name = "dgvDeudor";
+            dgvDeudor.Size = new Size(799, 408);
+            dgvDeudor.TabIndex = 85;
             // 
-            // btnModificarCaja
+            // btnModificarDeudor
             // 
-            btnModificarCaja.BackColor = Color.Gold;
-            btnModificarCaja.Location = new Point(131, 269);
-            btnModificarCaja.Name = "btnModificarCaja";
-            btnModificarCaja.Size = new Size(91, 32);
-            btnModificarCaja.TabIndex = 20;
-            btnModificarCaja.Text = "Modificar";
-            btnModificarCaja.UseVisualStyleBackColor = false;
+            btnModificarDeudor.BackColor = Color.Gold;
+            btnModificarDeudor.Location = new Point(131, 269);
+            btnModificarDeudor.Name = "btnModificarDeudor";
+            btnModificarDeudor.Size = new Size(91, 32);
+            btnModificarDeudor.TabIndex = 20;
+            btnModificarDeudor.Text = "Modificar";
+            btnModificarDeudor.UseVisualStyleBackColor = false;
             // 
-            // btnCargaCaja
+            // btnPagarDeudor
             // 
-            btnCargaCaja.BackColor = Color.Gold;
-            btnCargaCaja.Location = new Point(37, 269);
-            btnCargaCaja.Name = "btnCargaCaja";
-            btnCargaCaja.Size = new Size(75, 31);
-            btnCargaCaja.TabIndex = 1;
-            btnCargaCaja.Text = "PAGAR";
-            btnCargaCaja.UseVisualStyleBackColor = false;
+            btnPagarDeudor.BackColor = Color.Gold;
+            btnPagarDeudor.Location = new Point(37, 269);
+            btnPagarDeudor.Name = "btnPagarDeudor";
+            btnPagarDeudor.Size = new Size(75, 31);
+            btnPagarDeudor.TabIndex = 1;
+            btnPagarDeudor.Text = "PAGAR";
+            btnPagarDeudor.UseVisualStyleBackColor = false;
             // 
-            // btnCancelarCaja
+            // btnCancelarDeudor
             // 
-            btnCancelarCaja.AccessibleRole = AccessibleRole.Sound;
-            btnCancelarCaja.BackColor = Color.Gold;
-            btnCancelarCaja.Location = new Point(86, 318);
-            btnCancelarCaja.Name = "btnCancelarCaja";
-            btnCancelarCaja.Size = new Size(84, 31);
-            btnCancelarCaja.TabIndex = 0;
-            btnCancelarCaja.Text = "Cancelar";
-            btnCancelarCaja.UseVisualStyleBackColor = false;
+            btnCancelarDeudor.AccessibleRole = AccessibleRole.Sound;
+            btnCancelarDeudor.BackColor = Color.Gold;
+            btnCancelarDeudor.Location = new Point(86, 318);
+            btnCancelarDeudor.Name = "btnCancelarDeudor";
+            btnCancelarDeudor.Size = new Size(84, 31);
+            btnCancelarDeudor.TabIndex = 0;
+            btnCancelarDeudor.Text = "Cancelar";
+            btnCancelarDeudor.UseVisualStyleBackColor = false;
             // 
             // FormInicio
             // 
@@ -564,13 +564,13 @@
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             tabMisProductos.ResumeLayout(false);
             tabMisProductos.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvStockProductos).EndInit();
             tabMisVentas.ResumeLayout(false);
             tabMisVentas.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDetalleVenta).EndInit();
             tabDeudores.ResumeLayout(false);
             tabDeudores.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)dgvProducto).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvDeudor).EndInit();
             ResumeLayout(false);
         }
 
@@ -580,38 +580,38 @@
         private TabPage tabMisProductos;
         private TabPage tabMisVentas;
         private TabPage tabDeudores;
-        private Button btnModificarCaja;
-        private Button btnCargaCaja;
-        private Button btnCancelarCaja;
+        private Button btnModificarDeudor;
+        private Button btnPagarDeudor;
+        private Button btnCancelarDeudor;
         private TabPage tabInicio;
-        private Button button2;
-        private Button btRegistrarProducto;
+        private Button btnEliminarProductos;
+        private Button btnRegistrarProducto;
         private Label label2;
-        private Button btRegistrarVenta;
+        private Button btnRegistrarVenta;
         private PictureBox pictureBox1;
-        private TextBox txtEliminarProducto;
+        private TextBox txtEliminarDeudor;
         private Label lblEliminarProducto;
         private Label label4;
-        private TextBox txtBuscarProducto;
-        private Button btnBuscarProducto;
-        private Button btnEliminarProducto;
+        private TextBox txtBuscarDeudor;
+        private Button btnBuscarDeudor;
+        private Button btnEliminarDeudor;
         private Label label1;
-        private DataGridView dgvProducto;
-        private TextBox textBox1;
+        private DataGridView dgvDeudor;
+        private TextBox txtEliminarStockProductos;
         private Label label3;
         private Label label5;
-        private TextBox textBox2;
-        private Button button1;
+        private TextBox txtBuscarStockProductos;
+        private Button btnBuscarProductos;
         private Label label6;
-        private DataGridView dataGridView1;
-        private TextBox textBox3;
+        private DataGridView dgvStockProductos;
+        private TextBox txtEliminarDetalleVenta;
         private Label label7;
         private Label label8;
-        private TextBox textBox4;
-        private Button button3;
-        private Button button4;
+        private TextBox txtBuscarDetalleVenta;
+        private Button btnBuscarDetalleVenta;
+        private Button btnEliminarDetalleVenta;
         private Label label9;
-        private DataGridView dataGridView2;
+        private DataGridView dgvDetalleVenta;
         private Label label12;
         private Label VENTA;
         private Label label11;

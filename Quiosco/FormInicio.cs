@@ -17,7 +17,7 @@ namespace Quiosco
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnRegistrarProducto_Click(object sender, EventArgs e)
         {
             Form form2 = new FormRegistrarProducto();
             form2.Show();
@@ -33,7 +33,7 @@ namespace Quiosco
 
         }
 
-        private void btRegistrarVenta_Click(object sender, EventArgs e)
+        private void btnRegistrarVenta_Click(object sender, EventArgs e)
         {
             Form form3 = new FormRegistroVenta();
             form3.Show();
