@@ -210,7 +210,7 @@
             label2.BackColor = Color.LightSeaGreen;
             label2.BorderStyle = BorderStyle.FixedSingle;
             label2.Font = new Font("Gill Sans Ultra Bold", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(544, 49);
+            label2.Location = new Point(562, 27);
             label2.Name = "label2";
             label2.Size = new Size(194, 22);
             label2.TabIndex = 62;
@@ -221,7 +221,7 @@
             label1.AutoSize = true;
             label1.BackColor = SystemColors.ActiveCaption;
             label1.Font = new Font("Gill Sans Ultra Bold", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(1015, 88);
+            label1.Location = new Point(1010, 86);
             label1.Name = "label1";
             label1.Size = new Size(93, 20);
             label1.TabIndex = 61;

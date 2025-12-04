@@ -57,6 +57,12 @@
             label9 = new Label();
             dgvDetalleVenta = new DataGridView();
             tabDeudores = new TabPage();
+            txtTelefonoDeudor = new TextBox();
+            txtNombreDeudor = new TextBox();
+            lblMarcaProducto = new Label();
+            lblNombreProducto = new Label();
+            txtAdeudaDeudor = new TextBox();
+            lblPrecio = new Label();
             txtEliminarDeudor = new TextBox();
             lblEliminarProducto = new Label();
             label4 = new Label();
@@ -418,6 +424,12 @@
             tabDeudores.BackgroundImage = (Image)resources.GetObject("tabDeudores.BackgroundImage");
             tabDeudores.BackgroundImageLayout = ImageLayout.Stretch;
             tabDeudores.BorderStyle = BorderStyle.Fixed3D;
+            tabDeudores.Controls.Add(txtTelefonoDeudor);
+            tabDeudores.Controls.Add(txtNombreDeudor);
+            tabDeudores.Controls.Add(lblMarcaProducto);
+            tabDeudores.Controls.Add(lblNombreProducto);
+            tabDeudores.Controls.Add(txtAdeudaDeudor);
+            tabDeudores.Controls.Add(lblPrecio);
             tabDeudores.Controls.Add(txtEliminarDeudor);
             tabDeudores.Controls.Add(lblEliminarProducto);
             tabDeudores.Controls.Add(label4);
@@ -439,9 +451,72 @@
             tabDeudores.Text = "Deudores";
             tabDeudores.UseVisualStyleBackColor = true;
             // 
+            // txtTelefonoDeudor
+            // 
+            txtTelefonoDeudor.Location = new Point(205, 218);
+            txtTelefonoDeudor.Margin = new Padding(4);
+            txtTelefonoDeudor.Name = "txtTelefonoDeudor";
+            txtTelefonoDeudor.Size = new Size(173, 27);
+            txtTelefonoDeudor.TabIndex = 98;
+            txtTelefonoDeudor.KeyPress += txtTelefonoDeudor_KeyPress;
+            // 
+            // txtNombreDeudor
+            // 
+            txtNombreDeudor.Location = new Point(204, 139);
+            txtNombreDeudor.Margin = new Padding(4);
+            txtNombreDeudor.Name = "txtNombreDeudor";
+            txtNombreDeudor.Size = new Size(173, 27);
+            txtNombreDeudor.TabIndex = 97;
+            txtNombreDeudor.KeyPress += txtNombreDeudor_KeyPress;
+            // 
+            // lblMarcaProducto
+            // 
+            lblMarcaProducto.AutoSize = true;
+            lblMarcaProducto.BackColor = Color.Wheat;
+            lblMarcaProducto.ForeColor = SystemColors.ActiveCaptionText;
+            lblMarcaProducto.Location = new Point(95, 221);
+            lblMarcaProducto.Margin = new Padding(4, 0, 4, 0);
+            lblMarcaProducto.Name = "lblMarcaProducto";
+            lblMarcaProducto.Size = new Size(71, 20);
+            lblMarcaProducto.TabIndex = 96;
+            lblMarcaProducto.Text = "Telefono";
+            // 
+            // lblNombreProducto
+            // 
+            lblNombreProducto.AutoSize = true;
+            lblNombreProducto.BackColor = Color.Wheat;
+            lblNombreProducto.ForeColor = SystemColors.ActiveCaptionText;
+            lblNombreProducto.Location = new Point(38, 142);
+            lblNombreProducto.Margin = new Padding(4, 0, 4, 0);
+            lblNombreProducto.Name = "lblNombreProducto";
+            lblNombreProducto.Size = new Size(144, 20);
+            lblNombreProducto.TabIndex = 95;
+            lblNombreProducto.Text = "Nombre del Cliente";
+            // 
+            // txtAdeudaDeudor
+            // 
+            txtAdeudaDeudor.Location = new Point(205, 299);
+            txtAdeudaDeudor.Margin = new Padding(4);
+            txtAdeudaDeudor.Name = "txtAdeudaDeudor";
+            txtAdeudaDeudor.Size = new Size(173, 27);
+            txtAdeudaDeudor.TabIndex = 94;
+            txtAdeudaDeudor.KeyPress += txtAdeudaDeudor_KeyPress;
+            // 
+            // lblPrecio
+            // 
+            lblPrecio.AutoSize = true;
+            lblPrecio.BackColor = Color.Wheat;
+            lblPrecio.ForeColor = SystemColors.ActiveCaptionText;
+            lblPrecio.Location = new Point(95, 305);
+            lblPrecio.Margin = new Padding(4, 0, 4, 0);
+            lblPrecio.Name = "lblPrecio";
+            lblPrecio.Size = new Size(63, 20);
+            lblPrecio.TabIndex = 93;
+            lblPrecio.Text = "Adeuda";
+            // 
             // txtEliminarDeudor
             // 
-            txtEliminarDeudor.Location = new Point(816, 521);
+            txtEliminarDeudor.Location = new Point(935, 528);
             txtEliminarDeudor.Name = "txtEliminarDeudor";
             txtEliminarDeudor.Size = new Size(134, 27);
             txtEliminarDeudor.TabIndex = 92;
@@ -450,7 +525,7 @@
             // 
             lblEliminarProducto.AutoSize = true;
             lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(738, 524);
+            lblEliminarProducto.Location = new Point(857, 531);
             lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
             lblEliminarProducto.Name = "lblEliminarProducto";
             lblEliminarProducto.Size = new Size(66, 20);
@@ -461,7 +536,7 @@
             // 
             label4.AutoSize = true;
             label4.BackColor = Color.Wheat;
-            label4.Location = new Point(408, 526);
+            label4.Location = new Point(527, 533);
             label4.Margin = new Padding(4, 0, 4, 0);
             label4.Name = "label4";
             label4.Size = new Size(56, 20);
@@ -470,7 +545,7 @@
             // 
             // txtBuscarDeudor
             // 
-            txtBuscarDeudor.Location = new Point(472, 522);
+            txtBuscarDeudor.Location = new Point(591, 529);
             txtBuscarDeudor.Name = "txtBuscarDeudor";
             txtBuscarDeudor.Size = new Size(155, 27);
             txtBuscarDeudor.TabIndex = 89;
@@ -478,29 +553,31 @@
             // btnBuscarDeudor
             // 
             btnBuscarDeudor.BackColor = Color.Gold;
-            btnBuscarDeudor.Location = new Point(633, 513);
+            btnBuscarDeudor.Location = new Point(752, 520);
             btnBuscarDeudor.Name = "btnBuscarDeudor";
             btnBuscarDeudor.Size = new Size(84, 36);
             btnBuscarDeudor.TabIndex = 88;
             btnBuscarDeudor.Text = "Buscar";
             btnBuscarDeudor.UseVisualStyleBackColor = false;
+            btnBuscarDeudor.Click += btnBuscarDeudor_Click;
             // 
             // btnEliminarDeudor
             // 
             btnEliminarDeudor.BackColor = Color.Gold;
-            btnEliminarDeudor.Location = new Point(963, 515);
+            btnEliminarDeudor.Location = new Point(1082, 522);
             btnEliminarDeudor.Name = "btnEliminarDeudor";
             btnEliminarDeudor.Size = new Size(84, 36);
             btnEliminarDeudor.TabIndex = 87;
             btnEliminarDeudor.Text = "Eliminar";
             btnEliminarDeudor.UseVisualStyleBackColor = false;
+            btnEliminarDeudor.Click += btnEliminarDeudor_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
             label1.BackColor = SystemColors.ActiveCaption;
             label1.Font = new Font("Gill Sans Ultra Bold", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(651, 30);
+            label1.Location = new Point(774, 30);
             label1.Name = "label1";
             label1.Size = new Size(107, 20);
             label1.TabIndex = 86;
@@ -513,41 +590,45 @@
             dgvDeudor.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvDeudor.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDeudor.Cursor = Cursors.Hand;
-            dgvDeudor.Location = new Point(329, 72);
+            dgvDeudor.Location = new Point(554, 73);
             dgvDeudor.Name = "dgvDeudor";
-            dgvDeudor.Size = new Size(799, 408);
+            dgvDeudor.Size = new Size(571, 408);
             dgvDeudor.TabIndex = 85;
+            dgvDeudor.CellClick += dgvDeudor_CellClick;
             // 
             // btnModificarDeudor
             // 
             btnModificarDeudor.BackColor = Color.Gold;
-            btnModificarDeudor.Location = new Point(131, 269);
+            btnModificarDeudor.Location = new Point(208, 435);
             btnModificarDeudor.Name = "btnModificarDeudor";
             btnModificarDeudor.Size = new Size(91, 32);
             btnModificarDeudor.TabIndex = 20;
             btnModificarDeudor.Text = "Modificar";
             btnModificarDeudor.UseVisualStyleBackColor = false;
+            btnModificarDeudor.Click += btnModificarDeudor_Click;
             // 
             // btnPagarDeudor
             // 
             btnPagarDeudor.BackColor = Color.Gold;
-            btnPagarDeudor.Location = new Point(37, 269);
+            btnPagarDeudor.Location = new Point(114, 435);
             btnPagarDeudor.Name = "btnPagarDeudor";
             btnPagarDeudor.Size = new Size(75, 31);
             btnPagarDeudor.TabIndex = 1;
             btnPagarDeudor.Text = "PAGAR";
             btnPagarDeudor.UseVisualStyleBackColor = false;
+            btnPagarDeudor.Click += btnPagarDeudor_Click;
             // 
             // btnCancelarDeudor
             // 
             btnCancelarDeudor.AccessibleRole = AccessibleRole.Sound;
             btnCancelarDeudor.BackColor = Color.Gold;
-            btnCancelarDeudor.Location = new Point(86, 318);
+            btnCancelarDeudor.Location = new Point(163, 484);
             btnCancelarDeudor.Name = "btnCancelarDeudor";
             btnCancelarDeudor.Size = new Size(84, 31);
             btnCancelarDeudor.TabIndex = 0;
             btnCancelarDeudor.Text = "Cancelar";
             btnCancelarDeudor.UseVisualStyleBackColor = false;
+            btnCancelarDeudor.Click += btnCancelarDeudor_Click;
             // 
             // FormInicio
             // 
@@ -615,5 +696,11 @@
         private Label label12;
         private Label VENTA;
         private Label label11;
+        private TextBox txtTelefonoDeudor;
+        private TextBox txtNombreDeudor;
+        private Label lblMarcaProducto;
+        private Label lblNombreProducto;
+        private TextBox txtAdeudaDeudor;
+        private Label lblPrecio;
     }
 }

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Quiosco.Entidades;
+using Quiosco.Negocio;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,7 +17,429 @@ namespace Quiosco
         public FormInicio()
         {
             InitializeComponent();
+
+            dgvDeudor.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvDeudor.ColumnCount = 4;
+            dgvDeudor.Columns[0].HeaderText = "Codigo Cliente";
+            dgvDeudor.Columns[1].HeaderText = "Nombre Cliente";
+            dgvDeudor.Columns[2].HeaderText = "Telefono Cliente";
+            dgvDeudor.Columns[3].HeaderText = "Adeuda Cliente";
+
+
+            LlenarDGVDeudor();
+
+
+
+
+
+
         }
+
+
+
+
+        public Cliente objEntDeudor = new Cliente();
+
+        public ClienteNegocio objNegDeudor = new ClienteNegocio();
+
+        private void LlenarDGVDeudor()
+        {
+            dgvDeudor.Rows.Clear();
+            DataSet ds = new DataSet();
+            ds = objNegDeudor.listadoCliente("Todos");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    decimal deuda = Convert.ToDecimal(dr["AdeudaCliente"]);
+
+                    if (deuda > 0)   // 👈 solo agregar deudores reales
+                    {
+                        dgvDeudor.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2], deuda.ToString());
+                    }
+                }
+             
+            }
+         }
+
+
+        // HACE QUE AL BUSCAR SOLO MUESTRE LOS QUE TIENEN DEUDA MAYOR A 0 
+        /*  
+         private void LlenarDgDeudorBuscar()
+{
+    string cual = txtBuscarDeudor.Text;
+    dgvDeudor.Rows.Clear();
+
+    DataSet ds = objNegDeudor.listarClienteBuscar(cual);
+
+    if (ds.Tables[0].Rows.Count > 0)
+    {
+        foreach (DataRow dr in ds.Tables[0].Rows)
+        {
+            decimal deuda = Convert.ToDecimal(dr["AdeudaCliente"]);
+
+            if (deuda > 0)
+            {
+                dgvDeudor.Rows.Add(
+                    dr["IdCliente"].ToString(),
+                    dr["NombreCliente"].ToString(),
+                    dr["TelefonoCliente"].ToString(),
+                    deuda.ToString()
+                );
+            }
+        }
+    }
+}           */
+ 
+        
+        private void LlenarDgDeudorBuscar()
+        {
+            string cual = txtBuscarDeudor.Text;
+            dgvDeudor.Rows.Clear();
+            DataSet ds = new DataSet();
+            ds = objNegDeudor.listarClienteBuscar(cual);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    dgvDeudor.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2], dr[3]);
+                }
+            }
+        }
+
+        private void TxtBox_a_ObjDeudor()
+        {
+            objEntDeudor.NombreCliente = txtNombreDeudor.Text;
+            objEntDeudor.TelefonoCliente = txtTelefonoDeudor.Text;
+            objEntDeudor.AdeudaCliente = int.Parse(txtAdeudaDeudor.Text);
+
+
+        }
+
+        private void Ds_a_TxtBoxDeudor(DataSet ds)
+        {
+            txtNombreDeudor.Text = ds.Tables[0].Rows[0]["NombreCliente"].ToString();
+            txtTelefonoDeudor.Text = ds.Tables[0].Rows[0]["TelefonoCliente"].ToString();
+            txtAdeudaDeudor.Text = ds.Tables[0].Rows[0]["AdeudaCliente"].ToString();
+
+        }
+
+        public bool ValidacionCamposDeudor()
+        {
+
+            //Nombre
+            if (txtNombreDeudor.Text == string.Empty)
+            {
+                MessageBox.Show("Ingrese un Nombre de Deudor ", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            else if (txtNombreDeudor.Text.Length > 90 || txtNombreDeudor.Text.Length < 2)
+            {
+                MessageBox.Show("Solo se permiten nombre de 90 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+
+            //Telefono
+            if (txtTelefonoDeudor.Text == string.Empty)
+            {
+                MessageBox.Show("Ingrese un Telefono de Deudor", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            else if (txtTelefonoDeudor.Text.Length > 50 || txtTelefonoDeudor.Text.Length < 2)
+            {
+                MessageBox.Show("Solo se permiten nombres entre 2 y 50 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+
+            //Adeuda
+            if (txtAdeudaDeudor.Text == string.Empty)
+            {
+                MessageBox.Show("Ingrese si Adeuda un monto el Deudor", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+            else if (txtAdeudaDeudor.Text.Length > 50 || txtAdeudaDeudor.Text.Length < 0)
+            {
+                MessageBox.Show("Solo se permiten precio entre 0 y 50 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
+            }
+
+            return true;
+
+
+        }
+
+
+        private void btnModificarDeudor_Click(object sender, EventArgs e)
+        {
+            //bool validar = ValidacionCamposDeudor();
+            int nResultado = -1;
+            // if (validar == true)
+            {
+                TxtBox_a_ObjDeudor();
+                nResultado = objNegDeudor.abmCliente("Modificar", objEntDeudor);
+                if (nResultado != -1)
+                {
+                    MessageBox.Show("El Deudor fue modificado con éxito");
+                    LimpiarDeudor();
+                    LlenarDGVDeudor();
+                    btnModificarDeudor.Visible = false;
+                    // btnCargarCliente.Visible = true;
+                    btnCancelarDeudor.Visible = false;
+                }
+                else
+                {
+                    MessageBox.Show("Se produjo un error al intentar modificar el Deudor");
+                }
+            }
+        }
+
+
+        /*  private void dgvDeudor_CellClick(object sender, DataGridViewCellEventArgs e)
+          {
+
+              DataSet ds = new DataSet();
+              objEntDeudor.IdCliente = Convert.ToInt32(dgvDeudor.CurrentRow.Cells[0].Value);
+              ds = objNegDeudor.listadoCliente(objEntDeudor.IdCliente.ToString());
+              if (ds.Tables[0].Rows.Count > 0)
+              {
+                  Ds_a_TxtBoxDeudor(ds);
+                  // btnCargarDeudor.Visible = false;
+                  btnModificarDeudor.Visible = true;
+                  btnCancelarDeudor.Visible = true;
+              }
+          }*/
+
+
+        private int selectedIdCliente = 0;
+        private string selectedNombre = "";
+        private decimal selectedDeuda = 0;
+
+        private void dgvDeudor_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // Si hace clic en el encabezado, salir
+            if (e.RowIndex < 0) return;
+
+            var row = dgvDeudor.Rows[e.RowIndex];
+
+            // Si hace clic en la fila nueva vacía (la del '*'), limpiar selección
+            if (row.IsNewRow)
+            {
+                selectedIdCliente = 0;
+                selectedNombre = "";
+                selectedDeuda = 0;
+                return;
+            }
+
+            // Validar que ninguna celda sea null
+            if (row.Cells[0].Value == null ||
+                row.Cells[1].Value == null ||
+                row.Cells[3].Value == null)
+            {
+                selectedIdCliente = 0;
+                selectedNombre = "";
+                selectedDeuda = 0;
+                return;
+            }
+
+            // Si todo está OK, cargar datos
+            selectedIdCliente = Convert.ToInt32(row.Cells[0].Value);
+            selectedNombre = row.Cells[1].Value.ToString();
+            selectedDeuda = Convert.ToDecimal(row.Cells[3].Value);
+        }
+
+
+
+        private void txtNombreDeudor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsLetter(e.KeyChar) || char.IsWhiteSpace(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            {
+                MessageBox.Show("Solo se permiten letras", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                e.Handled = true;
+                return;
+            }
+        }
+
+        private void txtTelefonoDeudor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            {
+                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                e.Handled = true;
+                return;
+            }
+        }
+
+
+        private void txtAdeudaDeudor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            {
+                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                e.Handled = true;
+                return;
+            }
+        }
+
+
+        private void btnEliminarDeudor_Click(object sender, EventArgs e)
+        {
+            if (true)
+            {
+
+                DgEliminarDeudorId();
+
+                LlenarDGVDeudor();
+
+                MessageBox.Show("Se elimino el Deudor");
+            }
+        }
+
+
+
+
+        public void DgEliminarDeudorId()
+        {
+            string id = txtEliminarDeudor.Text;
+            dgvDeudor.Rows.Clear();
+            DataSet ds = new DataSet();
+
+            try
+            {
+                ds = objNegDeudor.ListarClienteEliminar(id);
+
+                if (ds.Tables.Count >= 0)
+                {
+                    try
+                    {
+                        foreach (DataRow dr in ds.Tables)
+                        {
+                            dgvDeudor.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3]);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        MessageBox.Show(e.Message);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+
+        private void btnCancelarDeudor_Click(object sender, EventArgs e)
+        {
+            LimpiarDeudor();
+            // btnCargarDeudor.Visible = true;
+            btnModificarDeudor.Visible = true;
+            btnCancelarDeudor.Visible = true;
+            LlenarDGVDeudor();
+        }
+
+
+
+        private void btnBuscarDeudor_Click(object sender, EventArgs e)
+        {
+            {
+                LlenarDgDeudorBuscar();
+            }
+        }
+
+        private void LimpiarDeudor()
+        {
+            txtNombreDeudor.Text = string.Empty;
+            txtTelefonoDeudor.Text = string.Empty;
+            txtAdeudaDeudor.Text = string.Empty;
+            txtBuscarDeudor.Clear();
+            txtEliminarDeudor.Clear();
+        }
+
+
+        private void btnPagarDeudor_Click(object sender, EventArgs e)
+        {
+            if (selectedIdCliente == 0)
+            {
+                MessageBox.Show("Seleccione un Deudor primero.");
+                return;
+            }
+
+            // Abrimos el formulario de pago pasando nombre + deuda que tenemos en memoria
+            using (FormPagarDeudor fp = new FormPagarDeudor(selectedNombre, selectedDeuda))
+            {
+                var dr = fp.ShowDialog();
+
+                if (dr == DialogResult.OK)
+                {
+                    decimal monto = fp.MontoIngresado;
+
+                    // --- LECTURA DE LA DEUDA REAL EN BD (verificación final) ---
+                    DataSet ds = objNegDeudor.listadoCliente(selectedIdCliente.ToString());
+                    if (ds == null || ds.Tables.Count == 0 || ds.Tables[0].Rows.Count == 0)
+                    {
+                        MessageBox.Show("No se pudo obtener la deuda actual desde la base de datos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    decimal deudaActualEnBD;
+                    try
+                    {
+                        deudaActualEnBD = Convert.ToDecimal(ds.Tables[0].Rows[0]["AdeudaCliente"]);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Valor de deuda en base de datos no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    // Comparación definitiva
+                    if (monto > deudaActualEnBD)
+                    {
+                        MessageBox.Show($"El monto ingresado ({monto:0.00}) supera la deuda actual en la base (${deudaActualEnBD:0.00}). Operación cancelada.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    // Calcular nueva deuda
+                    decimal nuevaDeuda = deudaActualEnBD - monto;
+
+                    // Actualizar la deuda en la BD (objEntDeudor espera AdeudaCliente)
+                    objEntDeudor.IdCliente = selectedIdCliente;
+                    // si tu campo en la entidad es decimal, mantené decimal; si es int, convertí con cuidado
+                    objEntDeudor.AdeudaCliente = nuevaDeuda;
+
+                    // Ejecutar la modificación (tu método construye SQL con el valor que le pases)
+                    objNegDeudor.abmCliente("ModificarSoloDeuda", objEntDeudor);
+
+                    // Actualizar lo que tenés en memoria
+                    selectedDeuda = nuevaDeuda;
+
+                    MessageBox.Show("Pago realizado", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    // refrescar la grilla
+                    LlenarDGVDeudor();
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         private void btnRegistrarProducto_Click(object sender, EventArgs e)
         {
@@ -53,5 +477,7 @@ namespace Quiosco
         {
 
         }
+
+
     }
 }

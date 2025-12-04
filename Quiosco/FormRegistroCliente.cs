@@ -67,7 +67,21 @@ namespace Quiosco
         {
             objEntCliente.NombreCliente = txtNombreCliente.Text;
             objEntCliente.TelefonoCliente = txtTelefonoCliente.Text;
-            objEntCliente.AdeudaCliente = int.Parse(txtAdeudaCliente.Text);
+            // objEntCliente.AdeudaCliente = int.Parse(txtAdeudaCliente.Text);
+            if (decimal.TryParse(txtAdeudaCliente.Text.Replace(",", "."),
+                      System.Globalization.NumberStyles.Any,
+                      System.Globalization.CultureInfo.InvariantCulture,
+                      out decimal monto))
+            {
+                objEntCliente.AdeudaCliente = monto;
+            }
+            else
+            {
+                MessageBox.Show("Ingrese un monto válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return; // detiene la ejecución si el monto no es válido
+            }
+
+
 
 
         }
@@ -131,7 +145,7 @@ namespace Quiosco
                 MessageBox.Show("Solo se permiten precio entre 0 y 50 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-           
+
             return true;
 
 
@@ -227,13 +241,39 @@ namespace Quiosco
 
         private void txtAdeudaCliente_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
+            TextBox txt = (TextBox)sender;
+
+            // Permitir números
+            if (char.IsDigit(e.KeyChar))
                 return;
+
+            // Permitir Backspace
+            if (e.KeyChar == (char)Keys.Back)
+                return;
+
+            // Permitir punto o coma, pero solo UNO
+            if (e.KeyChar == '.' || e.KeyChar == ',')
+            {
+                // Si ya existe punto o coma, no permitir repetir
+                if (txt.Text.Contains('.') || txt.Text.Contains(','))
+                {
+                    MessageBox.Show("Solo se permite un separador decimal (coma o punto).",
+                                    "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                    e.Handled = true;
+                    return;
+                }
+
+                return; // se permite
             }
+
+            // Si llegó acá → caracter inválido
+            MessageBox.Show("Solo se permiten números y separador decimal.",
+                            "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+            e.Handled = true;
         }
+
 
 
 
@@ -289,7 +329,7 @@ namespace Quiosco
 
 
 
-        private void btnCancelarCliente_Click(object sender, EventArgs e)
+        private void btnCancelarCliente_Click_1(object sender, EventArgs e)
         {
             LimpiarCliente();
             btnCargarCliente.Visible = true;
@@ -314,17 +354,6 @@ namespace Quiosco
             txtAdeudaCliente.Text = string.Empty;
             txtBuscarCliente.Clear();
             txtEliminarCliente.Clear();
-        }
-
-        private void btnCancelarCliente_Click_1(object sender, EventArgs e)
-        {
-            {
-                LimpiarCliente();
-                btnCargarCliente.Visible = true;
-                btnModificarCliente.Visible = true;
-                btnCancelarCliente.Visible = true;
-                LlenarDGVCliente();
-            }
         }
 
         private void dgvCliente_CellContentClick(object sender, DataGridViewCellEventArgs e)

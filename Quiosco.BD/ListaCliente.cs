@@ -19,12 +19,16 @@ namespace Quiosco.BD
             int resultado = -1;
             string orden = string.Empty;
             if (accion == "Alta")
-                orden = $"insert into Cliente values ('{objCliente.NombreCliente}','{objCliente.TelefonoCliente}','{objCliente.AdeudaCliente}')";
+                orden = $"insert into Cliente values ('{objCliente.NombreCliente}', '{objCliente.TelefonoCliente}', {objCliente.AdeudaCliente.ToString(System.Globalization.CultureInfo.InvariantCulture)})";
 
             if (accion == "Modificar")
-                orden = $"update Cliente set NombreCliente = '{objCliente.NombreCliente}' where IdCliente = {objCliente.IdCliente};  update Cliente set TelefonoCliente = '{objCliente.TelefonoCliente}' where IdCliente = {objCliente.IdCliente}; update Cliente set AdeudaCliente = '{objCliente.AdeudaCliente}' where IdCliente = {objCliente.IdCliente};";
+                orden = $"update Cliente set AdeudaCliente = {objCliente.AdeudaCliente.ToString(System.Globalization.CultureInfo.InvariantCulture)} where IdCliente = {objCliente.IdCliente};";
 
-             if (accion == "Baja")
+            if (accion == "ModificarSoloDeuda")
+                orden = $"update Cliente set AdeudaCliente = {objCliente.AdeudaCliente.ToString(System.Globalization.CultureInfo.InvariantCulture)} where IdCliente = {objCliente.IdCliente};";
+
+
+            if (accion == "Baja")
                orden = $"delete from Cliente where IdCliente = {objCliente.IdCliente}";
 
 
