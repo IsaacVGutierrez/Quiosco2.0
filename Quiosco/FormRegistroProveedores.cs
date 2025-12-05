@@ -17,15 +17,16 @@ namespace Quiosco
         public FormRegistroProveedores()
         {
             InitializeComponent();
-       
-    
-                dgvProveedor.ColumnCount = 6;
-                dgvProveedor.Columns[0].HeaderText = "Codigo Proveedor";
-                dgvProveedor.Columns[1].HeaderText = "Nombre Proveedor";
-                dgvProveedor.Columns[2].HeaderText = "Telefono Proveedor";
-                dgvProveedor.Columns[3].HeaderText = "Direccion Proveedor";
-                dgvProveedor.Columns[4].HeaderText = "Horario Proveedor";
-                dgvProveedor.Columns[5].HeaderText = "Dias de atencion";
+
+            dgvProveedor.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
+            dgvProveedor.ColumnCount = 6;
+            dgvProveedor.Columns[0].HeaderText = "Codigo Proveedor";
+            dgvProveedor.Columns[1].HeaderText = "Nombre Proveedor";
+            dgvProveedor.Columns[2].HeaderText = "Telefono Proveedor";
+            dgvProveedor.Columns[3].HeaderText = "Direccion Proveedor";
+            dgvProveedor.Columns[4].HeaderText = "Horario Proveedor";
+            dgvProveedor.Columns[5].HeaderText = "Dias de atencion";
 
                 LlenarDGVProveedor();
 

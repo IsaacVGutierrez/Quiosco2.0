@@ -15,7 +15,7 @@ namespace Quiosco.BD
     public class DatosConexionBD
     {
         protected SqlConnection conexion;
-        protected string cadenaConexion = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Quiosco2;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
+        protected string cadenaConexion = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Quiosco3;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
       
         public DatosConexionBD()
         {

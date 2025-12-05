@@ -19,6 +19,7 @@ namespace Quiosco
         {
             InitializeComponent();
 
+            dgvProducto.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
             dgvProducto.ColumnCount = 9;
             dgvProducto.Columns[0].HeaderText = "Nombre Producto";
@@ -31,6 +32,9 @@ namespace Quiosco
             dgvProducto.Columns[7].HeaderText = "Precio Venta";
             dgvProducto.Columns[8].HeaderText = "Fecha de compra";
 
+            txtPrecioCompraProducto.Text = "";
+            txtPrecioVentaProducto.Text = "";
+            txtPrecioTotalProducto.Text = "";
 
 
             LlenarDGVProducto();
@@ -316,12 +320,19 @@ namespace Quiosco
         {
             objEntProducto.NombreProducto = txtNombreProducto.Text;
             objEntProducto.MarcaProducto = txtMarcaProducto.Text;
-            objEntProducto.PrecioProducto = int.Parse(txtPrecioTotalProducto.Text);
+            objEntProducto.PrecioProducto = decimal.Parse(txtPrecioTotalProducto.Text.Replace(".", ","));
             objEntCategoria.IdCategoria = int.Parse(cmbCategoriaProducto.SelectedValue.ToString());
             objEntProducto.CantidadProducto = int.Parse(txtCantidadProducto.Text);
             //objEntProducto.DistribuidorProducto = cmbDistribuidorProducto.Text;
-            objEntProducto.PrecioCompra = int.Parse(txtPrecioCompraProducto.Text);
-            objEntProducto.PrecioVenta = int.Parse(txtPrecioVentaProducto.Text);
+            objEntProducto.PrecioCompra = decimal.Parse(txtPrecioCompraProducto.Text.Replace(".", ","));
+            objEntProducto.PrecioVenta = decimal.Parse(txtPrecioVentaProducto.Text.Replace(".", ","));
+
+
+
+
+
+
+
 
         }
 
@@ -470,6 +481,159 @@ namespace Quiosco
 
         }
 
+        private void CalcularTotal()
+        {
+            string precio = NormalizarNumero(txtPrecioCompraProducto.Text);
+            string cantidad = txtCantidadProducto.Text.Replace(".", "");
+
+            if (decimal.TryParse(precio, out decimal p) &&
+                int.TryParse(cantidad, out int c))
+            {
+                decimal total = p * c;
+                txtPrecioTotalProducto.Text = total.ToString("#,##0.00");
+            }
+            else
+            {
+                txtPrecioTotalProducto.Text = "0,00";
+            }
+        }
+
+
+        private string NormalizarNumero(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return "0";
+
+            // Primero reemplazar punto por coma
+            texto = texto.Replace(".", ",");
+
+            // Ahora quitar separadores de miles
+            // Pero solamente si hay más de una coma
+            // Ej: "1.234,56" → "1,23456" → OK
+            // Ej: "1.234" → "1,234" → OK
+            // NO queremos borrar la coma decimal
+            while (texto.IndexOf(',') != texto.LastIndexOf(','))
+            {
+                texto = texto.Remove(texto.IndexOf(','), 1);
+            }
+
+            return texto;
+        }
+
+
+        private string FormatoMilesDecimal(string texto)
+        {
+            texto = NormalizarNumero(texto);
+
+            if (!decimal.TryParse(texto, out decimal valor))
+                return "0,00";
+
+            return valor.ToString("#,##0.00");
+        }
+        private string FormatoMilesEntero(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return "0";
+
+            texto = texto.Replace(".", "");
+
+            if (!int.TryParse(texto, out int valor))
+                return "0";
+
+            return valor.ToString("#,##0");
+        }
+
+
+        private string FormatoMiles(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto))
+                return "0,00";
+
+            // Reemplazar punto por coma
+            texto = texto.Replace(".", ",");
+
+            if (!decimal.TryParse(texto, out decimal valor))
+                return "0,00";
+
+            // Formato con miles y 2 decimales
+            return valor.ToString("#,##0.00");
+        }
+
+
+        private void txtPrecioCompraProducto_Leave(object sender, EventArgs e)
+        {
+            txtPrecioCompraProducto.Text = FormatoMilesDecimal(txtPrecioCompraProducto.Text);
+        }
+
+        private void txtPrecioVentaProducto_Leave(object sender, EventArgs e)
+        {
+            txtPrecioVentaProducto.Text = FormatoMilesDecimal(txtPrecioVentaProducto.Text);
+        }
+
+
+
+        private void txtPrecioCompraProducto_TextChanged(object sender, EventArgs e)
+        {
+           CalcularTotal();
+        }
+
+        private void txtPrecioVentaProducto_TextChanged(object sender, EventArgs e)
+        {
+            CalcularTotal();
+        }
+
+        private void txtCantidadProducto_TextChanged(object sender, EventArgs e)
+        {
+            if (!txtCantidadProducto.Focused)
+                return;
+
+            int pos = txtCantidadProducto.SelectionStart;
+
+            txtCantidadProducto.Text = FormatoMilesEntero(txtCantidadProducto.Text);
+            txtCantidadProducto.SelectionStart = Math.Min(pos + 1, txtCantidadProducto.Text.Length);
+
+            CalcularTotal();
+        }
+
+
+
+
+
+        private void SoloDecimal_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            TextBox txt = (TextBox)sender;
+
+            if (char.IsDigit(e.KeyChar))
+                return;
+
+            if (e.KeyChar == (char)Keys.Back)
+                return;
+
+            if (e.KeyChar == '.' || e.KeyChar == ',')
+            {
+                if (e.KeyChar == '.')
+                    e.KeyChar = ',';
+
+                if (txt.Text.Contains(','))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                if (txt.SelectionStart == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                return;
+            }
+
+            e.Handled = true;
+        }
+
+
+
 
 
         private void txtPrecioTotalProducto_KeyPress(object sender, KeyPressEventArgs e)
@@ -496,23 +660,17 @@ namespace Quiosco
 
         private void txtPrecioCompraProducto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
+
+            SoloDecimal_KeyPress(sender, e);
+
         }
 
 
         private void txtPrecioVentaProducto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
+
+            SoloDecimal_KeyPress(sender, e);
+
         }
 
     }

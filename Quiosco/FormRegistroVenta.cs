@@ -19,6 +19,9 @@ namespace Quiosco
         {
             InitializeComponent();
 
+
+            dgvVenta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
             dgvVenta.ColumnCount = 5;
             dgvVenta.Columns[0].HeaderText = "Nombre Producto";
             dgvVenta.Columns[1].HeaderText = "Cantidad";
@@ -32,6 +35,8 @@ namespace Quiosco
 
             LlenarCombosVentaProducto();
             LlenarCombosVentaCliente();
+            LlenarCombosVentaMetodoDePago();
+
 
         }
 
@@ -88,17 +93,17 @@ namespace Quiosco
 
 
             // Medio de Pago de Venta
-            if (txtMedioPagoVenta.Text == string.Empty)
+            if (cmbMedioPagoVenta.Text == string.Empty)
             {
                 MessageBox.Show("Ingrese un Medio de Pago de Venta ", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-            else if (txtMedioPagoVenta.Text.Length > 100 || txtMedioPagoVenta.Text.Length < 1)
+            else if (cmbMedioPagoVenta.Text.Length > 100 || cmbMedioPagoVenta.Text.Length < 1)
             {
                 MessageBox.Show("Solo se permiten Medio de Pago de Venta entre 1 y 100 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
-            else if (txtMedioPagoVenta.Text.Length > 200)
+            else if (cmbMedioPagoVenta.Text.Length > 200)
             {
                 MessageBox.Show("La observación no puede superar los 200 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
@@ -198,12 +203,13 @@ namespace Quiosco
 
         public Producto objEntProducto = new Producto();
         public Cliente objEntCliente = new Cliente();
+        public MetodoDePago objEntMetodoDePago = new MetodoDePago();
 
 
 
         public ProductoNegocio objNegProducto = new ProductoNegocio();
         public ClienteNegocio objNegCliente = new ClienteNegocio();
-
+        public MetodoDePagoNegocio objNegMetodoDePago = new MetodoDePagoNegocio();
 
         #endregion
 
@@ -222,7 +228,12 @@ namespace Quiosco
             cmbClienteVenta.ValueMember = "IdCliente";
         }
 
-
+        private void LlenarCombosVentaMetodoDePago()
+        {
+            cmbMedioPagoVenta.DataSource = objNegMetodoDePago.ObtenerMetodoDePago();
+            cmbMedioPagoVenta.DisplayMember = "NombreMetodoDePago";
+            cmbMedioPagoVenta.ValueMember = "IdMetododePago";
+        }
         #endregion
 
 
@@ -247,10 +258,10 @@ namespace Quiosco
         private void TxtBox_a_ObjVenta()
         {
             objEntProducto.IdProducto = int.Parse(cmbProductoVenta.SelectedValue.ToString());
-            // objEntVenta.CantidadVenta = int.Parse(txtCantidadVenta.Text);
+            //objEntVenta.CantidadVenta = int.Parse(txtCantidadVenta.Text);
             objEntVenta.SubtotalVenta = int.Parse(txtSubtotalVenta.Text);
             objEntCliente.IdCliente = int.Parse(cmbClienteVenta.SelectedValue.ToString());
-            objEntVenta.MetodoDePagoVenta = txtMedioPagoVenta.Text;
+            objEntMetodoDePago.IdMetodoDePago = int.Parse(cmbMedioPagoVenta.SelectedValue.ToString());
             //objEntVenta.SaldoVenta = int.Parse(txtSaldoVenta.ToString());
 
 
@@ -262,7 +273,7 @@ namespace Quiosco
             cmbProductoVenta.SelectedIndex = -1;
             txtCantidadVenta.Text = string.Empty;
             txtSubtotalVenta.Text = string.Empty;
-            txtMedioPagoVenta.Text = string.Empty;
+            cmbMedioPagoVenta.SelectedIndex = -1;
             cmbClienteVenta.SelectedIndex = -1;
             // txtSaldoVenta.Text = string.Empty;
             txtBuscarVenta.Clear();
@@ -274,7 +285,7 @@ namespace Quiosco
             cmbProductoVenta.SelectedValue = System.Convert.ToInt32(ds.Tables[0].Rows[0]["ProductoId"].ToString());
             txtCantidadVenta.Text = ds.Tables[0].Rows[0]["CantidadVenta"].ToString();
             txtSubtotalVenta.Text = ds.Tables[0].Rows[0]["SubtotalVenta"].ToString();
-            txtMedioPagoVenta.Text = ds.Tables[0].Rows[0]["MedioPagoVenta"].ToString();
+            cmbMedioPagoVenta.SelectedValue = System.Convert.ToInt32(ds.Tables[0].Rows[0]["MetodoDePagoId"].ToString());
             cmbClienteVenta.SelectedValue = System.Convert.ToInt32(ds.Tables[0].Rows[0]["ClienteId"].ToString());
             //txtSaldoVenta.Text = ds.Tables[0].Rows[0]["SaldoVenta"].ToString();
 
@@ -387,7 +398,7 @@ namespace Quiosco
         }
 
 
-        private void txtMedioPagoVenta_KeyPress(object sender, KeyPressEventArgs e)
+        private void cmbMedioPagoVenta_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!(char.IsLetter(e.KeyChar) || char.IsWhiteSpace(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
             {

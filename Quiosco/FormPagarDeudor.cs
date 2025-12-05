@@ -23,12 +23,13 @@ namespace Quiosco
             deudaMaximaReal = deuda;
             labelInfo.Text = $"Confirmar que {nombre} realizará un pago ?\nDeuda actual: ${deuda:0.00}";
 
-            txtMonto.Text = "";
+            txtMonto.Text = "0,00";   // valor inicial
         }
+
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            string texto = txtMonto.Text.Replace(".", ","); // <-- aceptar punto como decimal
+            string texto = txtMonto.Text.Replace(".", ",");
 
             if (!decimal.TryParse(texto, out decimal monto))
             {
@@ -57,6 +58,7 @@ namespace Quiosco
         }
 
 
+
         private void btnCancelar_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;
@@ -66,13 +68,44 @@ namespace Quiosco
 
         private void txtMonto_KeyPress(object sender, KeyPressEventArgs e)
         {
-            // Permitir solo números, coma, punto y backspace
-            if (!char.IsDigit(e.KeyChar) && e.KeyChar != ',' &&
-                e.KeyChar != '.' && e.KeyChar != (char)Keys.Back)
+            TextBox txt = (TextBox)sender;
+
+            // Permitir números
+            if (char.IsDigit(e.KeyChar))
+                return;
+
+            // Permitir Backspace
+            if (e.KeyChar == (char)Keys.Back)
+                return;
+
+            // Permitir punto o coma
+            if (e.KeyChar == '.' || e.KeyChar == ',')
             {
-                e.Handled = true;
+                // Si el usuario escribe punto → convertirlo a coma
+                if (e.KeyChar == '.')
+                    e.KeyChar = ',';
+
+                // Evitar dos decimales
+                if (txt.Text.Contains(','))
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                // Evitar separador como primer carácter
+                if (txt.SelectionStart == 0)
+                {
+                    e.Handled = true;
+                    return;
+                }
+
+                return;
             }
+
+            // Todo lo demás NO se permite
+            e.Handled = true;
         }
+
     }
 
 }

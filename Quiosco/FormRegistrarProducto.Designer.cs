@@ -199,6 +199,7 @@
             txtCantidadProducto.Name = "txtCantidadProducto";
             txtCantidadProducto.Size = new Size(173, 23);
             txtCantidadProducto.TabIndex = 44;
+            txtCantidadProducto.TextChanged += txtCantidadProducto_TextChanged;
             txtCantidadProducto.KeyPress += txtCantidadProducto_KeyPress;
             // 
             // txtPrecioCompraProducto
@@ -208,7 +209,9 @@
             txtPrecioCompraProducto.Name = "txtPrecioCompraProducto";
             txtPrecioCompraProducto.Size = new Size(176, 23);
             txtPrecioCompraProducto.TabIndex = 43;
+            txtPrecioCompraProducto.TextChanged += txtPrecioCompraProducto_TextChanged;
             txtPrecioCompraProducto.KeyPress += txtPrecioCompraProducto_KeyPress;
+            txtPrecioCompraProducto.Leave += txtPrecioCompraProducto_Leave;
             // 
             // lblCantidadProducto
             // 
@@ -382,7 +385,9 @@
             txtPrecioVentaProducto.Name = "txtPrecioVentaProducto";
             txtPrecioVentaProducto.Size = new Size(176, 23);
             txtPrecioVentaProducto.TabIndex = 107;
+            txtPrecioVentaProducto.TextChanged += txtPrecioVentaProducto_TextChanged;
             txtPrecioVentaProducto.KeyPress += txtPrecioVentaProducto_KeyPress;
+            txtPrecioVentaProducto.Leave += txtPrecioVentaProducto_Leave;
             // 
             // label5
             // 

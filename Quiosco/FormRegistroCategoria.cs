@@ -18,6 +18,8 @@ namespace Quiosco
         {
             InitializeComponent();
 
+            dgvCategoria.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
 
             dgvCategoria.ColumnCount = 2;
             dgvCategoria.Columns[0].HeaderText = "Codigo Categoria";
@@ -123,7 +125,7 @@ namespace Quiosco
         private void dgvCategoria_CellClick(object sender, DataGridViewCellEventArgs e)
         {
 
-           
+
             DataSet ds = new DataSet();
             objEntCategoria.IdCategoria = Convert.ToInt32(dgvCategoria.CurrentRow.Cells[0].Value);
             ds = objNegCategoria.listadoCategoria(objEntCategoria.IdCategoria.ToString());
@@ -182,7 +184,7 @@ namespace Quiosco
                     MessageBox.Show("Se logró agregar la Categoria con éxito");
                     LlenarDGVCategoria();
                     LimpiarCategoria();
-                   // tabControl1.SelectTab(tabCategoria);
+                    // tabControl1.SelectTab(tabCategoria);
                 }
             }
         }

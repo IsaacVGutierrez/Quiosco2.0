@@ -164,7 +164,7 @@
             label2.BackColor = Color.LightSeaGreen;
             label2.BorderStyle = BorderStyle.FixedSingle;
             label2.Font = new Font("Gill Sans Ultra Bold", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(519, 50);
+            label2.Location = new Point(519, 30);
             label2.Name = "label2";
             label2.Size = new Size(228, 22);
             label2.TabIndex = 86;
@@ -188,9 +188,9 @@
             dgvCategoria.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvCategoria.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvCategoria.Cursor = Cursors.Hand;
-            dgvCategoria.Location = new Point(552, 128);
+            dgvCategoria.Location = new Point(712, 128);
             dgvCategoria.Name = "dgvCategoria";
-            dgvCategoria.Size = new Size(837, 408);
+            dgvCategoria.Size = new Size(677, 408);
             dgvCategoria.TabIndex = 84;
             dgvCategoria.CellClick += dgvCategoria_CellClick;
             dgvCategoria.CellContentClick += dgvCategoria_CellContentClick;
@@ -224,7 +224,7 @@
         }
 
         #endregion
-    
+
         private TextBox txtNombreCategoria;
         private Label lblNombreProducto;
         private TextBox txtEliminarCategoria;

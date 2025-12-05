@@ -44,7 +44,6 @@
             label2 = new Label();
             label1 = new Label();
             dgvVenta = new DataGridView();
-            txtMedioPagoVenta = new TextBox();
             label5 = new Label();
             cmbProductoVenta = new ComboBox();
             txtSubtotalVenta = new TextBox();
@@ -52,6 +51,7 @@
             label6 = new Label();
             btnAgregarCliente = new Button();
             cmbClienteVenta = new ComboBox();
+            cmbMedioPagoVenta = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)dgvVenta).BeginInit();
             SuspendLayout();
             // 
@@ -209,19 +209,10 @@
             dgvVenta.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvVenta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVenta.Cursor = Cursors.Hand;
-            dgvVenta.Location = new Point(725, 120);
+            dgvVenta.Location = new Point(707, 120);
             dgvVenta.Name = "dgvVenta";
-            dgvVenta.Size = new Size(674, 408);
+            dgvVenta.Size = new Size(718, 408);
             dgvVenta.TabIndex = 69;
-            // 
-            // txtMedioPagoVenta
-            // 
-            txtMedioPagoVenta.Location = new Point(246, 344);
-            txtMedioPagoVenta.Margin = new Padding(4);
-            txtMedioPagoVenta.Name = "txtMedioPagoVenta";
-            txtMedioPagoVenta.Size = new Size(176, 23);
-            txtMedioPagoVenta.TabIndex = 100;
-            txtMedioPagoVenta.KeyPress += txtMedioPagoVenta_KeyPress;
             // 
             // label5
             // 
@@ -295,6 +286,14 @@
             cmbClienteVenta.TabIndex = 107;
             cmbClienteVenta.SelectedIndexChanged += cmbClienteVenta_SelectedIndexChanged;
             // 
+            // cmbMedioPagoVenta
+            // 
+            cmbMedioPagoVenta.FormattingEnabled = true;
+            cmbMedioPagoVenta.Location = new Point(246, 344);
+            cmbMedioPagoVenta.Name = "cmbMedioPagoVenta";
+            cmbMedioPagoVenta.Size = new Size(176, 23);
+            cmbMedioPagoVenta.TabIndex = 108;
+            // 
             // FormRegistroVenta
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -302,13 +301,13 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1453, 652);
+            Controls.Add(cmbMedioPagoVenta);
             Controls.Add(cmbClienteVenta);
             Controls.Add(btnAgregarCliente);
             Controls.Add(label6);
             Controls.Add(txtSubtotalVenta);
             Controls.Add(label3);
             Controls.Add(cmbProductoVenta);
-            Controls.Add(txtMedioPagoVenta);
             Controls.Add(label5);
             Controls.Add(lblNombreProducto);
             Controls.Add(txtEliminarVenta);
@@ -349,7 +348,6 @@
         private Label label2;
         private Label label1;
         private DataGridView dgvVenta;
-        private TextBox txtMedioPagoVenta;
         private Label label5;
         private ComboBox cmbProductoVenta;
         private TextBox txtSubtotalVenta;
@@ -357,5 +355,6 @@
         private Label label6;
         private Button btnAgregarCliente;
         private ComboBox cmbClienteVenta;
+        private ComboBox cmbMedioPagoVenta;
     }
 }

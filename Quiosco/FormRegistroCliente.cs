@@ -20,6 +20,8 @@ namespace Quiosco
         {
             InitializeComponent();
 
+            dgvCliente.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
             dgvCliente.ColumnCount = 4;
             dgvCliente.Columns[0].HeaderText = "Codigo Cliente";
             dgvCliente.Columns[1].HeaderText = "Nombre Cliente";
