@@ -108,7 +108,8 @@ namespace Quiosco.BD
                     cliente.IdCliente = dataReader.GetInt32(0);
                     cliente.NombreCliente = dataReader.GetString(1);
                     cliente.TelefonoCliente = dataReader.GetString(2);
-                    cliente.AdeudaCliente = Convert.ToDecimal(dataReader.GetDouble(3));
+                    cliente.AdeudaCliente = dataReader.GetDecimal(3);
+
 
 
                     lista.Add(cliente);

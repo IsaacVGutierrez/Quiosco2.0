@@ -19,17 +19,45 @@ namespace Quiosco
         {
             InitializeComponent();
 
-
+            dgvVenta.AutoGenerateColumns = false; // IMPORTANTE: evita que se creen columnas automáticamente
             dgvVenta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            dgvVenta.ColumnCount = 5;
-            dgvVenta.Columns[0].HeaderText = "Nombre Producto";
-            dgvVenta.Columns[1].HeaderText = "Cantidad";
-            dgvVenta.Columns[2].HeaderText = "Subtotal";
-            dgvVenta.Columns[3].HeaderText = "Medio de Pago";
-            dgvVenta.Columns[4].HeaderText = "Cliente";
+            // Definir columnas manualmente según tu gusto
+            dgvVenta.Columns.Clear();
+
+            // Ejemplo:
+
+            dgvVenta.Columns.Add("IdVenta", "Código");
+            dgvVenta.Columns["IdVenta"].DataPropertyName = "IdVenta";
+            dgvVenta.Columns["IdVenta"].Visible = false; // ocultamos la columna
 
 
+            dgvVenta.Columns.Add("NombreProducto", "Nombre Producto");
+            dgvVenta.Columns["NombreProducto"].DataPropertyName = "NombreProducto";
+
+            dgvVenta.Columns.Add("CantidadProducto", "Cantidad");
+            dgvVenta.Columns["CantidadProducto"].DataPropertyName = "CantidadProducto";
+
+            dgvVenta.Columns.Add("SubtotalVenta", "Subtotal");
+            dgvVenta.Columns["SubtotalVenta"].DataPropertyName = "SubtotalVenta";
+
+            dgvVenta.Columns.Add("NombreMetodoDePago", "Medio de Pago");
+            dgvVenta.Columns["NombreMetodoDePago"].DataPropertyName = "NombreMetodoDePago";
+
+            dgvVenta.Columns.Add("NombreCliente", "Cliente");
+            dgvVenta.Columns["NombreCliente"].DataPropertyName = "NombreCliente";
+
+            // Si querés mostrar la fecha, pero en otra posición:
+            // dgvVenta.Columns.Add("FechaVenta", "Fecha");
+            // dgvVenta.Columns["FechaVenta"].DataPropertyName = "FechaVenta";
+
+            dgvVenta.Columns.Add("FechaVenta", "Fecha");
+            dgvVenta.Columns["FechaVenta"].DataPropertyName = "FechaVenta";
+            dgvVenta.Columns["FechaVenta"].Visible = false;
+
+            // NO agregamos IdVenta si no queremos mostrarlo
+            // dgvVenta.Columns.Add("IdVenta", "Código");
+            // dgvVenta.Columns["IdVenta"].DataPropertyName = "IdVenta";
 
             LlenarDGVVenta();
 
@@ -43,6 +71,60 @@ namespace Quiosco
         public Venta objEntVenta = new Venta();
 
         public VentaNegocio objNegVenta = new VentaNegocio();
+
+        // en la cabecera del form agrega:
+        public DetalleVentaNegocio objNegDetalleVenta = new DetalleVentaNegocio();
+        public ProductoNegocio objNegProducto = new ProductoNegocio();
+
+        private void btnCargarVenta_Click(object sender, EventArgs e)
+        {
+            bool validar = ValidacionCamposVenta();
+            if (!validar) return;
+
+            // 1) Armar la entidad Venta
+            Venta v = new Venta
+            {
+                SubtotalVenta = decimal.Parse(txtSubtotalVenta.Text.Replace(".", "").Replace(",", ".")),
+                FechaVenta = DateTime.Now, // o toma desde un datetimepicker si lo tenés
+                IdMetodoDePagoVenta = Convert.ToInt32(cmbMedioPagoVenta.SelectedValue),
+                IdCliente = Convert.ToInt32(cmbClienteVenta.SelectedValue),
+                SaldoVenta = 0 // o lo que corresponda
+            };
+
+            // 2) Insertar venta y obtener id
+            int idVentaCreada = objNegVenta.abmVenta("Alta", v);
+            if (idVentaCreada <= 0)
+            {
+                MessageBox.Show("No se pudo crear la venta.");
+                return;
+            }
+
+            // 3) Insertar detalle (un solo producto: adaptá si querés varios)
+            int idProducto = Convert.ToInt32(cmbProductoVenta.SelectedValue);
+            int cantidad = int.Parse(txtCantidadVenta.Text);
+
+            DetalleVenta dv = new DetalleVenta
+            {
+                IdVenta = idVentaCreada,
+                IdProducto = idProducto,
+                CantidadProducto = cantidad
+            };
+
+            int r = objNegDetalleVenta.abmDetalleVenta("Alta", dv);
+            if (r <= 0)
+            {
+                MessageBox.Show("Venta creada pero no se pudo guardar el detalle.");
+                // opcional: eliminar la venta creada para mantener integridad
+                return;
+            }
+
+            // 4) Reducir stock del producto
+            objNegProducto.ReducirStock(idProducto, cantidad);
+
+            MessageBox.Show("Venta y detalle guardados correctamente.");
+            LlenarDGVVenta();
+            LimpiarVenta();
+        }
 
         public bool ValidacionCamposVenta()
         {
@@ -150,7 +232,7 @@ namespace Quiosco
                     {
                         foreach (DataRow dr in ds.Tables)
                         {
-                            dgvVenta.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4]);
+                            dgvVenta.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4], dr[5], dr[6]);
                         }
                     }
                     catch (Exception e)
@@ -176,7 +258,7 @@ namespace Quiosco
             {
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    dgvVenta.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4]);
+                    dgvVenta.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4], dr[5], dr[6]);
                 }
             }
 
@@ -185,18 +267,31 @@ namespace Quiosco
 
         private void LlenarDGVVenta()
         {
+            DataSet ds = objNegVenta.listadoVenta("Todos");
 
-            dgvVenta.Rows.Clear();
-            DataSet ds = new DataSet();
-            ds = objNegVenta.listadoVenta("Todos");
-            if (ds.Tables[0].Rows.Count > 0)
+            if (ds.Tables.Count > 0)
             {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    dgvVenta.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4].ToString());
-                }
+                dgvVenta.DataSource = ds.Tables[0];
+
+                // Ocultar columnas que no querés mostrar
+                dgvVenta.Columns["IdVenta"].Visible = false;
+
+                // Reordenar columnas según tu preferencia
+                dgvVenta.Columns["NombreCliente"].DisplayIndex = 0;
+                dgvVenta.Columns["NombreProducto"].DisplayIndex = 1;
+                dgvVenta.Columns["CantidadProducto"].DisplayIndex = 2;
+                dgvVenta.Columns["SubtotalVenta"].DisplayIndex = 3;
+                dgvVenta.Columns["NombreMetodoDePago"].DisplayIndex = 4;
+                dgvVenta.Columns["FechaVenta"].Visible = false;
+                //  dgvVenta.Columns["FechaVenta"].DisplayIndex = 5;
+
+                // Formatear fecha si querés
+                dgvVenta.Columns["FechaVenta"].DefaultCellStyle.Format = "dd/MM/yyyy";
             }
         }
+
+
+
 
 
         #region DeclaracionVariables
@@ -207,7 +302,7 @@ namespace Quiosco
 
 
 
-        public ProductoNegocio objNegProducto = new ProductoNegocio();
+      
         public ClienteNegocio objNegCliente = new ClienteNegocio();
         public MetodoDePagoNegocio objNegMetodoDePago = new MetodoDePagoNegocio();
 
@@ -295,28 +390,6 @@ namespace Quiosco
 
 
 
-
-        private void btnCargarVenta_Click(object sender, EventArgs e)
-        {
-            bool validar = ValidacionCamposVenta();
-            int nGrabados = -1;
-            if (validar == true)
-            {
-                TxtBox_a_ObjVenta();
-                nGrabados = objNegVenta.abmVenta("Alta", objEntVenta);
-                if (nGrabados == -1)
-                {
-                    MessageBox.Show("No se logró agregar la Venta al sistema");
-                }
-                else
-                {
-                    MessageBox.Show("Se logró agregar la Venta con éxito");
-                    LlenarDGVVenta();
-                    LimpiarVenta();
-
-                }
-            }
-        }
 
         private void BtnModificarVenta_Click(object sender, EventArgs e)
         {

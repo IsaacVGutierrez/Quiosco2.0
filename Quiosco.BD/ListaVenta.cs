@@ -3,70 +3,134 @@ using Quiosco.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Quiosco.BD
 {
     public class ListaVenta : DatosConexionBD
     {
-
         public int abmVenta(string accion, Venta objVenta)
         {
-
             int resultado = -1;
-            string orden = string.Empty;
+
             if (accion == "Alta")
-                orden = $"insert into Venta values ('{objVenta.SubtotalVenta}','{objVenta.FechaVenta}','{objVenta.MetodoDePagoVenta}','{objVenta.IdCliente}' ,'{objVenta.SaldoVenta}' )";
-
-            if (accion == "Modificar")
-                orden = $"update Venta set SubtotalVenta = '{objVenta.SubtotalVenta}' where id = {objVenta.IdVenta};  update Venta set FechaVenta = '{objVenta.FechaVenta}' where id = {objVenta.IdVenta}; update Venta set MetodoDePagoVenta = '{objVenta.MetodoDePagoVenta}' where id = {objVenta.IdVenta}; update Venta set IdCliente = '{objVenta.IdCliente}' where id = {objVenta.IdVenta};  update Venta set SaldoVenta = '{objVenta.SaldoVenta}' where id = {objVenta.IdVenta} ; ";
-
-            //if (accion == "Baja")
-            //    orden = $"delete from Venta where IdVenta = {objVenta.IdVenta}";
-
-
-            SqlCommand cmd = new SqlCommand(orden, conexion);
-            try
             {
-                Abrirconexion();
-                resultado = cmd.ExecuteNonQuery();
+                string sql = @"
+                    INSERT INTO Venta (SubtotalVenta, FechaVenta, IdMetodoDePago, IdCliente, SaldoVenta)
+                    OUTPUT INSERTED.IdVenta
+                    VALUES (@subtotal, @fecha, @idMetodoPago, @idCliente, @saldo)";
+                SqlCommand cmd = new SqlCommand(sql, conexion);
+                cmd.Parameters.AddWithValue("@subtotal", objVenta.SubtotalVenta);
+                cmd.Parameters.AddWithValue("@fecha", objVenta.FechaVenta);
+                cmd.Parameters.AddWithValue("@idMetodoPago", objVenta.IdMetodoDePagoVenta);
+                cmd.Parameters.AddWithValue("@idCliente", objVenta.IdCliente);
+                cmd.Parameters.AddWithValue("@saldo", objVenta.SaldoVenta);
+
+                try
+                {
+                    Abrirconexion();
+                    object o = cmd.ExecuteScalar();
+                    if (o != null) resultado = Convert.ToInt32(o);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al insertar Venta", e);
+                }
+                finally
+                {
+                    Cerrarconexion();
+                    cmd.Dispose();
+                }
+                return resultado;
             }
-            catch (Exception e)
+            else if (accion == "Modificar")
             {
-                throw new Exception($"Error al tratar de guardar,borrar o modificar {objVenta} ", e);
+                string sql = @"
+                    UPDATE Venta
+                    SET SubtotalVenta = @subtotal,
+                        FechaVenta = @fecha,
+                        IdMetodoDePago = @idMetodoPago,
+                        IdCliente = @idCliente,
+                        SaldoVenta = @saldo
+                    WHERE IdVenta = @idVenta";
+                SqlCommand cmd = new SqlCommand(sql, conexion);
+                cmd.Parameters.AddWithValue("@subtotal", objVenta.SubtotalVenta);
+                cmd.Parameters.AddWithValue("@fecha", objVenta.FechaVenta);
+                cmd.Parameters.AddWithValue("@idMetodoPago", objVenta.IdMetodoDePagoVenta);
+                cmd.Parameters.AddWithValue("@idCliente", objVenta.IdCliente);
+                cmd.Parameters.AddWithValue("@saldo", objVenta.SaldoVenta);
+                cmd.Parameters.AddWithValue("@idVenta", objVenta.IdVenta);
+
+                try
+                {
+                    Abrirconexion();
+                    resultado = cmd.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al modificar Venta", e);
+                }
+                finally
+                {
+                    Cerrarconexion();
+                    cmd.Dispose();
+                }
+                return resultado;
             }
-            finally
-            {
-                Cerrarconexion();
-                cmd.Dispose();
-            }
+
             return resultado;
         }
 
         public DataSet listadoVenta(string id)
         {
-            string orden = string.Empty;
+            string orden;
             if (id != "Todos")
-                orden = $"select * from Venta where idVenta = {int.Parse(id)};";
+            {
+                orden = $@"
+            SELECT v.IdVenta,
+                   p.NombreProducto,
+                   dv.CantidadProducto,
+                   v.SubtotalVenta,
+                   mp.NombreMetodoDePago,
+                   c.NombreCliente,
+                   v.FechaVenta
+            FROM Venta v
+            INNER JOIN DetalleVenta dv ON v.IdVenta = dv.IdVenta
+            INNER JOIN Producto p ON dv.IdProducto = p.IdProducto
+            INNER JOIN Cliente c ON v.IdCliente = c.IdCliente
+            INNER JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetododePago
+            WHERE v.IdVenta = {int.Parse(id)}
+            ORDER BY v.IdVenta DESC";
+            }
             else
-                orden = "select * from Venta;";
+            {
+                orden = @"
+            SELECT v.IdVenta,
+                   p.NombreProducto,
+                   dv.CantidadProducto,
+                   v.SubtotalVenta,
+                   mp.NombreMetodoDePago,
+                   c.NombreCliente,
+                   v.FechaVenta
+            FROM Venta v
+            INNER JOIN DetalleVenta dv ON v.IdVenta = dv.IdVenta
+            INNER JOIN Producto p ON dv.IdProducto = p.IdProducto
+            INNER JOIN Cliente c ON v.IdCliente = c.IdCliente
+            INNER JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetododePago
+            ORDER BY v.IdVenta DESC";
+            }
+
             SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
-
                 return ds;
             }
             catch (Exception e)
             {
-                return ds = null;
                 throw new Exception("Error al listar Venta", e);
             }
             finally
@@ -74,7 +138,6 @@ namespace Quiosco.BD
                 Cerrarconexion();
                 cmd.Dispose();
             }
-            //return ds;
         }
 
 
@@ -82,63 +145,63 @@ namespace Quiosco.BD
         public List<Venta> ObtenerVenta()
         {
             List<Venta> lista = new List<Venta>();
-
-            string OrdenEjecucion = "Select IdVenta, SubtotalVenta, FechaVenta, MetodoDePagoVenta , IdCliente , SaldoVenta  from Venta";
-
-            SqlCommand cmd = new SqlCommand(OrdenEjecucion, conexion);
-
-            SqlDataReader dataReader;
+            string sql = "SELECT IdVenta, SubtotalVenta, FechaVenta, IdMetodoDePago, IdCliente, SaldoVenta FROM Venta";
+            SqlCommand cmd = new SqlCommand(sql, conexion);
 
             try
             {
                 Abrirconexion();
-
-                dataReader = cmd.ExecuteReader();
-
-                while (dataReader.Read())
+                SqlDataReader dr = cmd.ExecuteReader();
+                while (dr.Read())
                 {
-                    Venta venta = new Venta();
-
-                    venta.IdVenta = dataReader.GetInt32(0);
-                    venta.SubtotalVenta = Convert.ToDecimal(dataReader.GetDouble(1));
-                    venta.FechaVenta = dataReader.GetDateTime(2);
-                    venta.MetodoDePagoVenta = dataReader.GetString(3);
-                    venta.IdCliente = dataReader.GetInt32(4);
-                    venta.SaldoVenta = Convert.ToDecimal(dataReader.GetDouble(5));
-
-                    lista.Add(venta);
+                    Venta v = new Venta
+                    {
+                        IdVenta = dr.GetInt32(0),
+                        SubtotalVenta = dr.GetDecimal(1),
+                        FechaVenta = dr.GetDateTime(2),
+                        IdMetodoDePagoVenta = dr.GetInt32(3),
+                        IdCliente = dr.GetInt32(4),
+                        SaldoVenta = dr.GetDecimal(5)
+                    };
+                    lista.Add(v);
                 }
+                dr.Close();
             }
             catch (Exception e)
             {
-
-                throw new Exception("Error al obtener la lista de valores de la Venta", e);
+                throw new Exception("Error al obtener la lista de Venta", e);
             }
-
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
-
             return lista;
         }
 
-       
-
         public DataSet listarVentaBuscar(string cual)
         {
-            string orden = $" select v.IdVenta, v.SubtotalVenta, v.FechaVenta, v.MetodoDePagoVenta, v.SaldoVenta, k.NombreCliente, k.TelefonoCliente, k.AdeudaCliente" +
-                $" from  Venta as v inner join Cliente as k on v.IdVenta=k.IdCliente" +
-                $" where v.IdVenta like '%{cual}%' or v.SubtotalVenta like '%{cual}%'  or v.FechaVenta like '%{cual}%'   or v.MetodoDePagoVenta like '%{cual}%'  or v.SaldoVenta like '%{cual}%'  or k.NombreCliente like '%{cual}%'  or k.TelefonoCliente like '%{cual}%'  or k.AdeudaCliente like '%{cual}%' ; ";
-
+            string orden = @"
+                SELECT v.IdVenta, v.SubtotalVenta, v.FechaVenta, mp.NombreMetodoDePago, k.NombreCliente, v.SaldoVenta
+                FROM Venta v
+                LEFT JOIN Cliente k ON v.IdCliente = k.IdCliente
+                LEFT JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
+                WHERE
+                    v.IdVenta LIKE @buscar OR
+                    v.SubtotalVenta LIKE @buscar OR
+                    CONVERT(VARCHAR(30), v.FechaVenta, 23) LIKE @buscar OR
+                    mp.NombreMetodoDePago LIKE @buscar OR
+                    k.NombreCliente LIKE @buscar OR
+                    v.SaldoVenta LIKE @buscar
+                ORDER BY v.IdVenta DESC";
             SqlCommand cmd = new SqlCommand(orden, conexion);
+            cmd.Parameters.AddWithValue("@buscar", $"%{cual}%");
+
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
             }
@@ -156,18 +219,15 @@ namespace Quiosco.BD
 
         public DataSet ListarVentaEliminar(string id)
         {
-
-            string orden = $"delete from Venta where IdVenta = {id}";
-
+            string orden = $"DELETE FROM Venta WHERE IdVenta = {id}";
             SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
-            SqlDataAdapter da = new SqlDataAdapter();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
             try
             {
                 Abrirconexion();
                 cmd.ExecuteNonQuery();
-                da.SelectCommand = cmd;
-                da.Fill(ds);
+                // no hay filas para llenar, pero retornamos ds vacio por compatibilidad
             }
             catch (Exception e)
             {
@@ -181,26 +241,26 @@ namespace Quiosco.BD
             return ds;
         }
 
-
-       
-
         public DataSet Union()
         {
-
-            string orden = $" select v.IdVenta, v.SubtotalVenta, v.FechaVenta, v.MetodoDePagoVenta, v.SaldoVenta, k.NombreCliente, k.TelefonoCliente, k.AdeudaCliente from  Venta as v inner join Cliente as k on v.IdVenta=k.IdCliente ";
-                       SqlCommand cmd = new SqlCommand(orden, conexion);
+            string orden = @"
+                SELECT v.IdVenta, v.SubtotalVenta, v.FechaVenta, mp.NombreMetodoDePago, k.NombreCliente, v.SaldoVenta
+                FROM Venta v
+                LEFT JOIN Cliente k ON v.IdCliente = k.IdCliente
+                LEFT JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
+                ORDER BY v.IdVenta DESC";
+            SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
             }
             catch (Exception e)
             {
-                throw new Exception("Error al buscar los detalles de la Venta", e);
+                throw new Exception("Error al obtener union Venta", e);
             }
             finally
             {
@@ -209,7 +269,5 @@ namespace Quiosco.BD
             }
             return ds;
         }
-
-
     }
 }

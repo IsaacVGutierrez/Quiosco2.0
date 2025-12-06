@@ -184,10 +184,10 @@ namespace Quiosco.BD
                 while (dataReader.Read())
                 {
 
-                    //VER ESTA LINEA EN EL CODIGO ORIGINAL PARA VER PARA QUE SIRVE
-                    string productos = dataReader.GetString(2);
-                    int precio = dataReader.GetInt32(3);
+                 /*   string productos = dataReader.GetString(2);
+                    decimal precio = dataReader.GetDecimal(3);
                     string productoprecio = $"{productos} , ${precio}";
+                 */
 
 
 
@@ -230,6 +230,23 @@ namespace Quiosco.BD
             return lista;
         }
 
+        public int ReducirStock(int idProducto, int cantidad)
+        {
+            string sql = "UPDATE Producto SET CantidadProducto = CantidadProducto - @cantidad WHERE IdProducto = @id";
+            SqlCommand cmd = new SqlCommand(sql, conexion);
+            cmd.Parameters.AddWithValue("@cantidad", cantidad);
+            cmd.Parameters.AddWithValue("@id", idProducto);
+            try
+            {
+                Abrirconexion();
+                return cmd.ExecuteNonQuery();
+            }
+            finally
+            {
+                Cerrarconexion();
+                cmd.Dispose();
+            }
+        }
 
 
         public DataSet listarProductoBuscar(string cual)

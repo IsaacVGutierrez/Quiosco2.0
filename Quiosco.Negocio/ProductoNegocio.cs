@@ -34,6 +34,11 @@ namespace Quiosco.Negocio
         }
 
 
+        public int ReducirStock(int id, int cantidad)
+        {
+            return objDatosProducto.ReducirStock( id , cantidad);
+        }
+
         public DataSet Union()
         {
             return objDatosProducto.Union();
