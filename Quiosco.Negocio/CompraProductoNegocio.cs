@@ -45,7 +45,10 @@ namespace Quiosco.Negocio
             return objDatosCompraProducto.Union();
         }
 
-
+        public int ModificarCompra(CompraProducto obj)
+        {
+            return objDatosCompraProducto.ModificarCompra(obj);
+        }
 
 
     }

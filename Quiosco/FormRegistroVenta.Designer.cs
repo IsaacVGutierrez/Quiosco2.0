@@ -52,6 +52,7 @@
             btnAgregarCliente = new Button();
             cmbClienteVenta = new ComboBox();
             cmbMedioPagoVenta = new ComboBox();
+            btnAgregarMetodoDePago = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvVenta).BeginInit();
             SuspendLayout();
             // 
@@ -209,9 +210,9 @@
             dgvVenta.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvVenta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvVenta.Cursor = Cursors.Hand;
-            dgvVenta.Location = new Point(707, 120);
+            dgvVenta.Location = new Point(674, 120);
             dgvVenta.Name = "dgvVenta";
-            dgvVenta.Size = new Size(718, 408);
+            dgvVenta.Size = new Size(767, 408);
             dgvVenta.TabIndex = 69;
             // 
             // label5
@@ -294,6 +295,17 @@
             cmbMedioPagoVenta.Size = new Size(176, 23);
             cmbMedioPagoVenta.TabIndex = 108;
             // 
+            // btnAgregarMetodoDePago
+            // 
+            btnAgregarMetodoDePago.BackColor = Color.Gold;
+            btnAgregarMetodoDePago.Location = new Point(438, 344);
+            btnAgregarMetodoDePago.Name = "btnAgregarMetodoDePago";
+            btnAgregarMetodoDePago.Size = new Size(31, 24);
+            btnAgregarMetodoDePago.TabIndex = 109;
+            btnAgregarMetodoDePago.Text = "+";
+            btnAgregarMetodoDePago.UseVisualStyleBackColor = false;
+            btnAgregarMetodoDePago.Click += btnAgregarMetodoDePago_Click;
+            // 
             // FormRegistroVenta
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -301,6 +313,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1453, 652);
+            Controls.Add(btnAgregarMetodoDePago);
             Controls.Add(cmbMedioPagoVenta);
             Controls.Add(cmbClienteVenta);
             Controls.Add(btnAgregarCliente);
@@ -356,5 +369,6 @@
         private Button btnAgregarCliente;
         private ComboBox cmbClienteVenta;
         private ComboBox cmbMedioPagoVenta;
+        private Button btnAgregarMetodoDePago;
     }
 }

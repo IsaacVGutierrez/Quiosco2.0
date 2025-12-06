@@ -53,7 +53,7 @@ namespace Quiosco.Entidades
 
         {
             get { return precioProducto; }
-            set { precioProducto = (int)value; }
+            set { precioProducto = value; }
 
         }
 

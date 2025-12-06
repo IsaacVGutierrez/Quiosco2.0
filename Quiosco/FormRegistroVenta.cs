@@ -414,6 +414,12 @@ namespace Quiosco
             form2.Show();
         }
 
+        private void btnAgregarMetodoDePago_Click(object sender, EventArgs e)
+        {
+            Form form3 = new FormRegistroMetodoDePago();
+            form3.Show();
+        }
+
         private void cmbProductoVenta_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -428,5 +434,7 @@ namespace Quiosco
         {
 
         }
+
+
     }
 }

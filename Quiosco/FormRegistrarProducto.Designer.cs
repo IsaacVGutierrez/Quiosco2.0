@@ -61,6 +61,9 @@
             dtFechaCompraProducto = new DateTimePicker();
             txtPrecioVentaProducto = new TextBox();
             label5 = new Label();
+            cmbMetodoPago = new ComboBox();
+            label6 = new Label();
+            btnAgregarMetodoDePago = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvProducto).BeginInit();
             SuspendLayout();
             // 
@@ -87,6 +90,7 @@
             dgvProducto.Name = "dgvProducto";
             dgvProducto.Size = new Size(909, 408);
             dgvProducto.TabIndex = 7;
+            dgvProducto.CellClick += dgvProducto_CellClick;
             // 
             // label2
             // 
@@ -194,7 +198,7 @@
             // 
             // txtCantidadProducto
             // 
-            txtCantidadProducto.Location = new Point(250, 276);
+            txtCantidadProducto.Location = new Point(250, 246);
             txtCantidadProducto.Margin = new Padding(4);
             txtCantidadProducto.Name = "txtCantidadProducto";
             txtCantidadProducto.Size = new Size(173, 23);
@@ -218,7 +222,7 @@
             lblCantidadProducto.AutoSize = true;
             lblCantidadProducto.BackColor = Color.Wheat;
             lblCantidadProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblCantidadProducto.Location = new Point(135, 282);
+            lblCantidadProducto.Location = new Point(135, 252);
             lblCantidadProducto.Margin = new Padding(4, 0, 4, 0);
             lblCantidadProducto.Name = "lblCantidadProducto";
             lblCantidadProducto.Size = new Size(55, 15);
@@ -249,7 +253,7 @@
             // 
             // txtNombreProducto
             // 
-            txtNombreProducto.Location = new Point(252, 97);
+            txtNombreProducto.Location = new Point(252, 67);
             txtNombreProducto.Margin = new Padding(4);
             txtNombreProducto.Name = "txtNombreProducto";
             txtNombreProducto.Size = new Size(173, 23);
@@ -260,7 +264,7 @@
             lblNombreProducto.AutoSize = true;
             lblNombreProducto.BackColor = Color.Wheat;
             lblNombreProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblNombreProducto.Location = new Point(107, 100);
+            lblNombreProducto.Location = new Point(107, 70);
             lblNombreProducto.Margin = new Padding(4, 0, 4, 0);
             lblNombreProducto.Name = "lblNombreProducto";
             lblNombreProducto.Size = new Size(122, 15);
@@ -272,7 +276,7 @@
             lblMarcaProducto.AutoSize = true;
             lblMarcaProducto.BackColor = Color.Wheat;
             lblMarcaProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblMarcaProducto.Location = new Point(142, 146);
+            lblMarcaProducto.Location = new Point(142, 116);
             lblMarcaProducto.Margin = new Padding(4, 0, 4, 0);
             lblMarcaProducto.Name = "lblMarcaProducto";
             lblMarcaProducto.Size = new Size(40, 15);
@@ -281,7 +285,7 @@
             // 
             // txtMarcaProducto
             // 
-            txtMarcaProducto.Location = new Point(252, 143);
+            txtMarcaProducto.Location = new Point(252, 113);
             txtMarcaProducto.Margin = new Padding(4);
             txtMarcaProducto.Name = "txtMarcaProducto";
             txtMarcaProducto.Size = new Size(173, 23);
@@ -289,7 +293,7 @@
             // 
             // txtPrecioTotalProducto
             // 
-            txtPrecioTotalProducto.Location = new Point(249, 185);
+            txtPrecioTotalProducto.Location = new Point(249, 155);
             txtPrecioTotalProducto.Margin = new Padding(4);
             txtPrecioTotalProducto.Name = "txtPrecioTotalProducto";
             txtPrecioTotalProducto.Size = new Size(173, 23);
@@ -301,7 +305,7 @@
             lblPrecioCompraProducto.AutoSize = true;
             lblPrecioCompraProducto.BackColor = Color.Wheat;
             lblPrecioCompraProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblPrecioCompraProducto.Location = new Point(113, 189);
+            lblPrecioCompraProducto.Location = new Point(113, 159);
             lblPrecioCompraProducto.Margin = new Padding(4, 0, 4, 0);
             lblPrecioCompraProducto.Name = "lblPrecioCompraProducto";
             lblPrecioCompraProducto.Size = new Size(68, 15);
@@ -322,7 +326,7 @@
             label3.AutoSize = true;
             label3.BackColor = Color.Wheat;
             label3.ForeColor = SystemColors.ActiveCaptionText;
-            label3.Location = new Point(134, 238);
+            label3.Location = new Point(134, 208);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(58, 15);
@@ -332,7 +336,7 @@
             // btnAgregarCategoria
             // 
             btnAgregarCategoria.BackColor = Color.Gold;
-            btnAgregarCategoria.Location = new Point(444, 230);
+            btnAgregarCategoria.Location = new Point(444, 200);
             btnAgregarCategoria.Name = "btnAgregarCategoria";
             btnAgregarCategoria.Size = new Size(149, 28);
             btnAgregarCategoria.TabIndex = 100;
@@ -343,7 +347,7 @@
             // cmbCategoriaProducto
             // 
             cmbCategoriaProducto.FormattingEnabled = true;
-            cmbCategoriaProducto.Location = new Point(249, 234);
+            cmbCategoriaProducto.Location = new Point(249, 204);
             cmbCategoriaProducto.Name = "cmbCategoriaProducto";
             cmbCategoriaProducto.Size = new Size(176, 23);
             cmbCategoriaProducto.TabIndex = 102;
@@ -400,6 +404,36 @@
             label5.TabIndex = 106;
             label5.Text = "Precio de Venta";
             // 
+            // cmbMetodoPago
+            // 
+            cmbMetodoPago.FormattingEnabled = true;
+            cmbMetodoPago.Location = new Point(250, 283);
+            cmbMetodoPago.Name = "cmbMetodoPago";
+            cmbMetodoPago.Size = new Size(172, 23);
+            cmbMetodoPago.TabIndex = 108;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.Wheat;
+            label6.Location = new Point(132, 288);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(87, 15);
+            label6.TabIndex = 109;
+            label6.Text = "Medio de Pago";
+            // 
+            // btnAgregarMetodoDePago
+            // 
+            btnAgregarMetodoDePago.BackColor = Color.Gold;
+            btnAgregarMetodoDePago.Location = new Point(443, 282);
+            btnAgregarMetodoDePago.Name = "btnAgregarMetodoDePago";
+            btnAgregarMetodoDePago.Size = new Size(31, 24);
+            btnAgregarMetodoDePago.TabIndex = 110;
+            btnAgregarMetodoDePago.Text = "+";
+            btnAgregarMetodoDePago.UseVisualStyleBackColor = false;
+            btnAgregarMetodoDePago.Click += btnAgregarMetodoDePago_Click;
+            // 
             // FormRegistrarProducto
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -407,6 +441,9 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1536, 653);
+            Controls.Add(btnAgregarMetodoDePago);
+            Controls.Add(label6);
+            Controls.Add(cmbMetodoPago);
             Controls.Add(txtPrecioVentaProducto);
             Controls.Add(label5);
             Controls.Add(lblFechaCaja);
@@ -480,5 +517,8 @@
         private DateTimePicker dtFechaCompraProducto;
         private TextBox txtPrecioVentaProducto;
         private Label label5;
+        private ComboBox cmbMetodoPago;
+        private Label label6;
+        private Button btnAgregarMetodoDePago;
     }
 }

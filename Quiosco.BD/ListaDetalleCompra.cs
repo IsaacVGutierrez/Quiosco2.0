@@ -14,36 +14,41 @@ namespace Quiosco.BD
 
         public int abmDetalleCompra(string accion, DetalleCompra objDetalleCompra)
         {
-
             int resultado = -1;
-            string orden = string.Empty;
             if (accion == "Alta")
-                orden = $"insert into DetalleCompra values ('{objDetalleCompra.IdCompraProducto}','{objDetalleCompra.IdProducto}','{objDetalleCompra.CantidadProducto}')";
-
-            if (accion == "Modificar")
-                orden = $"update DetalleCompra set IdCompraProducto = '{objDetalleCompra.IdCompraProducto}' where id = {objDetalleCompra.IdDetalleCompra};  update DetalleCompra set IdProducto = '{objDetalleCompra.IdProducto}' where id = {objDetalleCompra.IdDetalleCompra}; update DetalleCompra set CantidadProducto = '{objDetalleCompra.CantidadProducto}' where id = {objDetalleCompra.IdDetalleCompra};";
-
-            if (accion == "Baja")
-                orden = $"delete from DetalleCompra where IdDetalleCompra = {objDetalleCompra.IdDetalleCompra}";
-
-
-            SqlCommand cmd = new SqlCommand(orden, conexion);
-            try
             {
-                Abrirconexion();
-                resultado = cmd.ExecuteNonQuery();
+                string sql = @"
+            INSERT INTO DetalleCompra (IdCompraProducto, IdProducto, CantidadProducto)
+            VALUES (@idCompra, @idProducto, @cantidad);
+            SELECT CAST(SCOPE_IDENTITY() AS INT);
+        ";
+                SqlCommand cmd = new SqlCommand(sql, conexion);
+                cmd.Parameters.AddWithValue("@idCompra", objDetalleCompra.IdCompraProducto);
+                cmd.Parameters.AddWithValue("@idProducto", objDetalleCompra.IdProducto);
+                cmd.Parameters.AddWithValue("@cantidad", objDetalleCompra.CantidadProducto);
+
+                try
+                {
+                    Abrirconexion();
+                    object o = cmd.ExecuteScalar();
+                    if (o != null) resultado = Convert.ToInt32(o);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al insertar DetalleCompra", e);
+                }
+                finally
+                {
+                    Cerrarconexion();
+                    cmd.Dispose();
+                }
+                return resultado;
             }
-            catch (Exception e)
-            {
-                throw new Exception($"Error al tratar de guardar,borrar o modificar {objDetalleCompra} ", e);
-            }
-            finally
-            {
-                Cerrarconexion();
-                cmd.Dispose();
-            }
-            return resultado;
+
+            // modificar / borrar si necesitás...
+            return -1;
         }
+
 
         public DataSet listadoDetalleCompra(string id)
         {

@@ -28,10 +28,15 @@ namespace Quiosco.Negocio
             return objDatosProducto.listarProductoBuscar(cual);
         }
 
-        public DataSet ListarProductoEliminar(string id)
+        public bool ListarProductoEliminar(int id)
         {
             return objDatosProducto.ListarProductoEliminar(id);
         }
 
+
+        public DataSet Union()
+        {
+            return objDatosProducto.Union();
+        }
     }
 }

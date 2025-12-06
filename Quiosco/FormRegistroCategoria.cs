@@ -28,9 +28,7 @@ namespace Quiosco
 
             LlenarDGVCategoria();
 
-            // LlenarCombos();
-            // LlenarCombos2();
-
+           
 
         }
 
@@ -201,7 +199,7 @@ namespace Quiosco
                 nResultado = objNegCategoria.abmCategoria("Modificar", objEntCategoria);
                 if (nResultado != -1)
                 {
-                    MessageBox.Show("el Categoria fue modificada con éxito");
+                    MessageBox.Show(" La Categoria fue modificada con éxito");
                     LimpiarCategoria();
                     LlenarDGVCategoria();
                     btnModificarCategoria.Visible = false;

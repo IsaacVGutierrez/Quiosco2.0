@@ -16,7 +16,7 @@ namespace Quiosco.Entidades
 
         private DateTime fechaVenta;
 
-        private string metodoDePagoVenta;
+        private int metodoDePagoVenta;
 
         private int idCliente;
 
@@ -45,7 +45,7 @@ namespace Quiosco.Entidades
         }
 
 
-        public string MetodoDePagoVenta
+        public int MetodoDePagoVenta
         {
             get { return metodoDePagoVenta; }
             set { metodoDePagoVenta = value; }
@@ -66,7 +66,7 @@ namespace Quiosco.Entidades
 
         public Venta() { }
 
-        public Venta( decimal subtotalVent,  DateTime fechaVent, string metodoDePagoVent, decimal saldoVent)
+        public Venta( decimal subtotalVent,  DateTime fechaVent, int metodoDePagoVent, decimal saldoVent)
         {
             subtotalVenta = subtotalVent;
             fechaVenta = fechaVent;

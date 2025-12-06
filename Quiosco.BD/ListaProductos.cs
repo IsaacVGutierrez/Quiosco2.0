@@ -9,62 +9,147 @@ namespace Quiosco.BD
 
         public int abmProducto(string accion, Producto objProducto)
         {
-
-
             int resultado = -1;
-            string orden = string.Empty;
+
             if (accion == "Alta")
-
-                orden = $"insert into Producto values ('{objProducto.NombreProducto}','{objProducto.MarcaProducto}','{objProducto.PrecioProducto}' ,'{objProducto.CantidadProducto}' ,'{objProducto.PrecioCompra}' ,'{objProducto.PrecioVenta}' ,'{objProducto.IdCategoria}')";
-
-            if (accion == "Modificar")
-               orden = $"update Producto set NombreProducto = '{objProducto.NombreProducto}' where id = {objProducto.IdProducto}; update Producto set MarcaProducto = '{objProducto.MarcaProducto}' where id = {objProducto.IdProducto}; update Producto set PrecioProducto = '{objProducto.PrecioProducto}' where id = {objProducto.IdProducto}; update Producto set CantidadProducto = {objProducto.CantidadProducto} where id = {objProducto.IdProducto};  update Producto set PrecioCompra = '{objProducto.PrecioCompra}' where id = {objProducto.IdProducto};  update Producto set PrecioVenta = '{objProducto.PrecioVenta}' where id = {objProducto.IdProducto};  update Producto set IdCategoria = '{objProducto.IdCategoria}' where id = {objProducto.IdProducto}; ";
-
-            if (accion == "Baja")
-
-               orden = $"delete from Producto where IdProducto = {objProducto.IdProducto}";
-
-
-            SqlCommand cmd = new SqlCommand(orden, conexion);
-            try
             {
-                Abrirconexion();
-                resultado = cmd.ExecuteNonQuery();
+                string sql = @"
+            INSERT INTO Producto (NombreProducto, MarcaProducto, PrecioProducto, CantidadProducto, PrecioCompra, PrecioVenta, IdCategoria)
+            OUTPUT INSERTED.IdProducto
+            VALUES (@nombre, @marca, @precioProducto, @cantidad, @precioCompra, @precioVenta, @idCategoria);
+        ";
+
+                SqlCommand cmd = new SqlCommand(sql, conexion);
+                cmd.Parameters.AddWithValue("@nombre", objProducto.NombreProducto);
+                cmd.Parameters.AddWithValue("@marca", objProducto.MarcaProducto);
+                cmd.Parameters.AddWithValue("@precioProducto", objProducto.PrecioProducto);
+                cmd.Parameters.AddWithValue("@cantidad", objProducto.CantidadProducto);
+                cmd.Parameters.AddWithValue("@precioCompra", objProducto.PrecioCompra);
+                cmd.Parameters.AddWithValue("@precioVenta", objProducto.PrecioVenta);
+                cmd.Parameters.AddWithValue("@idCategoria", objProducto.IdCategoria);
+
+                try
+                {
+                    Abrirconexion();
+                    object o = cmd.ExecuteScalar();
+                    if (o != null) resultado = Convert.ToInt32(o);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al insertar Producto", e);
+                }
+                finally
+                {
+                    Cerrarconexion();
+                    cmd.Dispose();
+                }
+
+                return resultado;
             }
-            catch (Exception e)
+            else if (accion == "Modificar")
             {
-                throw new Exception($"Error al tratar de guardar,borrar o modificar {objProducto} ", e);
+                string sql = @"
+            UPDATE Producto SET
+                NombreProducto = @nombre,
+                MarcaProducto = @marca,
+                PrecioProducto = @precioProducto,
+                CantidadProducto = @cantidad,
+                PrecioCompra = @precioCompra,
+                PrecioVenta = @precioVenta,
+                IdCategoria = @idCategoria
+            WHERE IdProducto = @idProducto;
+        ";
+                SqlCommand cmd = new SqlCommand(sql, conexion);
+                cmd.Parameters.AddWithValue("@nombre", objProducto.NombreProducto);
+                cmd.Parameters.AddWithValue("@marca", objProducto.MarcaProducto);
+                cmd.Parameters.AddWithValue("@precioProducto", objProducto.PrecioProducto);
+                cmd.Parameters.AddWithValue("@cantidad", objProducto.CantidadProducto);
+                cmd.Parameters.AddWithValue("@precioCompra", objProducto.PrecioCompra);
+                cmd.Parameters.AddWithValue("@precioVenta", objProducto.PrecioVenta);
+                cmd.Parameters.AddWithValue("@idCategoria", objProducto.IdCategoria);
+                cmd.Parameters.AddWithValue("@idProducto", objProducto.IdProducto);
+
+                try
+                {
+                    Abrirconexion();
+                    resultado = cmd.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al modificar Producto", e);
+                }
+                finally
+                {
+                    Cerrarconexion();
+                    cmd.Dispose();
+                }
+                return resultado;
             }
-            finally
+            else if (accion == "Baja")
             {
-                Cerrarconexion();
-                cmd.Dispose();
+                string sql = "DELETE FROM Producto WHERE IdProducto = @idProducto";
+                SqlCommand cmd = new SqlCommand(sql, conexion);
+                cmd.Parameters.AddWithValue("@idProducto", objProducto.IdProducto);
+                try
+                {
+                    Abrirconexion();
+                    resultado = cmd.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al eliminar Producto", e);
+                }
+                finally
+                {
+                    Cerrarconexion();
+                    cmd.Dispose();
+                }
+                return resultado;
             }
+
             return resultado;
         }
 
+
+
+
         public DataSet listadoProducto(string id)
         {
-            string orden = string.Empty;
-            if (id != "Todos")
-                orden = $"select * from Producto where idProducto = {int.Parse(id)};";
-            else
-                orden = "select * from Producto;";
+            string orden = @"
+        SELECT
+            p.IdProducto,
+            p.NombreProducto,
+            p.MarcaProducto,
+            p.PrecioProducto,
+            p.CantidadProducto,
+            p.PrecioCompra,
+            p.PrecioVenta,
+            p.IdCategoria,
+            cp.IdProveedor,
+            cp.IdMetodoDePago,
+            cp.FechaCompraProductos,
+            dc.IdCompraProducto
+        FROM Producto p
+        LEFT JOIN DetalleCompra dc ON p.IdProducto = dc.IdProducto
+        LEFT JOIN CompraProducto cp ON dc.IdCompraProducto = cp.IdCompraProducto
+        WHERE p.IdProducto = @id;
+    ";
+
             SqlCommand cmd = new SqlCommand(orden, conexion);
+            cmd.Parameters.AddWithValue("@id", int.Parse(id));
+
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
+
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
-
                 return ds;
             }
             catch (Exception e)
             {
-                return ds = null;
                 throw new Exception("Error al listar Producto", e);
             }
             finally
@@ -72,7 +157,6 @@ namespace Quiosco.BD
                 Cerrarconexion();
                 cmd.Dispose();
             }
-            //return ds;
         }
 
 
@@ -116,15 +200,16 @@ namespace Quiosco.BD
 
                     producto.MarcaProducto = dataReader.GetString(2);
 
-                    producto.PrecioProducto = dataReader.GetInt32(3);
+                    producto.PrecioProducto = dataReader.GetDecimal(3);
 
                     producto.CantidadProducto = dataReader.GetInt32(4);
 
-                    producto.PrecioCompra = Convert.ToDecimal(dataReader.GetDouble(5));
+                    producto.PrecioCompra = dataReader.GetDecimal(5);
 
-                    producto.PrecioVenta = Convert.ToDecimal(dataReader.GetDouble(6));
+                    producto.PrecioVenta = dataReader.GetDecimal(6);
 
                     producto.IdCategoria = dataReader.GetInt32(7);
+
 
 
                     lista.Add(producto);
@@ -145,22 +230,54 @@ namespace Quiosco.BD
             return lista;
         }
 
-       
+
 
         public DataSet listarProductoBuscar(string cual)
         {
-            string orden = $" select p.IdProducto , p.NombreProducto, p.MarcaProducto, p.PrecioProducto, p.CantidadProducto, p.PrecioCompra, p.PrecioVenta, m.NombreCategoria" +
-                $"from  Producto as p inner join Categoria as m on p.IdProducto=m.IdCategoria " +
-                      $"where p.IdProducto like '%{cual}%' or p.NombreProducto like '%{cual}%' or  p.MarcaProducto like '%{cual}%' or  p.PrecioProducto like '%{cual}%' or  p.CantidadProducto like '%{cual}%' or  p.PrecioCompra like '%{cual}%' or  p.PrecioVenta like '%{cual}%' or  p.NombreCategoria like '%{cual}%' ; ";
+            string orden = @"
+        SELECT  
+            p.IdProducto,
+            p.NombreProducto,
+            p.MarcaProducto,
+            p.PrecioProducto,
+            c.NombreCategoria,
+            p.CantidadProducto,
+            pr.NombreProveedor,
+            p.PrecioCompra,
+            p.PrecioVenta,
+            mp.NombreMetodoDePago,
+            cp.FechaCompraProductos
+        FROM Producto p
+            INNER JOIN Categoria c ON p.IdCategoria = c.IdCategoria
+            INNER JOIN DetalleCompra dc ON p.IdProducto = dc.IdProducto
+            INNER JOIN CompraProducto cp ON dc.IdCompraProducto = cp.IdCompraProducto
+            INNER JOIN Proveedor pr ON cp.IdProveedor = pr.IdProveedor
+            INNER JOIN MetodoDePago mp ON cp.IdMetodoDePago = mp.IdMetodoDePago
+        WHERE 
+            p.IdProducto LIKE @buscar OR
+            p.NombreProducto LIKE @buscar OR
+            p.MarcaProducto LIKE @buscar OR
+            p.PrecioProducto LIKE @buscar OR
+            p.CantidadProducto LIKE @buscar OR
+            p.PrecioCompra LIKE @buscar OR
+            p.PrecioVenta LIKE @buscar OR
+            c.NombreCategoria LIKE @buscar OR
+            pr.NombreProveedor LIKE @buscar OR
+           mp.NombreMetodoDePago LIKE @buscar OR
+CONVERT(VARCHAR(10), cp.FechaCompraProductos, 120) LIKE @buscar OR
+           CONVERT(VARCHAR(10), cp.FechaCompraProductos, 120) LIKE @buscar
+        ORDER BY p.IdProducto DESC;
+    ";
 
             SqlCommand cmd = new SqlCommand(orden, conexion);
+            cmd.Parameters.AddWithValue("@buscar", $"%{cual}%");
+
             DataSet ds = new DataSet();
-            SqlDataAdapter da = new SqlDataAdapter();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
+
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
-                da.SelectCommand = cmd;
                 da.Fill(ds);
             }
             catch (Exception e)
@@ -172,56 +289,106 @@ namespace Quiosco.BD
                 Cerrarconexion();
                 cmd.Dispose();
             }
+
             return ds;
         }
 
-        public DataSet ListarProductoEliminar(string id)
-        {
-            string orden = $"delete from Producto where IdProducto = {id};";
 
-            SqlCommand cmd = new SqlCommand(orden, conexion);
-            DataSet ds = new DataSet();
-            SqlDataAdapter da = new SqlDataAdapter();
+
+
+        public bool ListarProductoEliminar(int idProducto)
+        {
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
-                da.SelectCommand = cmd;
-                da.Fill(ds);
+
+                // 1) Obtener IdCompraProducto asociado
+                var cmdGet = new SqlCommand("SELECT IdCompraProducto FROM DetalleCompra WHERE IdProducto=@id", conexion);
+                cmdGet.Parameters.AddWithValue("@id", idProducto);
+
+                object o = cmdGet.ExecuteScalar();
+                int idCompra = (o == null) ? -1 : Convert.ToInt32(o);
+
+                // 2) Eliminar detalle
+                var cmd1 = new SqlCommand("DELETE FROM DetalleCompra WHERE IdProducto=@id", conexion);
+                cmd1.Parameters.AddWithValue("@id", idProducto);
+                cmd1.ExecuteNonQuery();
+
+                // 3) Eliminar compra si no tiene más detalles
+                if (idCompra > 0)
+                {
+                    var cmdCheck = new SqlCommand("SELECT COUNT(*) FROM DetalleCompra WHERE IdCompraProducto=@idc", conexion);
+                    cmdCheck.Parameters.AddWithValue("@idc", idCompra);
+
+                    int count = (int)cmdCheck.ExecuteScalar();
+                    if (count == 0)
+                    {
+                        var cmd2 = new SqlCommand("DELETE FROM CompraProducto WHERE IdCompraProducto=@idc", conexion);
+                        cmd2.Parameters.AddWithValue("@idc", idCompra);
+                        cmd2.ExecuteNonQuery();
+                    }
+                }
+
+                // 4) Eliminar producto
+                var cmd3 = new SqlCommand("DELETE FROM Producto WHERE IdProducto=@id", conexion);
+                cmd3.Parameters.AddWithValue("@id", idProducto);
+                cmd3.ExecuteNonQuery();
+
+                return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception("Error al eliminar el producto", e);
+                throw new Exception("Error al eliminar el producto", ex);
             }
             finally
             {
                 Cerrarconexion();
-                cmd.Dispose();
             }
-            return ds;
         }
 
 
-       
+
+
 
         public DataSet Union()
         {
+            string orden = @"
+          SELECT 
+                p.IdProducto,
+              p.NombreProducto,
+              p.MarcaProducto,
+               p.PrecioProducto,
+              c.NombreCategoria,
+              p.CantidadProducto,
+              pr.NombreProveedor,
+              p.PrecioCompra,
+              p.PrecioVenta,
+              mp.NombreMetodoDePago,
+              cp.FechaCompraProductos
+             FROM Producto p
+             INNER JOIN Categoria c ON p.IdCategoria = c.IdCategoria
+              LEFT JOIN DetalleCompra dc ON p.IdProducto = dc.IdProducto
+             LEFT JOIN CompraProducto cp ON dc.IdCompraProducto = cp.IdCompraProducto
+              LEFT JOIN Proveedor pr ON cp.IdProveedor = pr.IdProveedor
+             LEFT JOIN MetodoDePago mp ON cp.IdMetodoDePago = mp.IdMetodoDePago
 
-            string orden = $" select p.IdProducto , p.NombreProducto, p.MarcaProducto, p.PrecioProducto, p.CantidadProducto, p.PrecioCompra, p.PrecioVenta, m.NombreCategoria from  Producto as p inner join Categoria as m on p.IdProducto=m.IdCategoria ";
-        
+              ORDER BY p.IdProducto DESC;
+
+
+               ";
+
             SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
             }
             catch (Exception e)
             {
-                throw new Exception("Error al buscar los Detalle de Compra", e);
+                throw new Exception("Error al obtener todas las compras del producto", e);
             }
             finally
             {
@@ -230,6 +397,9 @@ namespace Quiosco.BD
             }
             return ds;
         }
+
+
+
 
     }
 }

@@ -3,9 +3,6 @@ using Quiosco.Entidades;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Quiosco.BD
 {
@@ -14,51 +11,95 @@ namespace Quiosco.BD
 
         public int abmCompraProducto(string accion, CompraProducto objCompraProducto)
         {
-
             int resultado = -1;
-            string orden = string.Empty;
+
             if (accion == "Alta")
-                orden = $"insert into CompraProducto values ('{objCompraProducto.SubtotalCompraProducto}','{objCompraProducto.FechaCompraProductos}','{objCompraProducto.MetodoDePago}','{objCompraProducto.IdProveedor}')";
+            {
+                string sql = @"
+                    INSERT INTO CompraProducto
+                  (SubtotalCompraProducto, FechaCompraProductos, IdMetodoDePago, IdProveedor)
+                   VALUES (@subtotal, @fecha, @metodo, @idProveedor);
+                  SELECT CAST(SCOPE_IDENTITY() AS INT);
+                   ";
 
-            if (accion == "Modificar")
-                orden = $"update CompraProducto set SubtotalCompraProducto = '{objCompraProducto.SubtotalCompraProducto}' where id = {objCompraProducto.IdCompraProducto};  update CompraProducto set FechaCompraProductos = '{objCompraProducto.FechaCompraProductos}' where id = {objCompraProducto.IdCompraProducto}; update CompraProducto set MetodoDePago = '{objCompraProducto.MetodoDePago}' where id = {objCompraProducto.IdCompraProducto}; update CompraProducto set IdProveedor = '{objCompraProducto.IdProveedor}' where id = {objCompraProducto.IdCompraProducto}; ";
+                SqlCommand cmd = new SqlCommand(sql, conexion);
+                cmd.Parameters.AddWithValue("@subtotal", objCompraProducto.SubtotalCompraProducto);
+                cmd.Parameters.AddWithValue("@fecha", objCompraProducto.FechaCompraProductos);
+                // IdMetodoDePago ahora es int (no string)
+                cmd.Parameters.AddWithValue("@metodo", objCompraProducto.IdMetodoDePago);
+                cmd.Parameters.AddWithValue("@idProveedor", objCompraProducto.IdProveedor);
 
-            //if (accion == "Baja")
-            //    orden = $"delete from CompraProducto where IdCompraProducto = {objCompraProducto.IdCompraProducto}";
+                try
+                {
+                    Abrirconexion();
+                    object o = cmd.ExecuteScalar();
+                    if (o != null) resultado = Convert.ToInt32(o);
+                }
+                catch (Exception e)
+                {
+                    throw new Exception("Error al insertar CompraProducto", e);
+                }
+                finally
+                {
+                    Cerrarconexion();
+                    cmd.Dispose();
+                }
+                return resultado;
+            }
+           
+                                          
+
+                 return -1;
+        }
 
 
-            SqlCommand cmd = new SqlCommand(orden, conexion);
+        public int ModificarCompra(CompraProducto obj)
+        {
+            string sql = @"
+        UPDATE CompraProducto SET
+            IdProveedor = @prov,
+            IdMetodoDePago = @metodo,
+            FechaCompraProductos = @fecha
+        WHERE IdCompraProducto = @id;
+    ";
+
+            SqlCommand cmd = new SqlCommand(sql, conexion);
+            cmd.Parameters.AddWithValue("@prov", obj.IdProveedor);
+            cmd.Parameters.AddWithValue("@metodo", obj.IdMetodoDePago);
+            cmd.Parameters.AddWithValue("@fecha", obj.FechaCompraProductos);
+            cmd.Parameters.AddWithValue("@id", obj.IdCompraProducto);
+
             try
             {
                 Abrirconexion();
-                resultado = cmd.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                throw new Exception($"Error al tratar de guardar,borrar o modificar {objCompraProducto} ", e);
+                return cmd.ExecuteNonQuery();
             }
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
-            return resultado;
         }
+
+
+
 
         public DataSet listadoCompraProducto(string id)
         {
-            string orden = string.Empty;
+            string orden;
+
             if (id != "Todos")
-                orden = $"select * from CompraProducto where idCompraProducto = {int.Parse(id)};";
+                orden = $"SELECT * FROM CompraProducto WHERE IdCompraProducto = {id}";
             else
-                orden = "select * from CompraProducto;";
+                orden = "SELECT * FROM CompraProducto";
+
             SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
+
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
 
@@ -66,54 +107,51 @@ namespace Quiosco.BD
             }
             catch (Exception e)
             {
-                return ds = null;
-                throw new Exception("Error al listar Compra De Producto", e);
+                throw new Exception("Error al listar CompraProducto", e);
             }
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
-            //return ds;
         }
-
-
 
         public List<CompraProducto> ObtenerCompraProducto()
         {
             List<CompraProducto> lista = new List<CompraProducto>();
 
-            string OrdenEjecucion = "Select IdCompraProducto, SubtotalCompraProducto, FechaCompraProductos, MetodoDePago , IdProveedor  from CompraProducto";
+            string sql = @"SELECT IdCompraProducto, SubtotalCompraProducto,
+               FechaCompraProductos, IdMetodoDePago, IdProveedor
+               FROM CompraProducto";
 
-            SqlCommand cmd = new SqlCommand(OrdenEjecucion, conexion);
-
-            SqlDataReader dataReader;
+            SqlCommand cmd = new SqlCommand(sql, conexion);
 
             try
             {
                 Abrirconexion();
 
-                dataReader = cmd.ExecuteReader();
+                SqlDataReader dr = cmd.ExecuteReader();
 
-                while (dataReader.Read())
+                while (dr.Read())
                 {
-                    CompraProducto compraProducto = new CompraProducto();
+                    CompraProducto cp = new CompraProducto();
 
-                    compraProducto.IdCompraProducto = dataReader.GetInt32(0);
-                    compraProducto.SubtotalCompraProducto = Convert.ToDecimal(dataReader.GetDouble(1));
-                    compraProducto.FechaCompraProductos = dataReader.GetDateTime(2);
-                    compraProducto.MetodoDePago = dataReader.GetString(3);
-                    compraProducto.IdProveedor = dataReader.GetInt32(4);
+                    cp.IdCompraProducto = dr.GetInt32(0);
+                    // Subtotal puede venir como decimal -> leer con GetDecimal
+                    cp.SubtotalCompraProducto = dr.GetDecimal(1);
+                    cp.FechaCompraProductos = dr.GetDateTime(2);
+                    // IdMetodoDePago ahora es int
+                    cp.IdMetodoDePago = dr.GetInt32(3);
+                    cp.IdProveedor = dr.GetInt32(4);
 
-                   lista.Add(compraProducto);
+                    lista.Add(cp);
                 }
+                dr.Close();
             }
             catch (Exception e)
             {
-
-                throw new Exception("Error al obtener la lista de valores de la Compra de Producto", e);
+                throw new Exception("Error al obtener lista de CompraProducto", e);
             }
-
             finally
             {
                 Cerrarconexion();
@@ -123,90 +161,118 @@ namespace Quiosco.BD
             return lista;
         }
 
-        
         public DataSet listarCompraProductoBuscar(string cual)
         {
-            string orden = $" select c.IdCompraProducto, c.SubtotalCompraProducto, c.FechaCompraProductos, c.MetodoDePago,  m.NombreProveedor, m.TelefonoProveedor, m.DireccionProveedor, m.HorarioProveedor, m.DiasProveedor " +
-                $" from  CompraProducto as c inner join Proveedor as m on c.IdCompraProducto= m.IdProveedor" +
-                $" where c.IdCompraProducto like '%{cual}%' or c.SubtotalCompraProducto like '%{cual}%'  or c.FechaCompraProductos like '%{cual}%'   or c.MetodoDePago like '%{cual}%'  or m.NombreProveedor like '%{cual}%'  or m.TelefonoProveedor like '%{cual}%'  or m.DireccionProveedor like '%{cual}%'  or m.HorarioProveedor like '%{cual}%'  or m.DiasProveedor like '%{cual}%'; ";
+            string sql =
+            $@"SELECT 
+            c.IdCompraProducto,
+            c.SubtotalCompraProducto,
+            c.FechaCompraProductos,
+            mp.NombreMetodoDePago,
+            m.NombreProveedor,
+            m.TelefonoProveedor,
+            m.DireccionProveedor,
+            m.HorarioProveedor,
+            m.DiasProveedor
+        FROM CompraProducto AS c
+        INNER JOIN Proveedor AS m ON c.IdProveedor = m.IdProveedor
+        INNER JOIN MetodoPago AS mp ON c.IdMetodoDePago = mp.IdMetodoDePago
+        WHERE
+            c.IdCompraProducto LIKE '%{cual}%'
+            OR c.SubtotalCompraProducto LIKE '%{cual}%'
+            OR CONVERT(VARCHAR(10), c.FechaCompraProductos, 120) LIKE '%{cual}%'
+            OR mp.NombreMetodoDePago LIKE '%{cual}%'
+            OR m.NombreProveedor LIKE '%{cual}%'
+            OR m.TelefonoProveedor LIKE '%{cual}%'
+            OR m.DireccionProveedor LIKE '%{cual}%'
+            OR m.HorarioProveedor LIKE '%{cual}%'
+            OR m.DiasProveedor LIKE '%{cual}%'
+    ";
 
-            SqlCommand cmd = new SqlCommand(orden, conexion);
+            SqlCommand cmd = new SqlCommand(sql, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
+
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Error al buscar la Compra de Producto", e);
             }
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
+
             return ds;
         }
+
 
         public DataSet ListarCompraProductoEliminar(string id)
         {
-            string orden = $"delete from CompraProducto where IdCompraProducto = {id};";
+            string sql = $"DELETE FROM CompraProducto WHERE IdCompraProducto = {id}";
 
-            SqlCommand cmd = new SqlCommand(orden, conexion);
+            SqlCommand cmd = new SqlCommand(sql, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
+
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
             }
             catch (Exception e)
             {
-                throw new Exception("Error al eliminar la Compra de Producto", e);
+                throw new Exception("Error al eliminar CompraProducto", e);
             }
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
+
             return ds;
         }
 
-       
-
         public DataSet Union()
         {
+            string sql =
+            @"SELECT 
+            c.IdCompraProducto,
+            c.SubtotalCompraProducto,
+            c.FechaCompraProductos,
+            mp.NombreMetodoDePago,
+            m.NombreProveedor,
+            m.TelefonoProveedor,
+            m.DireccionProveedor,
+            m.HorarioProveedor,
+            m.DiasProveedor
+        FROM CompraProducto AS c
+        INNER JOIN Proveedor AS m ON c.IdProveedor = m.IdProveedor
+        INNER JOIN MetodoPago AS mp ON c.IdMetodoDePago = mp.IdMetodoDePago";
 
-            string orden = $" select c.IdCompraProducto, c.SubtotalCompraProducto, c.FechaCompraProductos, c.MetodoDePago,  m.NombreProveedor, m.TelefonoProveedor, m.DireccionProveedor, m.HorarioProveedor, m.DiasProveedor  from  CompraProducto as c inner join Proveedor as m on c.IdCompraProducto= m.IdProveedor";
-
-            SqlCommand cmd = new SqlCommand(orden, conexion);
+            SqlCommand cmd = new SqlCommand(sql, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();
+
             try
             {
                 Abrirconexion();
-                cmd.ExecuteNonQuery();
                 da.SelectCommand = cmd;
                 da.Fill(ds);
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Error al buscar los detalles de la Compra de Producto", e);
             }
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
+
             return ds;
         }
 
 
     }
+
 }
