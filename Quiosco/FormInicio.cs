@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 using Quiosco.BD;
+using System.Windows.Forms.DataVisualization.Charting;
 
 
 namespace Quiosco
@@ -20,6 +21,11 @@ namespace Quiosco
         public FormInicio()
         {
             InitializeComponent();
+
+
+            CargarGrafico();
+
+
 
             dgvDeudor.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
@@ -45,6 +51,65 @@ namespace Quiosco
         public Cliente objEntDeudor = new Cliente();
 
         public ClienteNegocio objNegDeudor = new ClienteNegocio();
+
+
+        private void CrearGrafico()
+        {
+            Chart chart = new Chart();
+            chart.Parent = this; // Agregarlo al formulario
+            chart.Dock = DockStyle.Fill; // Que ocupe todo el formulario
+
+            // Crear el área del gráfico
+            ChartArea area = new ChartArea("Area1");
+            chart.ChartAreas.Add(area);
+
+            // Crear la serie de datos
+            Series serie = new Series("Serie1");
+            serie.ChartType = SeriesChartType.Pie; // Gráfico de torta
+
+            // EJEMPLO de datos
+            serie.Points.AddXY("Ventas", 15000);
+            serie.Points.AddXY("Compras", 5000);
+            serie.Points.AddXY("Ganancias", 8000);
+
+            chart.Series.Add(serie);
+
+            // Estilo lindo
+            serie["PieLabelStyle"] = "Outside";
+            serie.BorderWidth = 2;
+            serie.BorderColor = Color.White;
+            chart.BackColor = Color.WhiteSmoke;
+
+            this.Controls.Add(chart);
+        }
+
+
+
+        private void CargarGrafico()
+        {
+            chart1 = new Chart();
+            ChartArea chartArea1 = new ChartArea();
+            Series series1 = new Series();
+
+            chartArea1.Name = "ChartArea1";
+            chart1.ChartAreas.Add(chartArea1);
+
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = SeriesChartType.Pie;
+            series1.Name = "Series1";
+
+            chart1.Series.Add(series1);
+
+            chart1.Location = new Point(600, 150);
+            chart1.Size = new Size(350, 300);
+            chart1.BackColor = Color.WhiteSmoke;
+
+            tabInicio.Controls.Add(chart1);
+        }
+
+
+
+
 
         private void LlenarDGVDeudor()
         {
@@ -442,7 +507,7 @@ namespace Quiosco
         {
             CargarDetalleVenta();
             CargarProductosEnStock();
-
+            CrearGrafico();
         }
 
         private void CargarDetalleVenta()
@@ -636,6 +701,6 @@ namespace Quiosco
 
         }
 
-      
+
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace Quiosco
+﻿using System.Windows.Forms.DataVisualization.Charting;
+
+namespace Quiosco
 {
     partial class FormInicio
     {
@@ -31,9 +33,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInicio));
             tabControl1 = new TabControl();
             tabInicio = new TabPage();
-            label12 = new Label();
-            label11 = new Label();
-            VENTA = new Label();
+            lblGanancia = new Label();
+            lblCompra = new Label();
+            lblVenta = new Label();
             pictureBox1 = new PictureBox();
             btnRegistrarVenta = new Button();
             btnRegistrarProducto = new Button();
@@ -92,9 +94,9 @@
             // 
             tabInicio.BackgroundImage = (Image)resources.GetObject("tabInicio.BackgroundImage");
             tabInicio.BackgroundImageLayout = ImageLayout.Stretch;
-            tabInicio.Controls.Add(label12);
-            tabInicio.Controls.Add(label11);
-            tabInicio.Controls.Add(VENTA);
+            tabInicio.Controls.Add(lblGanancia);
+            tabInicio.Controls.Add(lblCompra);
+            tabInicio.Controls.Add(lblVenta);
             tabInicio.Controls.Add(pictureBox1);
             tabInicio.Controls.Add(btnRegistrarVenta);
             tabInicio.Controls.Add(btnRegistrarProducto);
@@ -107,39 +109,39 @@
             tabInicio.Text = "Inicio";
             tabInicio.UseVisualStyleBackColor = true;
             // 
-            // label12
+            // lblGanancia
             // 
-            label12.AutoSize = true;
-            label12.BackColor = Color.Black;
-            label12.ForeColor = SystemColors.ButtonHighlight;
-            label12.Location = new Point(303, 258);
-            label12.Name = "label12";
-            label12.Size = new Size(68, 15);
-            label12.TabIndex = 17;
-            label12.Text = "GANANCIA";
+            lblGanancia.AutoSize = true;
+            lblGanancia.BackColor = Color.Black;
+            lblGanancia.ForeColor = SystemColors.ButtonHighlight;
+            lblGanancia.Location = new Point(303, 258);
+            lblGanancia.Name = "lblGanancia";
+            lblGanancia.Size = new Size(68, 15);
+            lblGanancia.TabIndex = 17;
+            lblGanancia.Text = "GANANCIA";
             // 
-            // label11
+            // lblCompra
             // 
-            label11.AutoSize = true;
-            label11.BackColor = Color.Black;
-            label11.ForeColor = SystemColors.ButtonHighlight;
-            label11.Location = new Point(389, 313);
-            label11.Name = "label11";
-            label11.Size = new Size(57, 15);
-            label11.TabIndex = 16;
-            label11.Text = "COMPRA\r\n";
+            lblCompra.AutoSize = true;
+            lblCompra.BackColor = Color.Black;
+            lblCompra.ForeColor = SystemColors.ButtonHighlight;
+            lblCompra.Location = new Point(389, 313);
+            lblCompra.Name = "lblCompra";
+            lblCompra.Size = new Size(57, 15);
+            lblCompra.TabIndex = 16;
+            lblCompra.Text = "COMPRA\r\n";
             // 
-            // VENTA
+            // lblVenta
             // 
-            VENTA.AutoSize = true;
-            VENTA.BackColor = Color.Black;
-            VENTA.ForeColor = SystemColors.ButtonHighlight;
-            VENTA.Location = new Point(404, 222);
-            VENTA.Name = "VENTA";
-            VENTA.Size = new Size(42, 15);
-            VENTA.TabIndex = 14;
-            VENTA.Text = "VENTA\r\n";
-            VENTA.Click += VENTA_Click;
+            lblVenta.AutoSize = true;
+            lblVenta.BackColor = Color.Black;
+            lblVenta.ForeColor = SystemColors.ButtonHighlight;
+            lblVenta.Location = new Point(404, 222);
+            lblVenta.Name = "lblVenta";
+            lblVenta.Size = new Size(42, 15);
+            lblVenta.TabIndex = 14;
+            lblVenta.Text = "VENTA\r\n";
+            lblVenta.Click += VENTA_Click;
             // 
             // pictureBox1
             // 
@@ -569,8 +571,10 @@
         private Button btnBuscarDetalleVenta;
         private Label label9;
         private DataGridView dgvDetalleVenta;
-        private Label label12;
-        private Label VENTA;
-        private Label label11;
+        private Label lblGanancia;
+        private Label lblVenta;
+        private Label lblCompra;
+        private Chart chart1;
+
     }
 }
