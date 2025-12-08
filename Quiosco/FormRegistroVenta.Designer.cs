@@ -30,15 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRegistroVenta));
             lblNombreProducto = new Label();
-            txtEliminarVenta = new TextBox();
-            lblEliminarProducto = new Label();
-            label4 = new Label();
-            txtBuscarVenta = new TextBox();
-            btnBuscarVenta = new Button();
-            btnEliminarVenta = new Button();
-            btnCancelarVenta = new Button();
-            btnModificarVenta = new Button();
-            btnCargarVenta = new Button();
             txtCantidadVenta = new TextBox();
             lblCantidadProducto = new Label();
             label2 = new Label();
@@ -53,6 +44,10 @@
             cmbClienteVenta = new ComboBox();
             cmbMedioPagoVenta = new ComboBox();
             btnAgregarMetodoDePago = new Button();
+            btnAgregarAlCarrito = new Button();
+            btnQuitarDelCarrito = new Button();
+            btnVaciarCarrito = new Button();
+            btnConfirmarVenta = new Button();
             ((System.ComponentModel.ISupportInitialize)dgvVenta).BeginInit();
             SuspendLayout();
             // 
@@ -61,107 +56,16 @@
             lblNombreProducto.AutoSize = true;
             lblNombreProducto.BackColor = Color.Wheat;
             lblNombreProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblNombreProducto.Location = new Point(104, 170);
+            lblNombreProducto.Location = new Point(103, 210);
             lblNombreProducto.Margin = new Padding(4, 0, 4, 0);
             lblNombreProducto.Name = "lblNombreProducto";
             lblNombreProducto.Size = new Size(122, 15);
             lblNombreProducto.TabIndex = 87;
             lblNombreProducto.Text = "Nombre del Producto";
             // 
-            // txtEliminarVenta
-            // 
-            txtEliminarVenta.Location = new Point(1142, 565);
-            txtEliminarVenta.Name = "txtEliminarVenta";
-            txtEliminarVenta.Size = new Size(134, 23);
-            txtEliminarVenta.TabIndex = 84;
-            // 
-            // lblEliminarProducto
-            // 
-            lblEliminarProducto.AutoSize = true;
-            lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(1080, 568);
-            lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
-            lblEliminarProducto.Name = "lblEliminarProducto";
-            lblEliminarProducto.Size = new Size(50, 15);
-            lblEliminarProducto.TabIndex = 83;
-            lblEliminarProducto.Text = "Eliminar";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.BackColor = Color.Wheat;
-            label4.Location = new Point(750, 570);
-            label4.Margin = new Padding(4, 0, 4, 0);
-            label4.Name = "label4";
-            label4.Size = new Size(42, 15);
-            label4.TabIndex = 82;
-            label4.Text = "Buscar";
-            // 
-            // txtBuscarVenta
-            // 
-            txtBuscarVenta.Location = new Point(814, 566);
-            txtBuscarVenta.Name = "txtBuscarVenta";
-            txtBuscarVenta.Size = new Size(155, 23);
-            txtBuscarVenta.TabIndex = 81;
-            // 
-            // btnBuscarVenta
-            // 
-            btnBuscarVenta.BackColor = Color.Gold;
-            btnBuscarVenta.Location = new Point(975, 557);
-            btnBuscarVenta.Name = "btnBuscarVenta";
-            btnBuscarVenta.Size = new Size(84, 36);
-            btnBuscarVenta.TabIndex = 80;
-            btnBuscarVenta.Text = "Buscar";
-            btnBuscarVenta.UseVisualStyleBackColor = false;
-            btnBuscarVenta.Click += btnBuscarVenta_Click;
-            // 
-            // btnEliminarVenta
-            // 
-            btnEliminarVenta.BackColor = Color.Gold;
-            btnEliminarVenta.Location = new Point(1289, 559);
-            btnEliminarVenta.Name = "btnEliminarVenta";
-            btnEliminarVenta.Size = new Size(84, 36);
-            btnEliminarVenta.TabIndex = 79;
-            btnEliminarVenta.Text = "Eliminar";
-            btnEliminarVenta.UseVisualStyleBackColor = false;
-            btnEliminarVenta.Click += btnEliminarVenta_Click;
-            // 
-            // btnCancelarVenta
-            // 
-            btnCancelarVenta.BackColor = Color.Gold;
-            btnCancelarVenta.Location = new Point(213, 535);
-            btnCancelarVenta.Name = "btnCancelarVenta";
-            btnCancelarVenta.Size = new Size(84, 36);
-            btnCancelarVenta.TabIndex = 77;
-            btnCancelarVenta.Text = "Cancelar";
-            btnCancelarVenta.UseVisualStyleBackColor = false;
-            btnCancelarVenta.Click += btnCancelarVenta_Click_1;
-            // 
-            // btnModificarVenta
-            // 
-            btnModificarVenta.BackColor = Color.Gold;
-            btnModificarVenta.Location = new Point(272, 475);
-            btnModificarVenta.Name = "btnModificarVenta";
-            btnModificarVenta.Size = new Size(84, 39);
-            btnModificarVenta.TabIndex = 76;
-            btnModificarVenta.Text = "Modificar";
-            btnModificarVenta.UseVisualStyleBackColor = false;
-            btnModificarVenta.Click += BtnModificarVenta_Click;
-            // 
-            // btnCargarVenta
-            // 
-            btnCargarVenta.BackColor = Color.Gold;
-            btnCargarVenta.Location = new Point(162, 476);
-            btnCargarVenta.Name = "btnCargarVenta";
-            btnCargarVenta.Size = new Size(84, 36);
-            btnCargarVenta.TabIndex = 78;
-            btnCargarVenta.Text = "Cargar";
-            btnCargarVenta.UseVisualStyleBackColor = false;
-            btnCargarVenta.Click += btnCargarVenta_Click;
-            // 
             // txtCantidadVenta
             // 
-            txtCantidadVenta.Location = new Point(249, 232);
+            txtCantidadVenta.Location = new Point(248, 272);
             txtCantidadVenta.Margin = new Padding(4);
             txtCantidadVenta.Name = "txtCantidadVenta";
             txtCantidadVenta.Size = new Size(173, 23);
@@ -173,7 +77,7 @@
             lblCantidadProducto.AutoSize = true;
             lblCantidadProducto.BackColor = Color.Wheat;
             lblCantidadProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblCantidadProducto.Location = new Point(134, 238);
+            lblCantidadProducto.Location = new Point(133, 278);
             lblCantidadProducto.Margin = new Padding(4, 0, 4, 0);
             lblCantidadProducto.Name = "lblCantidadProducto";
             lblCantidadProducto.Size = new Size(55, 15);
@@ -186,7 +90,7 @@
             label2.BackColor = Color.LightSeaGreen;
             label2.BorderStyle = BorderStyle.FixedSingle;
             label2.Font = new Font("Gill Sans Ultra Bold", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label2.Location = new Point(529, 42);
+            label2.Location = new Point(538, 27);
             label2.Name = "label2";
             label2.Size = new Size(183, 22);
             label2.TabIndex = 71;
@@ -197,7 +101,7 @@
             label1.AutoSize = true;
             label1.BackColor = SystemColors.ActiveCaption;
             label1.Font = new Font("Gill Sans Ultra Bold", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(1000, 81);
+            label1.Location = new Point(1001, 44);
             label1.Name = "label1";
             label1.Size = new Size(82, 20);
             label1.TabIndex = 70;
@@ -214,12 +118,13 @@
             dgvVenta.Name = "dgvVenta";
             dgvVenta.Size = new Size(767, 408);
             dgvVenta.TabIndex = 69;
+            dgvVenta.CellClick += dgvVenta_CellClick;
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.BackColor = Color.Wheat;
-            label5.Location = new Point(115, 352);
+            label5.Location = new Point(114, 392);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(87, 15);
@@ -229,7 +134,7 @@
             // cmbProductoVenta
             // 
             cmbProductoVenta.FormattingEnabled = true;
-            cmbProductoVenta.Location = new Point(249, 167);
+            cmbProductoVenta.Location = new Point(248, 207);
             cmbProductoVenta.Name = "cmbProductoVenta";
             cmbProductoVenta.Size = new Size(176, 23);
             cmbProductoVenta.TabIndex = 101;
@@ -237,19 +142,18 @@
             // 
             // txtSubtotalVenta
             // 
-            txtSubtotalVenta.Location = new Point(246, 290);
-            txtSubtotalVenta.Margin = new Padding(4);
+            txtSubtotalVenta.Location = new Point(248, 336);
             txtSubtotalVenta.Name = "txtSubtotalVenta";
+            txtSubtotalVenta.ReadOnly = true;
             txtSubtotalVenta.Size = new Size(173, 23);
-            txtSubtotalVenta.TabIndex = 103;
-            txtSubtotalVenta.KeyPress += txtSubtotalVenta_KeyPress;
+            txtSubtotalVenta.TabIndex = 114;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.BackColor = Color.Wheat;
             label3.ForeColor = SystemColors.ActiveCaptionText;
-            label3.Location = new Point(131, 296);
+            label3.Location = new Point(130, 336);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(51, 15);
@@ -260,7 +164,7 @@
             // 
             label6.AutoSize = true;
             label6.BackColor = Color.Wheat;
-            label6.Location = new Point(115, 398);
+            label6.Location = new Point(117, 163);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(44, 15);
@@ -270,7 +174,7 @@
             // btnAgregarCliente
             // 
             btnAgregarCliente.BackColor = Color.Gold;
-            btnAgregarCliente.Location = new Point(438, 390);
+            btnAgregarCliente.Location = new Point(440, 155);
             btnAgregarCliente.Name = "btnAgregarCliente";
             btnAgregarCliente.Size = new Size(93, 28);
             btnAgregarCliente.TabIndex = 106;
@@ -281,7 +185,7 @@
             // cmbClienteVenta
             // 
             cmbClienteVenta.FormattingEnabled = true;
-            cmbClienteVenta.Location = new Point(246, 395);
+            cmbClienteVenta.Location = new Point(248, 160);
             cmbClienteVenta.Name = "cmbClienteVenta";
             cmbClienteVenta.Size = new Size(173, 23);
             cmbClienteVenta.TabIndex = 107;
@@ -290,7 +194,7 @@
             // cmbMedioPagoVenta
             // 
             cmbMedioPagoVenta.FormattingEnabled = true;
-            cmbMedioPagoVenta.Location = new Point(246, 344);
+            cmbMedioPagoVenta.Location = new Point(245, 384);
             cmbMedioPagoVenta.Name = "cmbMedioPagoVenta";
             cmbMedioPagoVenta.Size = new Size(176, 23);
             cmbMedioPagoVenta.TabIndex = 108;
@@ -298,13 +202,57 @@
             // btnAgregarMetodoDePago
             // 
             btnAgregarMetodoDePago.BackColor = Color.Gold;
-            btnAgregarMetodoDePago.Location = new Point(438, 344);
+            btnAgregarMetodoDePago.Location = new Point(437, 384);
             btnAgregarMetodoDePago.Name = "btnAgregarMetodoDePago";
             btnAgregarMetodoDePago.Size = new Size(31, 24);
             btnAgregarMetodoDePago.TabIndex = 109;
             btnAgregarMetodoDePago.Text = "+";
             btnAgregarMetodoDePago.UseVisualStyleBackColor = false;
             btnAgregarMetodoDePago.Click += btnAgregarMetodoDePago_Click;
+            // 
+            // btnAgregarAlCarrito
+            // 
+            btnAgregarAlCarrito.BackColor = Color.Gold;
+            btnAgregarAlCarrito.Location = new Point(258, 442);
+            btnAgregarAlCarrito.Name = "btnAgregarAlCarrito";
+            btnAgregarAlCarrito.Size = new Size(121, 36);
+            btnAgregarAlCarrito.TabIndex = 110;
+            btnAgregarAlCarrito.Text = "Agregar Al Carrito";
+            btnAgregarAlCarrito.UseVisualStyleBackColor = false;
+            btnAgregarAlCarrito.Click += btnAgregarAlCarrito_Click;
+            // 
+            // btnQuitarDelCarrito
+            // 
+            btnQuitarDelCarrito.BackColor = Color.Gold;
+            btnQuitarDelCarrito.Location = new Point(934, 566);
+            btnQuitarDelCarrito.Name = "btnQuitarDelCarrito";
+            btnQuitarDelCarrito.Size = new Size(112, 39);
+            btnQuitarDelCarrito.TabIndex = 111;
+            btnQuitarDelCarrito.Text = "Quitar Del Carrito";
+            btnQuitarDelCarrito.UseVisualStyleBackColor = false;
+            btnQuitarDelCarrito.Click += btnQuitarDelCarrito_Click;
+            // 
+            // btnVaciarCarrito
+            // 
+            btnVaciarCarrito.BackColor = Color.Gold;
+            btnVaciarCarrito.Location = new Point(1109, 566);
+            btnVaciarCarrito.Name = "btnVaciarCarrito";
+            btnVaciarCarrito.Size = new Size(121, 39);
+            btnVaciarCarrito.TabIndex = 112;
+            btnVaciarCarrito.Text = "Vaciar Carrito";
+            btnVaciarCarrito.UseVisualStyleBackColor = false;
+            btnVaciarCarrito.Click += btnVaciarCarrito_Click;
+            // 
+            // btnConfirmarVenta
+            // 
+            btnConfirmarVenta.BackColor = Color.Gold;
+            btnConfirmarVenta.Location = new Point(41, 566);
+            btnConfirmarVenta.Name = "btnConfirmarVenta";
+            btnConfirmarVenta.Size = new Size(109, 39);
+            btnConfirmarVenta.TabIndex = 113;
+            btnConfirmarVenta.Text = "Confirmar Venta";
+            btnConfirmarVenta.UseVisualStyleBackColor = false;
+            btnConfirmarVenta.Click += btnConfirmarVenta_Click;
             // 
             // FormRegistroVenta
             // 
@@ -313,6 +261,10 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1453, 652);
+            Controls.Add(btnConfirmarVenta);
+            Controls.Add(btnVaciarCarrito);
+            Controls.Add(btnQuitarDelCarrito);
+            Controls.Add(btnAgregarAlCarrito);
             Controls.Add(btnAgregarMetodoDePago);
             Controls.Add(cmbMedioPagoVenta);
             Controls.Add(cmbClienteVenta);
@@ -323,15 +275,6 @@
             Controls.Add(cmbProductoVenta);
             Controls.Add(label5);
             Controls.Add(lblNombreProducto);
-            Controls.Add(txtEliminarVenta);
-            Controls.Add(lblEliminarProducto);
-            Controls.Add(label4);
-            Controls.Add(txtBuscarVenta);
-            Controls.Add(btnBuscarVenta);
-            Controls.Add(btnEliminarVenta);
-            Controls.Add(btnCancelarVenta);
-            Controls.Add(btnModificarVenta);
-            Controls.Add(btnCargarVenta);
             Controls.Add(txtCantidadVenta);
             Controls.Add(lblCantidadProducto);
             Controls.Add(label2);
@@ -347,15 +290,6 @@
 
         #endregion
         private Label lblNombreProducto;
-        private TextBox txtEliminarVenta;
-        private Label lblEliminarProducto;
-        private Label label4;
-        private TextBox txtBuscarVenta;
-        private Button btnBuscarVenta;
-        private Button btnEliminarVenta;
-        private Button btnCancelarVenta;
-        private Button btnModificarVenta;
-        private Button btnCargarVenta;
         private TextBox txtCantidadVenta;
         private Label lblCantidadProducto;
         private Label label2;
@@ -370,5 +304,9 @@
         private ComboBox cmbClienteVenta;
         private ComboBox cmbMedioPagoVenta;
         private Button btnAgregarMetodoDePago;
+        private Button btnAgregarAlCarrito;
+        private Button btnQuitarDelCarrito;
+        private Button btnVaciarCarrito;
+        private Button btnConfirmarVenta;
     }
 }

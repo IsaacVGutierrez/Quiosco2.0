@@ -230,23 +230,39 @@ namespace Quiosco.BD
             return lista;
         }
 
-        public int ReducirStock(int idProducto, int cantidad)
+        public bool ReducirStock(int idProducto, int cantidad)
         {
-            string sql = "UPDATE Producto SET CantidadProducto = CantidadProducto - @cantidad WHERE IdProducto = @id";
-            SqlCommand cmd = new SqlCommand(sql, conexion);
-            cmd.Parameters.AddWithValue("@cantidad", cantidad);
-            cmd.Parameters.AddWithValue("@id", idProducto);
+            string sqlCheck = "SELECT CantidadProducto FROM Producto WHERE IdProducto = @id";
+            string sqlUpdate = "UPDATE Producto SET CantidadProducto = CantidadProducto - @cantidad WHERE IdProducto = @id";
+
+            SqlCommand cmdCheck = new SqlCommand(sqlCheck, conexion);
+            cmdCheck.Parameters.AddWithValue("@id", idProducto);
+
             try
             {
                 Abrirconexion();
-                return cmd.ExecuteNonQuery();
+
+                // Verificar stock disponible
+                int stockActual = Convert.ToInt32(cmdCheck.ExecuteScalar());
+                if (stockActual < cantidad)
+                {
+                    return false; // No hay stock suficiente
+                }
+
+                // Restar stock
+                SqlCommand cmdUpdate = new SqlCommand(sqlUpdate, conexion);
+                cmdUpdate.Parameters.AddWithValue("@cantidad", cantidad);
+                cmdUpdate.Parameters.AddWithValue("@id", idProducto);
+                cmdUpdate.ExecuteNonQuery();
+
+                return true;
             }
             finally
             {
                 Cerrarconexion();
-                cmd.Dispose();
             }
         }
+
 
 
         public DataSet listarProductoBuscar(string cual)

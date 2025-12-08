@@ -80,26 +80,35 @@ namespace Quiosco.BD
             return resultado;
         }
 
+
+
+
         public DataSet listadoVenta(string id)
         {
             string orden;
             if (id != "Todos")
             {
                 orden = $@"
-            SELECT v.IdVenta,
+            SELECT  
+              v.IdVenta,
+                p.IdProducto,
                    p.NombreProducto,
-                   dv.CantidadProducto,
-                   v.SubtotalVenta,
-                   mp.NombreMetodoDePago,
+                     dv.CantidadProducto,
+                     v.SubtotalVenta,
+                     mp.IdMetodoDePago,
+                       mp.NombreMetodoDePago,
+                   c.IdCliente,
                    c.NombreCliente,
-                   v.FechaVenta
-            FROM Venta v
-            INNER JOIN DetalleVenta dv ON v.IdVenta = dv.IdVenta
-            INNER JOIN Producto p ON dv.IdProducto = p.IdProducto
-            INNER JOIN Cliente c ON v.IdCliente = c.IdCliente
-            INNER JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetododePago
-            WHERE v.IdVenta = {int.Parse(id)}
-            ORDER BY v.IdVenta DESC";
+                  v.FechaVenta
+                       FROM Venta v
+                   INNER JOIN DetalleVenta dv ON v.IdVenta = dv.IdVenta
+                   INNER JOIN Producto p ON dv.IdProducto = p.IdProducto
+                    INNER JOIN Cliente c ON v.IdCliente = c.IdCliente
+                    INNER JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
+                   ORDER BY v.IdVenta DESC;
+
+
+                    ";
             }
             else
             {
@@ -110,7 +119,8 @@ namespace Quiosco.BD
                    v.SubtotalVenta,
                    mp.NombreMetodoDePago,
                    c.NombreCliente,
-                   v.FechaVenta
+                   v.FechaVenta,
+                   c.IdCliente 
             FROM Venta v
             INNER JOIN DetalleVenta dv ON v.IdVenta = dv.IdVenta
             INNER JOIN Producto p ON dv.IdProducto = p.IdProducto
@@ -219,7 +229,7 @@ namespace Quiosco.BD
 
         public DataSet ListarVentaEliminar(string id)
         {
-            string orden = $"DELETE FROM Venta WHERE IdVenta = {id}";
+            string orden = $"DELETE FROM DetalleVenta WHERE IdVenta = @id\r\nDELETE FROM Venta WHERE IdVenta = @id\r\n                ";
             SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter(cmd);
