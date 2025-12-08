@@ -58,6 +58,7 @@
             btnCancelar.TabIndex = 77;
             btnCancelar.Text = "Cancelar";
             btnCancelar.UseVisualStyleBackColor = false;
+            btnCancelar.Click += btnCancelar_Click;
             // 
             // btnAceptar
             // 
@@ -68,6 +69,7 @@
             btnAceptar.TabIndex = 78;
             btnAceptar.Text = "CONFIRMAR VENTA";
             btnAceptar.UseVisualStyleBackColor = false;
+            btnAceptar.Click += btnAceptar_Click;
             // 
             // label2
             // 

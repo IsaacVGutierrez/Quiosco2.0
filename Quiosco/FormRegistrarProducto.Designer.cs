@@ -296,6 +296,7 @@
             txtPrecioTotalProducto.Location = new Point(249, 155);
             txtPrecioTotalProducto.Margin = new Padding(4);
             txtPrecioTotalProducto.Name = "txtPrecioTotalProducto";
+            txtPrecioTotalProducto.ReadOnly = true;
             txtPrecioTotalProducto.Size = new Size(173, 23);
             txtPrecioTotalProducto.TabIndex = 59;
             txtPrecioTotalProducto.KeyPress += txtPrecioTotalProducto_KeyPress;

@@ -138,25 +138,28 @@ namespace Quiosco.BD
         public DataSet listarDetalleVentaBuscar(string cual)
         {
             string orden = @"
-                SELECT dv.IdDetalleVenta, dv.IdVenta, dv.IdProducto, dv.CantidadProducto,
-                       v.SubtotalVenta, v.FechaVenta, mp.NombreMetodoDePago, c.NombreCliente,
-                       p.NombreProducto, p.MarcaProducto
-                FROM DetalleVenta dv
-                LEFT JOIN Venta v ON dv.IdVenta = v.IdVenta
-                LEFT JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
-                LEFT JOIN Cliente c ON v.IdCliente = c.IdCliente
-                LEFT JOIN Producto p ON dv.IdProducto = p.IdProducto
-                WHERE
-                    dv.IdDetalleVenta LIKE @buscar OR
-                    dv.IdVenta LIKE @buscar OR
-                    dv.IdProducto LIKE @buscar OR
-                    dv.CantidadProducto LIKE @buscar OR
-                    v.SubtotalVenta LIKE @buscar OR
-                    CONVERT(VARCHAR(30), v.FechaVenta, 23) LIKE @buscar OR
-                    mp.NombreMetodoDePago LIKE @buscar OR
-                    c.NombreCliente LIKE @buscar OR
-                    p.NombreProducto LIKE @buscar
-                ORDER BY dv.IdDetalleVenta DESC";
+        SELECT dv.IdDetalleVenta, dv.IdVenta, dv.IdProducto, dv.CantidadProducto,
+               p.NombreProducto, p.MarcaProducto, p.PrecioVenta,
+               v.SubtotalVenta, v.FechaVenta,
+               mp.NombreMetodoDePago, 
+               c.NombreCliente
+        FROM DetalleVenta dv
+        LEFT JOIN Venta v ON dv.IdVenta = v.IdVenta
+        LEFT JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
+        LEFT JOIN Cliente c ON v.IdCliente = c.IdCliente
+        LEFT JOIN Producto p ON dv.IdProducto = p.IdProducto
+        WHERE
+            dv.IdDetalleVenta LIKE @buscar OR
+            dv.IdVenta LIKE @buscar OR
+            dv.IdProducto LIKE @buscar OR
+            dv.CantidadProducto LIKE @buscar OR
+            p.PrecioVenta LIKE @buscar OR
+            v.SubtotalVenta LIKE @buscar OR
+            CONVERT(VARCHAR(30), v.FechaVenta, 23) LIKE @buscar OR
+            mp.NombreMetodoDePago LIKE @buscar OR
+            c.NombreCliente LIKE @buscar OR
+            p.NombreProducto LIKE @buscar
+        ORDER BY dv.IdDetalleVenta DESC";
             SqlCommand cmd = new SqlCommand(orden, conexion);
             cmd.Parameters.AddWithValue("@buscar", $"%{cual}%");
             DataSet ds = new DataSet();
@@ -205,12 +208,17 @@ namespace Quiosco.BD
         {
             string orden = @"
                 SELECT dv.IdDetalleVenta, dv.IdVenta, dv.IdProducto, dv.CantidadProducto,
-                       p.NombreProducto, p.MarcaProducto, p.PrecioProducto, v.SubtotalVenta, v.FechaVenta, c.NombreCliente
-                FROM DetalleVenta dv
-                LEFT JOIN Producto p ON dv.IdProducto = p.IdProducto
-                LEFT JOIN Venta v ON dv.IdVenta = v.IdVenta
-                LEFT JOIN Cliente c ON v.IdCliente = c.IdCliente
-                ORDER BY dv.IdDetalleVenta DESC";
+                      p.NombreProducto, p.MarcaProducto, p.PrecioVenta,
+                      v.SubtotalVenta, v.FechaVenta,
+                      c.NombreCliente,
+                      mp.NombreMetodoDePago
+                      FROM DetalleVenta dv
+                     LEFT JOIN Producto p ON dv.IdProducto = p.IdProducto
+                     LEFT JOIN Venta v ON dv.IdVenta = v.IdVenta
+                     LEFT JOIN Cliente c ON v.IdCliente = c.IdCliente
+                     LEFT JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
+                     ORDER BY dv.IdDetalleVenta DESC
+                     ";
             SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
             SqlDataAdapter da = new SqlDataAdapter();

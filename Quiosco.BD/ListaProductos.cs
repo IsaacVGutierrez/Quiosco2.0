@@ -264,6 +264,77 @@ namespace Quiosco.BD
         }
 
 
+        public DataSet BuscarProductosEnStock(string buscar)
+        {
+            string sql = @"
+        SELECT IdProducto, NombreProducto, MarcaProducto, PrecioVenta, StockProducto
+        FROM Producto
+        WHERE StockProducto > 0
+          AND (
+                NombreProducto LIKE @buscar OR
+                MarcaProducto LIKE @buscar OR
+                PrecioVenta LIKE @buscar
+              )
+        ORDER BY NombreProducto";
+
+            SqlCommand cmd = new SqlCommand(sql, conexion);
+            cmd.Parameters.AddWithValue("@buscar", "%" + buscar + "%");
+
+            DataSet ds = new DataSet();
+            SqlDataAdapter da = new SqlDataAdapter();
+
+            try
+            {
+                Abrirconexion();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al buscar productos en stock", ex);
+            }
+            finally
+            {
+                Cerrarconexion();
+                cmd.Dispose();
+            }
+
+            return ds;
+        }
+
+
+
+        public DataSet ObtenerProductosEnStock()
+        {
+            string sql = @"
+        SELECT IdProducto, NombreProducto, MarcaProducto, PrecioVenta, CantidadProducto 
+        FROM Producto
+        WHERE CantidadProducto  > 0
+        ORDER BY NombreProducto";
+
+            SqlCommand cmd = new SqlCommand(sql, conexion);
+            SqlDataAdapter da = new SqlDataAdapter();
+            DataSet ds = new DataSet();
+
+            try
+            {
+                Abrirconexion();
+                da.SelectCommand = cmd;
+                da.Fill(ds);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error al obtener productos en stock", ex);
+            }
+            finally
+            {
+                Cerrarconexion();
+                cmd.Dispose();
+            }
+
+            return ds;
+        }
+
 
         public DataSet listarProductoBuscar(string cual)
         {

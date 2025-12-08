@@ -46,7 +46,7 @@ namespace Quiosco
             LlenarCombos3();
             LlenarDGVProducto();
             FormatearColumnasDGV();
-           
+
         }
 
         // Entidades / Negocios
@@ -215,7 +215,7 @@ namespace Quiosco
             objEntProducto.PrecioCompra = ConvertirDecimal(txtPrecioCompraProducto.Text);
             objEntProducto.PrecioVenta = ConvertirDecimal(txtPrecioVentaProducto.Text);
 
-                 
+
 
 
         }
@@ -537,7 +537,7 @@ namespace Quiosco
             // Precio Venta (columna 8)
             dgvProducto.Columns[8].DefaultCellStyle.Format = "N2";
 
-           
+
         }
 
         private decimal ConvertirDecimal(string texto)

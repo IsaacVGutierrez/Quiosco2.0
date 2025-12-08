@@ -48,12 +48,9 @@
             label6 = new Label();
             dgvStockProductos = new DataGridView();
             tabMisVentas = new TabPage();
-            txtEliminarDetalleVenta = new TextBox();
-            label7 = new Label();
             label8 = new Label();
             txtBuscarDetalleVenta = new TextBox();
             btnBuscarDetalleVenta = new Button();
-            btnEliminarDetalleVenta = new Button();
             label9 = new Label();
             dgvDetalleVenta = new DataGridView();
             tabDeudores = new TabPage();
@@ -274,6 +271,7 @@
             btnBuscarProductos.TabIndex = 57;
             btnBuscarProductos.Text = "Buscar";
             btnBuscarProductos.UseVisualStyleBackColor = false;
+            btnBuscarProductos.Click += btnBuscarProductos_Click;
             // 
             // btnEliminarProductos
             // 
@@ -314,12 +312,9 @@
             tabMisVentas.BackgroundImage = (Image)resources.GetObject("tabMisVentas.BackgroundImage");
             tabMisVentas.BackgroundImageLayout = ImageLayout.Stretch;
             tabMisVentas.BorderStyle = BorderStyle.Fixed3D;
-            tabMisVentas.Controls.Add(txtEliminarDetalleVenta);
-            tabMisVentas.Controls.Add(label7);
             tabMisVentas.Controls.Add(label8);
             tabMisVentas.Controls.Add(txtBuscarDetalleVenta);
             tabMisVentas.Controls.Add(btnBuscarDetalleVenta);
-            tabMisVentas.Controls.Add(btnEliminarDetalleVenta);
             tabMisVentas.Controls.Add(label9);
             tabMisVentas.Controls.Add(dgvDetalleVenta);
             tabMisVentas.Cursor = Cursors.Hand;
@@ -333,29 +328,11 @@
             tabMisVentas.Text = "Mis Ventas";
             tabMisVentas.UseVisualStyleBackColor = true;
             // 
-            // txtEliminarDetalleVenta
-            // 
-            txtEliminarDetalleVenta.Location = new Point(755, 520);
-            txtEliminarDetalleVenta.Name = "txtEliminarDetalleVenta";
-            txtEliminarDetalleVenta.Size = new Size(134, 27);
-            txtEliminarDetalleVenta.TabIndex = 92;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.BackColor = Color.Wheat;
-            label7.Location = new Point(670, 525);
-            label7.Margin = new Padding(4, 0, 4, 0);
-            label7.Name = "label7";
-            label7.Size = new Size(66, 20);
-            label7.TabIndex = 91;
-            label7.Text = "Eliminar";
-            // 
             // label8
             // 
             label8.AutoSize = true;
             label8.BackColor = Color.Wheat;
-            label8.Location = new Point(338, 525);
+            label8.Location = new Point(902, 531);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(56, 20);
@@ -364,7 +341,7 @@
             // 
             // txtBuscarDetalleVenta
             // 
-            txtBuscarDetalleVenta.Location = new Point(404, 523);
+            txtBuscarDetalleVenta.Location = new Point(968, 529);
             txtBuscarDetalleVenta.Name = "txtBuscarDetalleVenta";
             txtBuscarDetalleVenta.Size = new Size(155, 27);
             txtBuscarDetalleVenta.TabIndex = 89;
@@ -372,22 +349,13 @@
             // btnBuscarDetalleVenta
             // 
             btnBuscarDetalleVenta.BackColor = Color.Gold;
-            btnBuscarDetalleVenta.Location = new Point(565, 514);
+            btnBuscarDetalleVenta.Location = new Point(1129, 520);
             btnBuscarDetalleVenta.Name = "btnBuscarDetalleVenta";
             btnBuscarDetalleVenta.Size = new Size(84, 36);
             btnBuscarDetalleVenta.TabIndex = 88;
             btnBuscarDetalleVenta.Text = "Buscar";
             btnBuscarDetalleVenta.UseVisualStyleBackColor = false;
-            // 
-            // btnEliminarDetalleVenta
-            // 
-            btnEliminarDetalleVenta.BackColor = Color.Gold;
-            btnEliminarDetalleVenta.Location = new Point(902, 514);
-            btnEliminarDetalleVenta.Name = "btnEliminarDetalleVenta";
-            btnEliminarDetalleVenta.Size = new Size(84, 36);
-            btnEliminarDetalleVenta.TabIndex = 87;
-            btnEliminarDetalleVenta.Text = "Eliminar";
-            btnEliminarDetalleVenta.UseVisualStyleBackColor = false;
+            btnBuscarDetalleVenta.Click += btnBuscarDetalleVenta_Click;
             // 
             // label9
             // 
@@ -407,9 +375,9 @@
             dgvDetalleVenta.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvDetalleVenta.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvDetalleVenta.Cursor = Cursors.Hand;
-            dgvDetalleVenta.Location = new Point(170, 75);
+            dgvDetalleVenta.Location = new Point(216, 71);
             dgvDetalleVenta.Name = "dgvDetalleVenta";
-            dgvDetalleVenta.Size = new Size(994, 408);
+            dgvDetalleVenta.Size = new Size(927, 415);
             dgvDetalleVenta.TabIndex = 85;
             // 
             // tabDeudores
@@ -596,12 +564,9 @@
         private Button btnBuscarProductos;
         private Label label6;
         private DataGridView dgvStockProductos;
-        private TextBox txtEliminarDetalleVenta;
-        private Label label7;
         private Label label8;
         private TextBox txtBuscarDetalleVenta;
         private Button btnBuscarDetalleVenta;
-        private Button btnEliminarDetalleVenta;
         private Label label9;
         private DataGridView dgvDetalleVenta;
         private Label label12;

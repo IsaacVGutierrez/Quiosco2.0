@@ -34,7 +34,7 @@ namespace Quiosco.Negocio
         }
 
 
-        public int ReducirStock(int id, int cantidad)
+        public bool ReducirStock(int id, int cantidad)
         {
             return objDatosProducto.ReducirStock( id , cantidad);
         }
