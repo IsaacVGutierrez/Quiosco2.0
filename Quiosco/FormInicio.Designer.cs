@@ -33,9 +33,6 @@ namespace Quiosco
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInicio));
             tabControl1 = new TabControl();
             tabInicio = new TabPage();
-            lblGanancia = new Label();
-            lblCompra = new Label();
-            lblVenta = new Label();
             pictureBox1 = new PictureBox();
             btnRegistrarVenta = new Button();
             btnRegistrarProducto = new Button();
@@ -94,9 +91,6 @@ namespace Quiosco
             // 
             tabInicio.BackgroundImage = (Image)resources.GetObject("tabInicio.BackgroundImage");
             tabInicio.BackgroundImageLayout = ImageLayout.Stretch;
-            tabInicio.Controls.Add(lblGanancia);
-            tabInicio.Controls.Add(lblCompra);
-            tabInicio.Controls.Add(lblVenta);
             tabInicio.Controls.Add(pictureBox1);
             tabInicio.Controls.Add(btnRegistrarVenta);
             tabInicio.Controls.Add(btnRegistrarProducto);
@@ -109,55 +103,15 @@ namespace Quiosco
             tabInicio.Text = "Inicio";
             tabInicio.UseVisualStyleBackColor = true;
             // 
-            // lblGanancia
-            // 
-            lblGanancia.AutoSize = true;
-            lblGanancia.BackColor = Color.Black;
-            lblGanancia.ForeColor = SystemColors.ButtonHighlight;
-            lblGanancia.Location = new Point(303, 258);
-            lblGanancia.Name = "lblGanancia";
-            lblGanancia.Size = new Size(68, 15);
-            lblGanancia.TabIndex = 17;
-            lblGanancia.Text = "GANANCIA";
-            // 
-            // lblCompra
-            // 
-            lblCompra.AutoSize = true;
-            lblCompra.BackColor = Color.Black;
-            lblCompra.ForeColor = SystemColors.ButtonHighlight;
-            lblCompra.Location = new Point(389, 313);
-            lblCompra.Name = "lblCompra";
-            lblCompra.Size = new Size(57, 15);
-            lblCompra.TabIndex = 16;
-            lblCompra.Text = "COMPRA\r\n";
-            // 
-            // lblVenta
-            // 
-            lblVenta.AutoSize = true;
-            lblVenta.BackColor = Color.Black;
-            lblVenta.ForeColor = SystemColors.ButtonHighlight;
-            lblVenta.Location = new Point(404, 222);
-            lblVenta.Name = "lblVenta";
-            lblVenta.Size = new Size(42, 15);
-            lblVenta.TabIndex = 14;
-            lblVenta.Text = "VENTA\r\n";
-            lblVenta.Click += VENTA_Click;
-            // 
             // pictureBox1
             // 
-            pictureBox1.AccessibleRole = AccessibleRole.Chart;
-            pictureBox1.BackColor = Color.Transparent;
-            pictureBox1.BackgroundImageLayout = ImageLayout.Center;
-            pictureBox1.BorderStyle = BorderStyle.Fixed3D;
-            pictureBox1.Cursor = Cursors.Hand;
-            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
-            pictureBox1.Location = new Point(236, 162);
+            pictureBox1.Location = new Point(36, 144);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(308, 246);
-            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
+            pictureBox1.Size = new Size(762, 450);
             pictureBox1.TabIndex = 13;
             pictureBox1.TabStop = false;
-            pictureBox1.UseWaitCursor = true;
+            pictureBox1.MouseLeave += PictureBox1_MouseLeave;
+            pictureBox1.MouseMove += PictureBox1_MouseMove;
             // 
             // btnRegistrarVenta
             // 
@@ -550,7 +504,6 @@ namespace Quiosco
         private Button btnRegistrarProducto;
         private Label label2;
         private Button btnRegistrarVenta;
-        private PictureBox pictureBox1;
         private TextBox txtEliminarDeudor;
         private Label lblEliminarProducto;
         private Label label4;
@@ -571,10 +524,6 @@ namespace Quiosco
         private Button btnBuscarDetalleVenta;
         private Label label9;
         private DataGridView dgvDetalleVenta;
-        private Label lblGanancia;
-        private Label lblVenta;
-        private Label lblCompra;
-        private Chart chart1;
-
+        private PictureBox pictureBox1;
     }
 }

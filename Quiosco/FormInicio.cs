@@ -11,8 +11,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 using Quiosco.BD;
-using System.Windows.Forms.DataVisualization.Charting;
-
+using LiveChartsCore;
+using LiveChartsCore.SkiaSharpView;
+using LiveChartsCore.SkiaSharpView.WinForms;
+using SkiaSharp;
+using System.Drawing;
 
 namespace Quiosco
 {
@@ -22,8 +25,6 @@ namespace Quiosco
         {
             InitializeComponent();
 
-
-            CargarGrafico();
 
 
 
@@ -45,7 +46,21 @@ namespace Quiosco
 
         }
 
+        private int hoveredSegment = -1;
+        private readonly string[] labels = { "Ventas", "Compras", "Ganancias" };
+        private readonly double[] values = { 15000, 5000, 8000 };
 
+        private readonly SKColor[] colors = new SKColor[]
+        {
+         SKColors.DeepSkyBlue,
+         SKColors.LimeGreen,
+          SKColors.OrangeRed
+          };
+
+
+
+        private PieChart pieChart1;
+        private float rotacion = 0f;
 
 
         public Cliente objEntDeudor = new Cliente();
@@ -53,59 +68,306 @@ namespace Quiosco
         public ClienteNegocio objNegDeudor = new ClienteNegocio();
 
 
-        private void CrearGrafico()
+
+        // Método para crear SKBitmap con fondo transparente
+        // --- Variables para animación ---
+        private float animProgress = 1f;
+        private readonly float animSpeed = 0.15f;
+        System.Windows.Forms.Timer animTimer;
+
+
+        // Método mejorado
+        private Bitmap CreatePieBitmapSkia(int width, int height)
         {
-            Chart chart = new Chart();
-            chart.Parent = this; // Agregarlo al formulario
-            chart.Dock = DockStyle.Fill; // Que ocupe todo el formulario
+            double total = values.Sum();
 
-            // Crear el área del gráfico
-            ChartArea area = new ChartArea("Area1");
-            chart.ChartAreas.Add(area);
+            // Crear animación suave
+            if (animTimer == null)
+            {
+                animTimer = new System.Windows.Forms.Timer();
+                animTimer.Interval = 16;  // 60 FPS
+                animTimer.Tick += (s, e) =>
+                {
+                    // Animación de entrada
+                    animProgress += animSpeed;
+                    if (animProgress > 1f) animProgress = 1f;
 
-            // Crear la serie de datos
-            Series serie = new Series("Serie1");
-            serie.ChartType = SeriesChartType.Pie; // Gráfico de torta
+                    // Rotación SOLO de inicio hasta dar 1 vuelta
+                    if (rotacion < 360f)
+                    {
+                        rotacion += 15f;      // velocidad rápida
+                        if (rotacion >= 360f)
+                        {
+                            rotacion = 360f;
+                            animTimer.Stop(); // ⛔ se detiene la rotación y el timer
+                        }
+                    }
 
-            // EJEMPLO de datos
-            serie.Points.AddXY("Ventas", 15000);
-            serie.Points.AddXY("Compras", 5000);
-            serie.Points.AddXY("Ganancias", 8000);
+                    RedibujarGrafico();
+                };
 
-            chart.Series.Add(serie);
+                animProgress = 0f;
+                animTimer.Start();
+            }
 
-            // Estilo lindo
-            serie["PieLabelStyle"] = "Outside";
-            serie.BorderWidth = 2;
-            serie.BorderColor = Color.White;
-            chart.BackColor = Color.WhiteSmoke;
+            var info = new SKImageInfo(width, height, SKColorType.Rgba8888, SKAlphaType.Premul);
+            using (var surface = SKSurface.Create(info))
+            {
+                var canvas = surface.Canvas;
+                canvas.Clear(SKColors.Transparent);
 
-            this.Controls.Add(chart);
+                float cx = width / 2f;
+                float cy = height / 2f;
+
+                float radius = Math.Min(width, height) * 0.33f * animProgress;
+
+                // ===============================
+                // ⭐ EFECTO 3D — PROFUNDIDAD
+                // ===============================
+                float profundidad = radius * 0.22f;
+
+                var sombra3D = new SKPaint
+                {
+                    Shader = SKShader.CreateLinearGradient(
+                        new SKPoint(cx, cy - radius),
+                        new SKPoint(cx, cy + radius + profundidad),
+                        new SKColor[] { new SKColor(0, 0, 0, 100), new SKColor(0, 0, 0, 20) },
+                        null,
+                        SKShaderTileMode.Clamp),
+                    IsAntialias = true
+                };
+
+                canvas.DrawOval(new SKRect(cx - radius, cy - radius + profundidad, cx + radius, cy + radius + profundidad), sombra3D);
+
+                canvas.Save();
+                canvas.Translate(cx, cy);
+                canvas.RotateDegrees(rotacion);
+                canvas.Translate(-cx, -cy);
+
+
+                // ===============================
+                // ⭐ SEGMENTOS PIE
+                // ===============================
+                var segmentPaint = new SKPaint { IsAntialias = true };
+
+                // 🎨 Borde estilo “GLASS”
+                var glassBorder = new SKPaint
+                {
+                    Style = SKPaintStyle.Stroke,
+                    StrokeWidth = 5,
+                    Shader = SKShader.CreateLinearGradient(
+                        new SKPoint(cx - radius, cy - radius),
+                        new SKPoint(cx + radius, cy + radius),
+                        new[] { SKColors.White, new SKColor(255, 255, 255, 40), SKColors.White },
+                        null,
+                        SKShaderTileMode.Clamp),
+                    IsAntialias = true
+                };
+
+                float startAngle = -90f;
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    float sweep = (float)(values[i] / total * 360.0);
+                    float midAngle = startAngle + sweep / 2f;
+
+                    // EXPLODE
+                    float explode = (i == hoveredSegment) ? 25f : 0f;
+
+                    double rad = Math.PI * midAngle / 180.0;
+                    float offX = explode * (float)Math.Cos(rad);
+                    float offY = explode * (float)Math.Sin(rad);
+
+                    // ⭐ Gradiente en el segmento
+                    segmentPaint.Shader = SKShader.CreateRadialGradient(
+                        new SKPoint(cx + offX, cy + offY),
+                        radius,
+                        new[]
+                        {
+                    colors[i].WithAlpha(255),
+                    colors[i].WithAlpha(180),
+                    colors[i].WithAlpha(120)
+                        },
+                        null,
+                        SKShaderTileMode.Clamp
+                    );
+
+                    using (var path = new SKPath())
+                    {
+                        path.MoveTo(cx + offX, cy + offY);
+                        path.ArcTo(
+                            new SKRect((cx - radius) + offX, (cy - radius) + offY,
+                                       (cx + radius) + offX, (cy + radius) + offY),
+                            startAngle, sweep, false);
+                        path.Close();
+
+                        canvas.DrawPath(path, segmentPaint);
+                        canvas.DrawPath(path, glassBorder);
+                    }
+
+                    // ===============================
+                    // ⭐ ETIQUETAS ALREDEDOR DEL GRÁFICO
+                    // ===============================
+                    // float labelRadius = radius * 1.25f;   // queda afuera del segmento
+                    float labelRadius = radius * 0.60f; // queda dentro del segmento
+
+                    float lx = cx + labelRadius * (float)Math.Cos(rad);
+                    float ly = cy + labelRadius * (float)Math.Sin(rad);
+
+
+                    using var labelPaint = new SKPaint
+                    {
+                        Color = SKColors.White,
+                        TextSize = radius * 0.12f,
+                        IsAntialias = true,
+                        TextAlign = SKTextAlign.Center
+                    };
+
+                    canvas.DrawText(labels[i], lx, ly, labelPaint);
+
+
+                    startAngle += sweep;
+                }
+
+                // ===============================
+                // ⭐ TEXTO DE HOVER — ETIQUETA EXTERNA
+                // ===============================
+                if (hoveredSegment != -1)
+                {
+                    float hoverMidAngle = 0f;
+                    float angleAccum = -90f;
+
+                    // Calculamos el ángulo exacto del segmento seleccionado
+                    for (int i = 0; i < values.Length; i++)
+                    {
+                        float sweep = (float)(values[i] / total * 360.0);
+
+                        if (i == hoveredSegment)
+                        {
+                            hoverMidAngle = angleAccum + sweep / 2f;
+                            break;
+                        }
+
+                        angleAccum += sweep;
+                    }
+
+                    double radHover = Math.PI * hoverMidAngle / 180.0;
+
+                    // Radio más grande para salir bien afuera
+                    float hoverLabelRadius = radius * 1.55f;
+
+                    float hx = cx + hoverLabelRadius * (float)Math.Cos(radHover);
+                    float hy = cy + hoverLabelRadius * (float)Math.Sin(radHover);
+
+                    using var hoverPaint = new SKPaint
+                    {
+                        Color = SKColors.Yellow,
+                        TextSize = radius * 0.18f,
+                        IsAntialias = true,
+                        TextAlign = SKTextAlign.Center,
+                        StrokeWidth = 3
+                    };
+
+                    // Texto grande afuera: etiqueta + valor
+                    canvas.DrawText($"{labels[hoveredSegment]}  $ {values[hoveredSegment]:N0}", hx, hy, hoverPaint);
+                }
+
+                canvas.Restore();
+
+                using (var img = surface.Snapshot())
+                using (var data = img.Encode(SKEncodedImageFormat.Png, 100))
+                using (var ms = data.AsStream())
+                {
+                    return new Bitmap(ms);
+                }
+            }
         }
 
 
 
-        private void CargarGrafico()
+
+        // Uso desde el Form: asignar al PictureBox
+        private void MostrarPieSkiaEnPictureBox()
         {
-            chart1 = new Chart();
-            ChartArea chartArea1 = new ChartArea();
-            Series series1 = new Series();
+            Bitmap bmp = CreatePieBitmapSkia(400, 300);
 
-            chartArea1.Name = "ChartArea1";
-            chart1.ChartAreas.Add(chartArea1);
+            // Crear PictureBox si no existe
+            pictureBox1.Image?.Dispose();
+            pictureBox1.Image = bmp;
 
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = SeriesChartType.Pie;
-            series1.Name = "Series1";
-
-            chart1.Series.Add(series1);
-
-            chart1.Location = new Point(600, 150);
-            chart1.Size = new Size(350, 300);
-            chart1.BackColor = Color.WhiteSmoke;
-
-            tabInicio.Controls.Add(chart1);
+            pictureBox1.BackColor = Color.Transparent;
+            pictureBox1.SizeMode = PictureBoxSizeMode.CenterImage;
         }
+
+
+
+
+        private void RedibujarGrafico()
+        {
+            pictureBox1.Image?.Dispose();
+            pictureBox1.Image = CreatePieBitmapSkia(pictureBox1.Width, pictureBox1.Height);
+        }
+
+
+        private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
+        {
+            double total = values.Sum();
+
+            float cx = pictureBox1.Width / 2f;
+            float cy = pictureBox1.Height / 2f;
+            float radius = Math.Min(pictureBox1.Width, pictureBox1.Height) * 0.33f;
+
+            float dx = e.X - cx;
+            float dy = e.Y - cy;
+            float dist = (float)Math.Sqrt(dx * dx + dy * dy);
+
+            if (dist > radius + 25)
+            {
+                // fuera del gráfico
+                if (hoveredSegment != -1)
+                {
+                    hoveredSegment = -1;
+                    RedibujarGrafico();
+                }
+                pictureBox1.Cursor = Cursors.Default;
+
+
+                return;
+            }
+
+            float angle = (float)(Math.Atan2(dy, dx) * 180 / Math.PI);
+            angle = (angle < -90) ? angle + 360 : angle;
+            angle += 90;
+
+            float start = 0;
+            for (int i = 0; i < values.Length; i++)
+            {
+                float sweep = (float)(values[i] / total * 360.0);
+
+                if (angle >= start && angle < start + sweep)
+                {
+                    if (hoveredSegment != i)
+                    {
+                        hoveredSegment = i;
+                        RedibujarGrafico();
+                    }
+                    pictureBox1.Cursor = Cursors.Hand;
+                    return;
+                }
+
+                start += sweep;
+            }
+        }
+
+
+        private void PictureBox1_MouseLeave(object sender, EventArgs e)
+        {
+            hoveredSegment = -1;
+            RedibujarGrafico();
+            pictureBox1.Cursor = Cursors.Default;
+        }
+
+
 
 
 
@@ -507,7 +769,12 @@ namespace Quiosco
         {
             CargarDetalleVenta();
             CargarProductosEnStock();
-            CrearGrafico();
+            MostrarPieSkiaEnPictureBox();
+            RedibujarGrafico();
+
+            pictureBox1.MouseMove += PictureBox1_MouseMove;
+            pictureBox1.MouseLeave += PictureBox1_MouseLeave;
+
         }
 
         private void CargarDetalleVenta()

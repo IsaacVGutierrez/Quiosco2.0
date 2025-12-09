@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
 
-  <PropertyGroup>
+
+	<PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>disable</Nullable>
@@ -10,9 +11,14 @@
 
   <ItemGroup>
     <PackageReference Include="HIC.System.Windows.Forms.DataVisualization" Version="1.0.1" />
+    <PackageReference Include="LiveChartsCore" Version="2.0.0-beta.950" />
+    <PackageReference Include="LiveChartsCore.SkiaSharpView.WinForms" Version="2.0.0-beta.950" />
+    <PackageReference Include="SkiaSharp" Version="3.119.1" />
+    <PackageReference Include="SkiaSharp.Views" Version="3.119.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Quiosco.BD\Quiosco.BD.csproj" />
     <ProjectReference Include="..\Quiosco.Entidades\Quiosco.Entidades.csproj" />
     <ProjectReference Include="..\Quiosco.Negocio\Quiosco.Negocio.csproj" />
   </ItemGroup>
