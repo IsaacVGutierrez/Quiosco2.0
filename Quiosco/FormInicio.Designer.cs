@@ -33,6 +33,7 @@ namespace Quiosco
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInicio));
             tabControl1 = new TabControl();
             tabInicio = new TabPage();
+            btnGestionUsuarios = new Button();
             pictureBox1 = new PictureBox();
             btnRegistrarVenta = new Button();
             btnRegistrarProducto = new Button();
@@ -80,17 +81,19 @@ namespace Quiosco
             tabControl1.Controls.Add(tabMisProductos);
             tabControl1.Controls.Add(tabMisVentas);
             tabControl1.Controls.Add(tabDeudores);
-            tabControl1.Location = new Point(22, 8);
+            tabControl1.Dock = DockStyle.Fill;
+            tabControl1.Location = new Point(0, 0);
             tabControl1.Margin = new Padding(4);
             tabControl1.Name = "tabControl1";
             tabControl1.SelectedIndex = 0;
-            tabControl1.Size = new Size(1371, 650);
+            tabControl1.Size = new Size(1521, 699);
             tabControl1.TabIndex = 1;
             // 
             // tabInicio
             // 
             tabInicio.BackgroundImage = (Image)resources.GetObject("tabInicio.BackgroundImage");
             tabInicio.BackgroundImageLayout = ImageLayout.Stretch;
+            tabInicio.Controls.Add(btnGestionUsuarios);
             tabInicio.Controls.Add(pictureBox1);
             tabInicio.Controls.Add(btnRegistrarVenta);
             tabInicio.Controls.Add(btnRegistrarProducto);
@@ -98,16 +101,30 @@ namespace Quiosco
             tabInicio.Location = new Point(4, 24);
             tabInicio.Name = "tabInicio";
             tabInicio.Padding = new Padding(3);
-            tabInicio.Size = new Size(1363, 622);
+            tabInicio.Size = new Size(1513, 671);
             tabInicio.TabIndex = 3;
             tabInicio.Text = "Inicio";
             tabInicio.UseVisualStyleBackColor = true;
             // 
+            // btnGestionUsuarios
+            // 
+            btnGestionUsuarios.BackColor = Color.Gold;
+            btnGestionUsuarios.BackgroundImageLayout = ImageLayout.Center;
+            btnGestionUsuarios.Cursor = Cursors.Hand;
+            btnGestionUsuarios.FlatStyle = FlatStyle.Popup;
+            btnGestionUsuarios.Location = new Point(1218, 41);
+            btnGestionUsuarios.Name = "btnGestionUsuarios";
+            btnGestionUsuarios.Size = new Size(148, 23);
+            btnGestionUsuarios.TabIndex = 14;
+            btnGestionUsuarios.Text = "Gestion Usuarios";
+            btnGestionUsuarios.UseVisualStyleBackColor = false;
+            btnGestionUsuarios.Click += btnGestionUsuarios_Click;
+            // 
             // pictureBox1
             // 
-            pictureBox1.Location = new Point(36, 144);
+            pictureBox1.Location = new Point(77, 127);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(762, 450);
+            pictureBox1.Size = new Size(792, 552);
             pictureBox1.TabIndex = 13;
             pictureBox1.TabStop = false;
             pictureBox1.MouseLeave += PictureBox1_MouseLeave;
@@ -121,7 +138,7 @@ namespace Quiosco
             btnRegistrarVenta.FlatStyle = FlatStyle.Popup;
             btnRegistrarVenta.Font = new Font("Impact", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             btnRegistrarVenta.ForeColor = SystemColors.ActiveCaptionText;
-            btnRegistrarVenta.Location = new Point(981, 336);
+            btnRegistrarVenta.Location = new Point(1146, 422);
             btnRegistrarVenta.Name = "btnRegistrarVenta";
             btnRegistrarVenta.Size = new Size(220, 42);
             btnRegistrarVenta.TabIndex = 12;
@@ -137,7 +154,7 @@ namespace Quiosco
             btnRegistrarProducto.FlatStyle = FlatStyle.Popup;
             btnRegistrarProducto.Font = new Font("Impact", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             btnRegistrarProducto.ForeColor = SystemColors.ActiveCaptionText;
-            btnRegistrarProducto.Location = new Point(981, 204);
+            btnRegistrarProducto.Location = new Point(1146, 290);
             btnRegistrarProducto.Name = "btnRegistrarProducto";
             btnRegistrarProducto.Size = new Size(220, 42);
             btnRegistrarProducto.TabIndex = 11;
@@ -151,7 +168,7 @@ namespace Quiosco
             label2.BackColor = Color.MintCream;
             label2.BorderStyle = BorderStyle.Fixed3D;
             label2.Font = new Font("High Tower Text", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(544, 53);
+            label2.Location = new Point(573, 41);
             label2.Name = "label2";
             label2.Size = new Size(218, 34);
             label2.TabIndex = 10;
@@ -177,7 +194,7 @@ namespace Quiosco
             tabMisProductos.Margin = new Padding(4);
             tabMisProductos.Name = "tabMisProductos";
             tabMisProductos.Padding = new Padding(4);
-            tabMisProductos.Size = new Size(1363, 622);
+            tabMisProductos.Size = new Size(1513, 671);
             tabMisProductos.TabIndex = 0;
             tabMisProductos.Text = "Mis Productos";
             tabMisProductos.UseVisualStyleBackColor = true;
@@ -279,7 +296,7 @@ namespace Quiosco
             tabMisVentas.Margin = new Padding(4);
             tabMisVentas.Name = "tabMisVentas";
             tabMisVentas.Padding = new Padding(4);
-            tabMisVentas.Size = new Size(1363, 622);
+            tabMisVentas.Size = new Size(1513, 671);
             tabMisVentas.TabIndex = 1;
             tabMisVentas.Text = "Mis Ventas";
             tabMisVentas.UseVisualStyleBackColor = true;
@@ -356,7 +373,7 @@ namespace Quiosco
             tabDeudores.Location = new Point(4, 24);
             tabDeudores.Name = "tabDeudores";
             tabDeudores.Padding = new Padding(3);
-            tabDeudores.Size = new Size(1363, 622);
+            tabDeudores.Size = new Size(1513, 671);
             tabDeudores.TabIndex = 2;
             tabDeudores.Text = "Deudores";
             tabDeudores.UseVisualStyleBackColor = true;
@@ -470,10 +487,12 @@ namespace Quiosco
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1463, 671);
+            ClientSize = new Size(1521, 699);
             Controls.Add(tabControl1);
+            FormBorderStyle = FormBorderStyle.Fixed3D;
             Name = "FormInicio";
             Text = "Software Comercial";
+            WindowState = FormWindowState.Maximized;
             Load += FormInicio_Load;
             tabControl1.ResumeLayout(false);
             tabInicio.ResumeLayout(false);
@@ -525,5 +544,6 @@ namespace Quiosco
         private Label label9;
         private DataGridView dgvDetalleVenta;
         private PictureBox pictureBox1;
+        private Button btnGestionUsuarios;
     }
 }

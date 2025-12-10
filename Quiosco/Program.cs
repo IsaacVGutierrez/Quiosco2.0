@@ -19,7 +19,7 @@ namespace Quiosco
             // see https://aka.ms/applicationconfiguration.
             Application.EnableVisualStyles();
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormInicio());
+            Application.Run(new FormLogin());
         }
     }
 }

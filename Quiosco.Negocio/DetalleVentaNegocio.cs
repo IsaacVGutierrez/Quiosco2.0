@@ -40,10 +40,22 @@ namespace Quiosco.Negocio
             return objDatosDetalleVenta.ListarDetalleVentaEliminar(id);
         }
 
+        public double ObtenerTotalVentas()
+        {
+            return objDatosDetalleVenta.ObtenerTotalVentas();
+        }
+
+        public double ObtenerTotalCompras()
+        {
+            return objDatosDetalleVenta.ObtenerTotalCompras();
+        }
+       
+
         public DataSet Union()
         {
             return objDatosDetalleVenta.Union();
         }
+
 
 
 

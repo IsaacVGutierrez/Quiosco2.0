@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,10 +20,11 @@ namespace Quiosco
 {
     public partial class FormInicio : Form
     {
+
+
         public FormInicio()
         {
             InitializeComponent();
-
 
 
 
@@ -38,6 +38,9 @@ namespace Quiosco
 
 
             LlenarDGVDeudor();
+            CargarValoresPieChartDesdeBD();
+            MostrarPieSkiaEnPictureBox();
+
 
 
 
@@ -61,11 +64,17 @@ namespace Quiosco
 
         private PieChart pieChart1;
         private float rotacion = 0f;
+        private Label tooltipLabel;
+        private readonly Color tooltipBaseColor = Color.FromArgb(30, 30, 30);
+
 
 
         public Cliente objEntDeudor = new Cliente();
 
         public ClienteNegocio objNegDeudor = new ClienteNegocio();
+
+        public Usuario objEntUsuario = new Usuario();
+        public UsuarioNegocio objNegUsuario = new UsuarioNegocio();
 
 
 
@@ -76,10 +85,10 @@ namespace Quiosco
         System.Windows.Forms.Timer animTimer;
 
 
-        // Método mejorado
         private Bitmap CreatePieBitmapSkia(int width, int height)
         {
-            double total = values.Sum();
+            double total = valuesDynamic.Sum();
+            if (total == 0) total = 1; // evitar división por cero
 
             // Crear animación suave
             if (animTimer == null)
@@ -88,18 +97,16 @@ namespace Quiosco
                 animTimer.Interval = 16;  // 60 FPS
                 animTimer.Tick += (s, e) =>
                 {
-                    // Animación de entrada
                     animProgress += animSpeed;
                     if (animProgress > 1f) animProgress = 1f;
 
-                    // Rotación SOLO de inicio hasta dar 1 vuelta
                     if (rotacion < 360f)
                     {
-                        rotacion += 15f;      // velocidad rápida
+                        rotacion += 15f;
                         if (rotacion >= 360f)
                         {
                             rotacion = 360f;
-                            animTimer.Stop(); // ⛔ se detiene la rotación y el timer
+                            animTimer.Stop();
                         }
                     }
 
@@ -118,14 +125,10 @@ namespace Quiosco
 
                 float cx = width / 2f;
                 float cy = height / 2f;
+                float radius = Math.Min(width, height) * 0.45f * animProgress;
+                float profundidad = radius * 0.2f;
 
-                float radius = Math.Min(width, height) * 0.33f * animProgress;
-
-                // ===============================
-                // ⭐ EFECTO 3D — PROFUNDIDAD
-                // ===============================
-                float profundidad = radius * 0.22f;
-
+                // Sombra 3D
                 var sombra3D = new SKPaint
                 {
                     Shader = SKShader.CreateLinearGradient(
@@ -136,7 +139,6 @@ namespace Quiosco
                         SKShaderTileMode.Clamp),
                     IsAntialias = true
                 };
-
                 canvas.DrawOval(new SKRect(cx - radius, cy - radius + profundidad, cx + radius, cy + radius + profundidad), sombra3D);
 
                 canvas.Save();
@@ -144,13 +146,7 @@ namespace Quiosco
                 canvas.RotateDegrees(rotacion);
                 canvas.Translate(-cx, -cy);
 
-
-                // ===============================
-                // ⭐ SEGMENTOS PIE
-                // ===============================
                 var segmentPaint = new SKPaint { IsAntialias = true };
-
-                // 🎨 Borde estilo “GLASS”
                 var glassBorder = new SKPaint
                 {
                     Style = SKPaintStyle.Stroke,
@@ -166,19 +162,17 @@ namespace Quiosco
 
                 float startAngle = -90f;
 
-                for (int i = 0; i < values.Length; i++)
+                for (int i = 0; i < valuesDynamic.Length; i++)
                 {
-                    float sweep = (float)(values[i] / total * 360.0);
+                    float sweep = (float)(valuesDynamic[i] / total * 360.0);
                     float midAngle = startAngle + sweep / 2f;
 
-                    // EXPLODE
                     float explode = (i == hoveredSegment) ? 25f : 0f;
-
                     double rad = Math.PI * midAngle / 180.0;
                     float offX = explode * (float)Math.Cos(rad);
                     float offY = explode * (float)Math.Sin(rad);
 
-                    // ⭐ Gradiente en el segmento
+                    // Gradiente segmento
                     segmentPaint.Shader = SKShader.CreateRadialGradient(
                         new SKPoint(cx + offX, cy + offY),
                         radius,
@@ -195,81 +189,30 @@ namespace Quiosco
                     using (var path = new SKPath())
                     {
                         path.MoveTo(cx + offX, cy + offY);
-                        path.ArcTo(
-                            new SKRect((cx - radius) + offX, (cy - radius) + offY,
-                                       (cx + radius) + offX, (cy + radius) + offY),
-                            startAngle, sweep, false);
+                        path.ArcTo(new SKRect(cx - radius + offX, cy - radius + offY, cx + radius + offX, cy + radius + offY),
+                                   startAngle, sweep, false);
                         path.Close();
 
                         canvas.DrawPath(path, segmentPaint);
                         canvas.DrawPath(path, glassBorder);
                     }
 
-                    // ===============================
-                    // ⭐ ETIQUETAS ALREDEDOR DEL GRÁFICO
-                    // ===============================
-                    // float labelRadius = radius * 1.25f;   // queda afuera del segmento
-                    float labelRadius = radius * 0.60f; // queda dentro del segmento
-
+                    // Etiquetas dinámicas para evitar superposición
+                    float labelRadius = radius * 0.6f + (radius * 0.4f * (float)(valuesDynamic[i] / total));
                     float lx = cx + labelRadius * (float)Math.Cos(rad);
                     float ly = cy + labelRadius * (float)Math.Sin(rad);
-
 
                     using var labelPaint = new SKPaint
                     {
                         Color = SKColors.White,
-                        TextSize = radius * 0.12f,
+                        TextSize = radius * 0.1f + (radius * 0.05f * (float)(valuesDynamic[i] / total)), // tamaño dinámico según valor
                         IsAntialias = true,
                         TextAlign = SKTextAlign.Center
                     };
 
                     canvas.DrawText(labels[i], lx, ly, labelPaint);
 
-
                     startAngle += sweep;
-                }
-
-                // ===============================
-                // ⭐ TEXTO DE HOVER — ETIQUETA EXTERNA
-                // ===============================
-                if (hoveredSegment != -1)
-                {
-                    float hoverMidAngle = 0f;
-                    float angleAccum = -90f;
-
-                    // Calculamos el ángulo exacto del segmento seleccionado
-                    for (int i = 0; i < values.Length; i++)
-                    {
-                        float sweep = (float)(values[i] / total * 360.0);
-
-                        if (i == hoveredSegment)
-                        {
-                            hoverMidAngle = angleAccum + sweep / 2f;
-                            break;
-                        }
-
-                        angleAccum += sweep;
-                    }
-
-                    double radHover = Math.PI * hoverMidAngle / 180.0;
-
-                    // Radio más grande para salir bien afuera
-                    float hoverLabelRadius = radius * 1.55f;
-
-                    float hx = cx + hoverLabelRadius * (float)Math.Cos(radHover);
-                    float hy = cy + hoverLabelRadius * (float)Math.Sin(radHover);
-
-                    using var hoverPaint = new SKPaint
-                    {
-                        Color = SKColors.Yellow,
-                        TextSize = radius * 0.18f,
-                        IsAntialias = true,
-                        TextAlign = SKTextAlign.Center,
-                        StrokeWidth = 3
-                    };
-
-                    // Texto grande afuera: etiqueta + valor
-                    canvas.DrawText($"{labels[hoveredSegment]}  $ {values[hoveredSegment]:N0}", hx, hy, hoverPaint);
                 }
 
                 canvas.Restore();
@@ -282,6 +225,43 @@ namespace Quiosco
                 }
             }
         }
+
+
+
+
+
+
+        internal class NativeMethods
+        {
+            [System.Runtime.InteropServices.DllImport("gdi32.dll", SetLastError = true)]
+            public static extern IntPtr CreateRoundRectRgn(
+                int nLeftRect, int nTopRect, int nRightRect, int nBottomRect,
+                int nWidthEllipse, int nHeightEllipse);
+        }
+
+        private double[] valuesDynamic = new double[] { 0, 0, 0 };
+
+        private void CargarValoresPieChartDesdeBD()
+        {
+            double totalVentas = 0;
+            double totalCompras = 0;
+            double totalGanancias = 0;
+
+            try
+            {
+                totalVentas = objNegDetalle.ObtenerTotalVentas();
+                totalCompras = objNegDetalle.ObtenerTotalCompras();
+
+                totalGanancias = totalVentas - totalCompras;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al cargar valores del pie chart: " + ex.Message);
+            }
+
+            valuesDynamic = new double[] { totalVentas, totalCompras, totalGanancias };
+        }
+
 
 
 
@@ -309,7 +289,54 @@ namespace Quiosco
         }
 
 
-        private void PictureBox1_MouseMove(object sender, MouseEventArgs e)
+        private void FormInicio_Load(object sender, EventArgs e)
+        {
+            CargarDetalleVenta();
+            CargarProductosEnStock();
+            MostrarPieSkiaEnPictureBox();
+            RedibujarGrafico();
+
+            pictureBox1.MouseMove += PictureBox1_MouseMove;
+            pictureBox1.MouseLeave += PictureBox1_MouseLeave;
+
+            // tooltipLabel (mejor inicializar aquí)
+            tooltipLabel = new Label();
+            tooltipLabel.AutoSize = true;
+            tooltipLabel.Visible = false;
+            tooltipLabel.Padding = new Padding(8);
+            tooltipLabel.ForeColor = Color.White;
+            tooltipLabel.Font = new Font("Segoe UI", 9F, FontStyle.Regular);
+            tooltipLabel.BorderStyle = BorderStyle.None;
+            tooltipLabel.MaximumSize = new Size(240, 0);
+
+            tooltipLabel.Region = System.Drawing.Region.FromHrgn(
+                NativeMethods.CreateRoundRectRgn(0, 0, 300, 60, 12, 12)
+            );
+
+            // inicial BackColor totalmente transparente
+            tooltipLabel.BackColor = Color.FromArgb(0, tooltipBaseColor.R, tooltipBaseColor.G, tooltipBaseColor.B);
+
+            this.Controls.Add(tooltipLabel);
+            tooltipLabel.BringToFront();
+
+            if (Sesion.UsuarioActual == null)
+            {
+                MessageBox.Show("Error: no hay usuario logueado.");
+                this.Close();
+                return;
+            }
+
+          //  lblUsuario.Text = "Hola, " + Sesion.UsuarioActual.NombreUsuario;
+
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnGestionUsuarios.Visible = false;
+            }
+
+        }
+
+
+        private async void PictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
             double total = values.Sum();
 
@@ -321,42 +348,85 @@ namespace Quiosco
             float dy = e.Y - cy;
             float dist = (float)Math.Sqrt(dx * dx + dy * dy);
 
-            if (dist > radius + 25)
+            // Si está DENTRO del pie (dist <= radius + padding) -> detectar segmento y mostrar tooltip
+            float padding = 25f; // margen para explode/hover
+            if (dist <= radius + padding)
             {
-                // fuera del gráfico
-                if (hoveredSegment != -1)
+                // calcular ángulo y encontrar el segmento
+                float angle = (float)(Math.Atan2(dy, dx) * 180 / Math.PI);
+                angle = (angle < -90) ? angle + 360 : angle;
+                angle += 90;
+
+                float start = 0;
+                int found = -1;
+                for (int i = 0; i < values.Length; i++)
                 {
-                    hoveredSegment = -1;
-                    RedibujarGrafico();
-                }
-                pictureBox1.Cursor = Cursors.Default;
-
-
-                return;
-            }
-
-            float angle = (float)(Math.Atan2(dy, dx) * 180 / Math.PI);
-            angle = (angle < -90) ? angle + 360 : angle;
-            angle += 90;
-
-            float start = 0;
-            for (int i = 0; i < values.Length; i++)
-            {
-                float sweep = (float)(values[i] / total * 360.0);
-
-                if (angle >= start && angle < start + sweep)
-                {
-                    if (hoveredSegment != i)
+                    float sweep = (float)(values[i] / total * 360.0);
+                    if (angle >= start && angle < start + sweep)
                     {
-                        hoveredSegment = i;
-                        RedibujarGrafico();
+                        found = i;
+                        break;
                     }
+                    start += sweep;
+                }
+
+                if (found != -1)
+                {
+                    // cambiar hoveredSegment si hace falta (para redraw)
+                    if (hoveredSegment != found)
+                    {
+                        hoveredSegment = found;
+                        RedibujarGrafico(); // hará crecer el segmento (explode)
+                    }
+
+                    // preparar texto y color del tooltip según segmento
+                    string text = $"{labels[found]}  $ {valuesDynamic[found]:N0}";
+
+                    tooltipLabel.Text = text;
+
+                    // convertir SKColor -> System.Drawing.Color
+                    SKColor sk = colors[found];
+                    Color segColor = Color.FromArgb(220, sk.Red, sk.Green, sk.Blue);
+
+                    // posición: convertir coordenada del mouse en pictureBox a coordenada del form
+                    Point screenPt = pictureBox1.PointToScreen(new Point(e.X + 12, e.Y + 12));
+                    Point clientPt = this.PointToClient(screenPt);
+
+                    tooltipLabel.Location = clientPt;
+
+                    // si ya visible y mismo color, solo mover
+                    if (tooltipLabel.Visible)
+                    {
+                        tooltipLabel.BackColor = Color.FromArgb(220, segColor.R, segColor.G, segColor.B);
+                    }
+                    else
+                    {
+                        // fijar color con alpha 0 y animar a alpha 220
+                        tooltipLabel.BackColor = Color.FromArgb(0, segColor.R, segColor.G, segColor.B);
+                        // arrancar fade (no bloquear el hilo UI)
+                        _ = tooltipLabel.FadeBackgroundAsync(Color.FromArgb(220, segColor.R, segColor.G, segColor.B), 180);
+                    }
+
+                    tooltipLabel.Visible = true;
                     pictureBox1.Cursor = Cursors.Hand;
                     return;
                 }
-
-                start += sweep;
             }
+
+            // si llegamos acá: fuera del pie o sin segmento detectado
+            if (hoveredSegment != -1)
+            {
+                hoveredSegment = -1;
+                RedibujarGrafico();
+            }
+
+            if (tooltipLabel.Visible)
+            {
+                // fade out y ocultar (async)
+                _ = tooltipLabel.FadeOutBackgroundAsync(120);
+            }
+
+            pictureBox1.Cursor = Cursors.Default;
         }
 
 
@@ -364,11 +434,14 @@ namespace Quiosco
         {
             hoveredSegment = -1;
             RedibujarGrafico();
+
+            if (tooltipLabel.Visible)
+            {
+                _ = tooltipLabel.FadeOutBackgroundAsync(120);
+            }
+
             pictureBox1.Cursor = Cursors.Default;
         }
-
-
-
 
 
 
@@ -765,17 +838,7 @@ namespace Quiosco
 
         private DetalleVentaNegocio objNegDetalle = new DetalleVentaNegocio();
 
-        private void FormInicio_Load(object sender, EventArgs e)
-        {
-            CargarDetalleVenta();
-            CargarProductosEnStock();
-            MostrarPieSkiaEnPictureBox();
-            RedibujarGrafico();
 
-            pictureBox1.MouseMove += PictureBox1_MouseMove;
-            pictureBox1.MouseLeave += PictureBox1_MouseLeave;
-
-        }
 
         private void CargarDetalleVenta()
         {
@@ -968,6 +1031,16 @@ namespace Quiosco
 
         }
 
+        private void btnGestionUsuarios_Click(object sender, EventArgs e)
+        {
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                MessageBox.Show("No tiene permisos para acceder a esta sección.");
+                return;
+            }
+
+            new FormAdminUsuarios().ShowDialog();
+        }
 
     }
 }

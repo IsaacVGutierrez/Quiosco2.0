@@ -204,6 +204,66 @@ namespace Quiosco.BD
             return ds;
         }
 
+
+        public double ObtenerTotalVentas()
+        {
+            double totalVentas = 0;
+            string sql = @"
+        SELECT ISNULL(SUM(dv.CantidadProducto * p.PrecioVenta),0) AS TotalVentas
+        FROM DetalleVenta dv
+        INNER JOIN Producto p ON dv.IdProducto = p.IdProducto";
+
+            SqlCommand cmd = new SqlCommand(sql, conexion);
+            try
+            {
+                Abrirconexion();
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                    totalVentas = Convert.ToDouble(result);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error al calcular total de ventas", e);
+            }
+            finally
+            {
+                Cerrarconexion();
+                cmd.Dispose();
+            }
+
+            return totalVentas;
+        }
+
+        public double ObtenerTotalCompras()
+        {
+            double totalCompras = 0;
+            string sql = @"
+        SELECT ISNULL(SUM(p.PrecioCompra * dv.CantidadProducto),0) AS TotalCompras
+        FROM DetalleVenta dv
+        INNER JOIN Producto p ON dv.IdProducto = p.IdProducto";
+
+            SqlCommand cmd = new SqlCommand(sql, conexion);
+            try
+            {
+                Abrirconexion();
+                object result = cmd.ExecuteScalar();
+                if (result != null && result != DBNull.Value)
+                    totalCompras = Convert.ToDouble(result);
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Error al calcular total de compras", e);
+            }
+            finally
+            {
+                Cerrarconexion();
+                cmd.Dispose();
+            }
+
+            return totalCompras;
+        }
+
+
         public DataSet Union()
         {
             string orden = @"
