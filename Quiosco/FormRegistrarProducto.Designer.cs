@@ -32,8 +32,6 @@
             label1 = new Label();
             dgvProducto = new DataGridView();
             label2 = new Label();
-            txtEliminarProducto = new TextBox();
-            lblEliminarProducto = new Label();
             label4 = new Label();
             txtBuscarProducto = new TextBox();
             btnBuscarProducto = new Button();
@@ -105,24 +103,6 @@
             label2.Text = "REGISTRAR PRODUCTOS";
             label2.Click += label2_Click;
             // 
-            // txtEliminarProducto
-            // 
-            txtEliminarProducto.Location = new Point(1199, 551);
-            txtEliminarProducto.Name = "txtEliminarProducto";
-            txtEliminarProducto.Size = new Size(134, 23);
-            txtEliminarProducto.TabIndex = 53;
-            // 
-            // lblEliminarProducto
-            // 
-            lblEliminarProducto.AutoSize = true;
-            lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(1137, 554);
-            lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
-            lblEliminarProducto.Name = "lblEliminarProducto";
-            lblEliminarProducto.Size = new Size(50, 15);
-            lblEliminarProducto.TabIndex = 52;
-            lblEliminarProducto.Text = "Eliminar";
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -136,6 +116,7 @@
             // 
             // txtBuscarProducto
             // 
+            txtBuscarProducto.Cursor = Cursors.Hand;
             txtBuscarProducto.Location = new Point(871, 552);
             txtBuscarProducto.Name = "txtBuscarProducto";
             txtBuscarProducto.Size = new Size(155, 23);
@@ -144,6 +125,7 @@
             // btnBuscarProducto
             // 
             btnBuscarProducto.BackColor = Color.Gold;
+            btnBuscarProducto.Cursor = Cursors.Hand;
             btnBuscarProducto.Location = new Point(1032, 543);
             btnBuscarProducto.Name = "btnBuscarProducto";
             btnBuscarProducto.Size = new Size(84, 36);
@@ -155,7 +137,8 @@
             // btnEliminarProducto
             // 
             btnEliminarProducto.BackColor = Color.Gold;
-            btnEliminarProducto.Location = new Point(1346, 545);
+            btnEliminarProducto.Cursor = Cursors.Hand;
+            btnEliminarProducto.Location = new Point(1336, 543);
             btnEliminarProducto.Name = "btnEliminarProducto";
             btnEliminarProducto.Size = new Size(84, 36);
             btnEliminarProducto.TabIndex = 48;
@@ -166,6 +149,7 @@
             // btnCancelarProducto
             // 
             btnCancelarProducto.BackColor = Color.Gold;
+            btnCancelarProducto.Cursor = Cursors.Hand;
             btnCancelarProducto.Location = new Point(255, 555);
             btnCancelarProducto.Name = "btnCancelarProducto";
             btnCancelarProducto.Size = new Size(84, 36);
@@ -177,6 +161,7 @@
             // btnModificarProducto
             // 
             btnModificarProducto.BackColor = Color.Gold;
+            btnModificarProducto.Cursor = Cursors.Hand;
             btnModificarProducto.Location = new Point(314, 495);
             btnModificarProducto.Name = "btnModificarProducto";
             btnModificarProducto.Size = new Size(84, 39);
@@ -188,6 +173,7 @@
             // btnCargarProducto
             // 
             btnCargarProducto.BackColor = Color.Gold;
+            btnCargarProducto.Cursor = Cursors.Hand;
             btnCargarProducto.Location = new Point(204, 496);
             btnCargarProducto.Name = "btnCargarProducto";
             btnCargarProducto.Size = new Size(84, 36);
@@ -198,7 +184,8 @@
             // 
             // txtCantidadProducto
             // 
-            txtCantidadProducto.Location = new Point(250, 246);
+            txtCantidadProducto.Cursor = Cursors.Hand;
+            txtCantidadProducto.Location = new Point(250, 274);
             txtCantidadProducto.Margin = new Padding(4);
             txtCantidadProducto.Name = "txtCantidadProducto";
             txtCantidadProducto.Size = new Size(173, 23);
@@ -208,7 +195,8 @@
             // 
             // txtPrecioCompraProducto
             // 
-            txtPrecioCompraProducto.Location = new Point(255, 368);
+            txtPrecioCompraProducto.Cursor = Cursors.Hand;
+            txtPrecioCompraProducto.Location = new Point(247, 157);
             txtPrecioCompraProducto.Margin = new Padding(4);
             txtPrecioCompraProducto.Name = "txtPrecioCompraProducto";
             txtPrecioCompraProducto.Size = new Size(176, 23);
@@ -222,7 +210,7 @@
             lblCantidadProducto.AutoSize = true;
             lblCantidadProducto.BackColor = Color.Wheat;
             lblCantidadProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblCantidadProducto.Location = new Point(135, 252);
+            lblCantidadProducto.Location = new Point(135, 280);
             lblCantidadProducto.Margin = new Padding(4, 0, 4, 0);
             lblCantidadProducto.Name = "lblCantidadProducto";
             lblCantidadProducto.Size = new Size(55, 15);
@@ -233,7 +221,7 @@
             // 
             lblPrecioVentaProducto.AutoSize = true;
             lblPrecioVentaProducto.BackColor = Color.Wheat;
-            lblPrecioVentaProducto.Location = new Point(132, 371);
+            lblPrecioVentaProducto.Location = new Point(124, 160);
             lblPrecioVentaProducto.Margin = new Padding(4, 0, 4, 0);
             lblPrecioVentaProducto.Name = "lblPrecioVentaProducto";
             lblPrecioVentaProducto.Size = new Size(102, 15);
@@ -244,7 +232,7 @@
             // 
             lblDistribuidorProducto.AutoSize = true;
             lblDistribuidorProducto.BackColor = Color.Wheat;
-            lblDistribuidorProducto.Location = new Point(131, 331);
+            lblDistribuidorProducto.Location = new Point(130, 400);
             lblDistribuidorProducto.Margin = new Padding(4, 0, 4, 0);
             lblDistribuidorProducto.Name = "lblDistribuidorProducto";
             lblDistribuidorProducto.Size = new Size(69, 15);
@@ -253,6 +241,7 @@
             // 
             // txtNombreProducto
             // 
+            txtNombreProducto.Cursor = Cursors.Hand;
             txtNombreProducto.Location = new Point(252, 67);
             txtNombreProducto.Margin = new Padding(4);
             txtNombreProducto.Name = "txtNombreProducto";
@@ -285,6 +274,7 @@
             // 
             // txtMarcaProducto
             // 
+            txtMarcaProducto.Cursor = Cursors.Hand;
             txtMarcaProducto.Location = new Point(252, 113);
             txtMarcaProducto.Margin = new Padding(4);
             txtMarcaProducto.Name = "txtMarcaProducto";
@@ -293,7 +283,8 @@
             // 
             // txtPrecioTotalProducto
             // 
-            txtPrecioTotalProducto.Location = new Point(249, 155);
+            txtPrecioTotalProducto.Cursor = Cursors.Hand;
+            txtPrecioTotalProducto.Location = new Point(251, 312);
             txtPrecioTotalProducto.Margin = new Padding(4);
             txtPrecioTotalProducto.Name = "txtPrecioTotalProducto";
             txtPrecioTotalProducto.ReadOnly = true;
@@ -306,28 +297,30 @@
             lblPrecioCompraProducto.AutoSize = true;
             lblPrecioCompraProducto.BackColor = Color.Wheat;
             lblPrecioCompraProducto.ForeColor = SystemColors.ActiveCaptionText;
-            lblPrecioCompraProducto.Location = new Point(113, 159);
+            lblPrecioCompraProducto.Location = new Point(96, 316);
             lblPrecioCompraProducto.Margin = new Padding(4, 0, 4, 0);
             lblPrecioCompraProducto.Name = "lblPrecioCompraProducto";
-            lblPrecioCompraProducto.Size = new Size(68, 15);
+            lblPrecioCompraProducto.Size = new Size(130, 15);
             lblPrecioCompraProducto.TabIndex = 58;
-            lblPrecioCompraProducto.Text = "Precio Total";
+            lblPrecioCompraProducto.Text = "Precio Total de Compra";
             lblPrecioCompraProducto.Click += label7_Click;
             // 
             // cmbDistribuidorProducto
             // 
+            cmbDistribuidorProducto.Cursor = Cursors.Hand;
             cmbDistribuidorProducto.FormattingEnabled = true;
-            cmbDistribuidorProducto.Location = new Point(249, 327);
+            cmbDistribuidorProducto.Location = new Point(248, 396);
             cmbDistribuidorProducto.Name = "cmbDistribuidorProducto";
             cmbDistribuidorProducto.Size = new Size(176, 23);
             cmbDistribuidorProducto.TabIndex = 97;
+            cmbDistribuidorProducto.Click += cmbDistribuidorProducto_Click;
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.BackColor = Color.Wheat;
             label3.ForeColor = SystemColors.ActiveCaptionText;
-            label3.Location = new Point(134, 208);
+            label3.Location = new Point(134, 236);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
             label3.Size = new Size(58, 15);
@@ -337,7 +330,8 @@
             // btnAgregarCategoria
             // 
             btnAgregarCategoria.BackColor = Color.Gold;
-            btnAgregarCategoria.Location = new Point(444, 200);
+            btnAgregarCategoria.Cursor = Cursors.Hand;
+            btnAgregarCategoria.Location = new Point(444, 228);
             btnAgregarCategoria.Name = "btnAgregarCategoria";
             btnAgregarCategoria.Size = new Size(149, 28);
             btnAgregarCategoria.TabIndex = 100;
@@ -347,16 +341,20 @@
             // 
             // cmbCategoriaProducto
             // 
+            cmbCategoriaProducto.Cursor = Cursors.Hand;
             cmbCategoriaProducto.FormattingEnabled = true;
-            cmbCategoriaProducto.Location = new Point(249, 204);
+            cmbCategoriaProducto.Location = new Point(249, 232);
             cmbCategoriaProducto.Name = "cmbCategoriaProducto";
             cmbCategoriaProducto.Size = new Size(176, 23);
             cmbCategoriaProducto.TabIndex = 102;
+            cmbCategoriaProducto.SelectedIndexChanged += cmbCategoriaProducto_SelectedIndexChanged;
+            cmbCategoriaProducto.Click += cmbCategoriaProducto_Click;
             // 
             // btnAgregarProveedor
             // 
             btnAgregarProveedor.BackColor = Color.Gold;
-            btnAgregarProveedor.Location = new Point(444, 325);
+            btnAgregarProveedor.Cursor = Cursors.Hand;
+            btnAgregarProveedor.Location = new Point(443, 394);
             btnAgregarProveedor.Name = "btnAgregarProveedor";
             btnAgregarProveedor.Size = new Size(161, 28);
             btnAgregarProveedor.TabIndex = 103;
@@ -377,6 +375,7 @@
             // 
             // dtFechaCompraProducto
             // 
+            dtFechaCompraProducto.Cursor = Cursors.Hand;
             dtFechaCompraProducto.Location = new Point(249, 445);
             dtFechaCompraProducto.Name = "dtFechaCompraProducto";
             dtFechaCompraProducto.Size = new Size(300, 23);
@@ -385,7 +384,8 @@
             // 
             // txtPrecioVentaProducto
             // 
-            txtPrecioVentaProducto.Location = new Point(251, 404);
+            txtPrecioVentaProducto.Cursor = Cursors.Hand;
+            txtPrecioVentaProducto.Location = new Point(248, 194);
             txtPrecioVentaProducto.Margin = new Padding(4);
             txtPrecioVentaProducto.Name = "txtPrecioVentaProducto";
             txtPrecioVentaProducto.Size = new Size(176, 23);
@@ -398,7 +398,7 @@
             // 
             label5.AutoSize = true;
             label5.BackColor = Color.Wheat;
-            label5.Location = new Point(128, 407);
+            label5.Location = new Point(125, 197);
             label5.Margin = new Padding(4, 0, 4, 0);
             label5.Name = "label5";
             label5.Size = new Size(88, 15);
@@ -407,17 +407,19 @@
             // 
             // cmbMetodoPago
             // 
+            cmbMetodoPago.Cursor = Cursors.Hand;
             cmbMetodoPago.FormattingEnabled = true;
-            cmbMetodoPago.Location = new Point(250, 283);
+            cmbMetodoPago.Location = new Point(249, 352);
             cmbMetodoPago.Name = "cmbMetodoPago";
             cmbMetodoPago.Size = new Size(172, 23);
             cmbMetodoPago.TabIndex = 108;
+            cmbMetodoPago.Click += cmbMetodoPago_Click;
             // 
             // label6
             // 
             label6.AutoSize = true;
             label6.BackColor = Color.Wheat;
-            label6.Location = new Point(132, 288);
+            label6.Location = new Point(131, 357);
             label6.Margin = new Padding(4, 0, 4, 0);
             label6.Name = "label6";
             label6.Size = new Size(87, 15);
@@ -427,7 +429,8 @@
             // btnAgregarMetodoDePago
             // 
             btnAgregarMetodoDePago.BackColor = Color.Gold;
-            btnAgregarMetodoDePago.Location = new Point(443, 282);
+            btnAgregarMetodoDePago.Cursor = Cursors.Hand;
+            btnAgregarMetodoDePago.Location = new Point(442, 351);
             btnAgregarMetodoDePago.Name = "btnAgregarMetodoDePago";
             btnAgregarMetodoDePago.Size = new Size(31, 24);
             btnAgregarMetodoDePago.TabIndex = 110;
@@ -460,8 +463,6 @@
             Controls.Add(txtNombreProducto);
             Controls.Add(lblMarcaProducto);
             Controls.Add(lblNombreProducto);
-            Controls.Add(txtEliminarProducto);
-            Controls.Add(lblEliminarProducto);
             Controls.Add(label4);
             Controls.Add(txtBuscarProducto);
             Controls.Add(btnBuscarProducto);
@@ -479,6 +480,7 @@
             Controls.Add(dgvProducto);
             Name = "FormRegistrarProducto";
             Text = "Registro de Productos";
+            Load += FormRegistrarProducto_Load;
             ((System.ComponentModel.ISupportInitialize)dgvProducto).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -489,8 +491,6 @@
         private Label label1;
         private DataGridView dgvProducto;
         private Label label2;
-        private TextBox txtEliminarProducto;
-        private Label lblEliminarProducto;
         private Label label4;
         private TextBox txtBuscarProducto;
         private Button btnBuscarProducto;

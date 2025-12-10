@@ -35,8 +35,6 @@
             lblNombreProducto = new Label();
             txtAdeudaCliente = new TextBox();
             lblPrecio = new Label();
-            txtEliminarCliente = new TextBox();
-            lblEliminarProducto = new Label();
             label4 = new Label();
             txtBuscarCliente = new TextBox();
             btnBuscarCliente = new Button();
@@ -52,6 +50,7 @@
             // 
             // txtTelefonoCliente
             // 
+            txtTelefonoCliente.Cursor = Cursors.Hand;
             txtTelefonoCliente.Location = new Point(268, 273);
             txtTelefonoCliente.Margin = new Padding(4);
             txtTelefonoCliente.Name = "txtTelefonoCliente";
@@ -61,6 +60,7 @@
             // 
             // txtNombreCliente
             // 
+            txtNombreCliente.Cursor = Cursors.Hand;
             txtNombreCliente.Location = new Point(267, 194);
             txtNombreCliente.Margin = new Padding(4);
             txtNombreCliente.Name = "txtNombreCliente";
@@ -94,6 +94,7 @@
             // 
             // txtAdeudaCliente
             // 
+            txtAdeudaCliente.Cursor = Cursors.Hand;
             txtAdeudaCliente.Location = new Point(268, 354);
             txtAdeudaCliente.Margin = new Padding(4);
             txtAdeudaCliente.Name = "txtAdeudaCliente";
@@ -113,24 +114,6 @@
             lblPrecio.TabIndex = 78;
             lblPrecio.Text = "Adeuda";
             // 
-            // txtEliminarCliente
-            // 
-            txtEliminarCliente.Location = new Point(1157, 572);
-            txtEliminarCliente.Name = "txtEliminarCliente";
-            txtEliminarCliente.Size = new Size(134, 23);
-            txtEliminarCliente.TabIndex = 77;
-            // 
-            // lblEliminarProducto
-            // 
-            lblEliminarProducto.AutoSize = true;
-            lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(1095, 575);
-            lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
-            lblEliminarProducto.Name = "lblEliminarProducto";
-            lblEliminarProducto.Size = new Size(50, 15);
-            lblEliminarProducto.TabIndex = 76;
-            lblEliminarProducto.Text = "Eliminar";
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -144,6 +127,7 @@
             // 
             // txtBuscarCliente
             // 
+            txtBuscarCliente.Cursor = Cursors.Hand;
             txtBuscarCliente.Location = new Point(829, 573);
             txtBuscarCliente.Name = "txtBuscarCliente";
             txtBuscarCliente.Size = new Size(155, 23);
@@ -152,6 +136,7 @@
             // btnBuscarCliente
             // 
             btnBuscarCliente.BackColor = Color.Gold;
+            btnBuscarCliente.Cursor = Cursors.Hand;
             btnBuscarCliente.Location = new Point(990, 564);
             btnBuscarCliente.Name = "btnBuscarCliente";
             btnBuscarCliente.Size = new Size(84, 36);
@@ -163,6 +148,7 @@
             // btnEliminarCliente
             // 
             btnEliminarCliente.BackColor = Color.Gold;
+            btnEliminarCliente.Cursor = Cursors.Hand;
             btnEliminarCliente.Location = new Point(1304, 566);
             btnEliminarCliente.Name = "btnEliminarCliente";
             btnEliminarCliente.Size = new Size(84, 36);
@@ -174,6 +160,7 @@
             // btnCancelarCliente
             // 
             btnCancelarCliente.BackColor = Color.Gold;
+            btnCancelarCliente.Cursor = Cursors.Hand;
             btnCancelarCliente.Location = new Point(213, 576);
             btnCancelarCliente.Name = "btnCancelarCliente";
             btnCancelarCliente.Size = new Size(84, 36);
@@ -185,6 +172,7 @@
             // btnModificarCliente
             // 
             btnModificarCliente.BackColor = Color.Gold;
+            btnModificarCliente.Cursor = Cursors.Hand;
             btnModificarCliente.Location = new Point(272, 516);
             btnModificarCliente.Name = "btnModificarCliente";
             btnModificarCliente.Size = new Size(84, 39);
@@ -196,6 +184,7 @@
             // btnCargarCliente
             // 
             btnCargarCliente.BackColor = Color.Gold;
+            btnCargarCliente.Cursor = Cursors.Hand;
             btnCargarCliente.Location = new Point(162, 517);
             btnCargarCliente.Name = "btnCargarCliente";
             btnCargarCliente.Size = new Size(84, 36);
@@ -254,8 +243,6 @@
             Controls.Add(lblNombreProducto);
             Controls.Add(txtAdeudaCliente);
             Controls.Add(lblPrecio);
-            Controls.Add(txtEliminarCliente);
-            Controls.Add(lblEliminarProducto);
             Controls.Add(label4);
             Controls.Add(txtBuscarCliente);
             Controls.Add(btnBuscarCliente);
@@ -268,6 +255,7 @@
             Controls.Add(dgvCliente);
             Name = "FormRegistroCliente";
             Text = "Registrar Cliente";
+            Load += FormRegistroCliente_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCliente).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -281,8 +269,6 @@
         private Label lblNombreProducto;
         private TextBox txtAdeudaCliente;
         private Label lblPrecio;
-        private TextBox txtEliminarCliente;
-        private Label lblEliminarProducto;
         private Label label4;
         private TextBox txtBuscarCliente;
         private Button btnBuscarCliente;

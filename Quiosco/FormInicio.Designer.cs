@@ -37,10 +37,8 @@ namespace Quiosco
             pictureBox1 = new PictureBox();
             btnRegistrarVenta = new Button();
             btnRegistrarProducto = new Button();
-            label2 = new Label();
+            lblSaludo = new Label();
             tabMisProductos = new TabPage();
-            txtEliminarStockProductos = new TextBox();
-            label3 = new Label();
             label5 = new Label();
             txtBuscarStockProductos = new TextBox();
             btnBuscarProductos = new Button();
@@ -54,8 +52,6 @@ namespace Quiosco
             label9 = new Label();
             dgvDetalleVenta = new DataGridView();
             tabDeudores = new TabPage();
-            txtEliminarDeudor = new TextBox();
-            lblEliminarProducto = new Label();
             label4 = new Label();
             txtBuscarDeudor = new TextBox();
             btnBuscarDeudor = new Button();
@@ -97,7 +93,7 @@ namespace Quiosco
             tabInicio.Controls.Add(pictureBox1);
             tabInicio.Controls.Add(btnRegistrarVenta);
             tabInicio.Controls.Add(btnRegistrarProducto);
-            tabInicio.Controls.Add(label2);
+            tabInicio.Controls.Add(lblSaludo);
             tabInicio.Location = new Point(4, 24);
             tabInicio.Name = "tabInicio";
             tabInicio.Padding = new Padding(3);
@@ -112,7 +108,7 @@ namespace Quiosco
             btnGestionUsuarios.BackgroundImageLayout = ImageLayout.Center;
             btnGestionUsuarios.Cursor = Cursors.Hand;
             btnGestionUsuarios.FlatStyle = FlatStyle.Popup;
-            btnGestionUsuarios.Location = new Point(1218, 41);
+            btnGestionUsuarios.Location = new Point(1345, 41);
             btnGestionUsuarios.Name = "btnGestionUsuarios";
             btnGestionUsuarios.Size = new Size(148, 23);
             btnGestionUsuarios.TabIndex = 14;
@@ -122,11 +118,13 @@ namespace Quiosco
             // 
             // pictureBox1
             // 
+            pictureBox1.Cursor = Cursors.Hand;
             pictureBox1.Location = new Point(77, 127);
             pictureBox1.Name = "pictureBox1";
             pictureBox1.Size = new Size(792, 552);
             pictureBox1.TabIndex = 13;
             pictureBox1.TabStop = false;
+            pictureBox1.MouseEnter += pictureBox1_MouseEnter;
             pictureBox1.MouseLeave += PictureBox1_MouseLeave;
             pictureBox1.MouseMove += PictureBox1_MouseMove;
             // 
@@ -162,32 +160,29 @@ namespace Quiosco
             btnRegistrarProducto.UseVisualStyleBackColor = false;
             btnRegistrarProducto.Click += btnRegistrarProducto_Click;
             // 
-            // label2
+            // lblSaludo
             // 
-            label2.AutoSize = true;
-            label2.BackColor = Color.MintCream;
-            label2.BorderStyle = BorderStyle.Fixed3D;
-            label2.Font = new Font("High Tower Text", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
-            label2.Location = new Point(573, 41);
-            label2.Name = "label2";
-            label2.Size = new Size(218, 34);
-            label2.TabIndex = 10;
-            label2.Text = "BIENVENIDO!";
+            lblSaludo.AutoSize = true;
+            lblSaludo.BackColor = Color.MintCream;
+            lblSaludo.BorderStyle = BorderStyle.Fixed3D;
+            lblSaludo.Font = new Font("High Tower Text", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
+            lblSaludo.Location = new Point(595, 30);
+            lblSaludo.Name = "lblSaludo";
+            lblSaludo.Size = new Size(218, 34);
+            lblSaludo.TabIndex = 10;
+            lblSaludo.Text = "BIENVENIDO!";
             // 
             // tabMisProductos
             // 
             tabMisProductos.BackgroundImage = (Image)resources.GetObject("tabMisProductos.BackgroundImage");
             tabMisProductos.BackgroundImageLayout = ImageLayout.Stretch;
             tabMisProductos.BorderStyle = BorderStyle.Fixed3D;
-            tabMisProductos.Controls.Add(txtEliminarStockProductos);
-            tabMisProductos.Controls.Add(label3);
             tabMisProductos.Controls.Add(label5);
             tabMisProductos.Controls.Add(txtBuscarStockProductos);
             tabMisProductos.Controls.Add(btnBuscarProductos);
             tabMisProductos.Controls.Add(btnEliminarProductos);
             tabMisProductos.Controls.Add(label6);
             tabMisProductos.Controls.Add(dgvStockProductos);
-            tabMisProductos.Cursor = Cursors.Hand;
             tabMisProductos.Font = new Font("Ebrima", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             tabMisProductos.ForeColor = SystemColors.ActiveCaptionText;
             tabMisProductos.Location = new Point(4, 24);
@@ -198,24 +193,6 @@ namespace Quiosco
             tabMisProductos.TabIndex = 0;
             tabMisProductos.Text = "Mis Productos";
             tabMisProductos.UseVisualStyleBackColor = true;
-            // 
-            // txtEliminarStockProductos
-            // 
-            txtEliminarStockProductos.Location = new Point(770, 532);
-            txtEliminarStockProductos.Name = "txtEliminarStockProductos";
-            txtEliminarStockProductos.Size = new Size(134, 27);
-            txtEliminarStockProductos.TabIndex = 61;
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.BackColor = Color.Wheat;
-            label3.Location = new Point(697, 535);
-            label3.Margin = new Padding(4, 0, 4, 0);
-            label3.Name = "label3";
-            label3.Size = new Size(66, 20);
-            label3.TabIndex = 60;
-            label3.Text = "Eliminar";
             // 
             // label5
             // 
@@ -255,6 +232,7 @@ namespace Quiosco
             btnEliminarProductos.TabIndex = 56;
             btnEliminarProductos.Text = "Eliminar";
             btnEliminarProductos.UseVisualStyleBackColor = false;
+            btnEliminarProductos.Click += btnEliminarProductos_Click;
             // 
             // label6
             // 
@@ -275,9 +253,9 @@ namespace Quiosco
             dgvStockProductos.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvStockProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvStockProductos.Cursor = Cursors.Hand;
-            dgvStockProductos.Location = new Point(206, 93);
+            dgvStockProductos.Location = new Point(389, 101);
             dgvStockProductos.Name = "dgvStockProductos";
-            dgvStockProductos.Size = new Size(989, 408);
+            dgvStockProductos.Size = new Size(570, 408);
             dgvStockProductos.TabIndex = 54;
             // 
             // tabMisVentas
@@ -290,7 +268,6 @@ namespace Quiosco
             tabMisVentas.Controls.Add(btnBuscarDetalleVenta);
             tabMisVentas.Controls.Add(label9);
             tabMisVentas.Controls.Add(dgvDetalleVenta);
-            tabMisVentas.Cursor = Cursors.Hand;
             tabMisVentas.Font = new Font("Ebrima", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             tabMisVentas.Location = new Point(4, 24);
             tabMisVentas.Margin = new Padding(4);
@@ -305,7 +282,7 @@ namespace Quiosco
             // 
             label8.AutoSize = true;
             label8.BackColor = Color.Wheat;
-            label8.Location = new Point(902, 531);
+            label8.Location = new Point(1013, 581);
             label8.Margin = new Padding(4, 0, 4, 0);
             label8.Name = "label8";
             label8.Size = new Size(56, 20);
@@ -314,7 +291,7 @@ namespace Quiosco
             // 
             // txtBuscarDetalleVenta
             // 
-            txtBuscarDetalleVenta.Location = new Point(968, 529);
+            txtBuscarDetalleVenta.Location = new Point(1079, 579);
             txtBuscarDetalleVenta.Name = "txtBuscarDetalleVenta";
             txtBuscarDetalleVenta.Size = new Size(155, 27);
             txtBuscarDetalleVenta.TabIndex = 89;
@@ -322,7 +299,7 @@ namespace Quiosco
             // btnBuscarDetalleVenta
             // 
             btnBuscarDetalleVenta.BackColor = Color.Gold;
-            btnBuscarDetalleVenta.Location = new Point(1129, 520);
+            btnBuscarDetalleVenta.Location = new Point(1240, 570);
             btnBuscarDetalleVenta.Name = "btnBuscarDetalleVenta";
             btnBuscarDetalleVenta.Size = new Size(84, 36);
             btnBuscarDetalleVenta.TabIndex = 88;
@@ -350,7 +327,7 @@ namespace Quiosco
             dgvDetalleVenta.Cursor = Cursors.Hand;
             dgvDetalleVenta.Location = new Point(216, 71);
             dgvDetalleVenta.Name = "dgvDetalleVenta";
-            dgvDetalleVenta.Size = new Size(927, 415);
+            dgvDetalleVenta.Size = new Size(1039, 453);
             dgvDetalleVenta.TabIndex = 85;
             // 
             // tabDeudores
@@ -358,8 +335,6 @@ namespace Quiosco
             tabDeudores.BackgroundImage = (Image)resources.GetObject("tabDeudores.BackgroundImage");
             tabDeudores.BackgroundImageLayout = ImageLayout.Stretch;
             tabDeudores.BorderStyle = BorderStyle.Fixed3D;
-            tabDeudores.Controls.Add(txtEliminarDeudor);
-            tabDeudores.Controls.Add(lblEliminarProducto);
             tabDeudores.Controls.Add(label4);
             tabDeudores.Controls.Add(txtBuscarDeudor);
             tabDeudores.Controls.Add(btnBuscarDeudor);
@@ -368,7 +343,6 @@ namespace Quiosco
             tabDeudores.Controls.Add(dgvDeudor);
             tabDeudores.Controls.Add(btnPagarDeudor);
             tabDeudores.Controls.Add(btnCancelarDeudor);
-            tabDeudores.Cursor = Cursors.Hand;
             tabDeudores.Font = new Font("Ebrima", 11.25F, FontStyle.Bold, GraphicsUnit.Point);
             tabDeudores.Location = new Point(4, 24);
             tabDeudores.Name = "tabDeudores";
@@ -377,24 +351,6 @@ namespace Quiosco
             tabDeudores.TabIndex = 2;
             tabDeudores.Text = "Deudores";
             tabDeudores.UseVisualStyleBackColor = true;
-            // 
-            // txtEliminarDeudor
-            // 
-            txtEliminarDeudor.Location = new Point(778, 541);
-            txtEliminarDeudor.Name = "txtEliminarDeudor";
-            txtEliminarDeudor.Size = new Size(134, 27);
-            txtEliminarDeudor.TabIndex = 92;
-            // 
-            // lblEliminarProducto
-            // 
-            lblEliminarProducto.AutoSize = true;
-            lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(700, 544);
-            lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
-            lblEliminarProducto.Name = "lblEliminarProducto";
-            lblEliminarProducto.Size = new Size(66, 20);
-            lblEliminarProducto.TabIndex = 91;
-            lblEliminarProducto.Text = "Eliminar";
             // 
             // label4
             // 
@@ -493,6 +449,7 @@ namespace Quiosco
             Name = "FormInicio";
             Text = "Software Comercial";
             WindowState = FormWindowState.Maximized;
+            FormClosing += FormInicio_FormClosing;
             Load += FormInicio_Load;
             tabControl1.ResumeLayout(false);
             tabInicio.ResumeLayout(false);
@@ -521,18 +478,14 @@ namespace Quiosco
         private TabPage tabInicio;
         private Button btnEliminarProductos;
         private Button btnRegistrarProducto;
-        private Label label2;
+        private Label lblSaludo;
         private Button btnRegistrarVenta;
-        private TextBox txtEliminarDeudor;
-        private Label lblEliminarProducto;
         private Label label4;
         private TextBox txtBuscarDeudor;
         private Button btnBuscarDeudor;
         private Button btnEliminarDeudor;
         private Label label1;
         private DataGridView dgvDeudor;
-        private TextBox txtEliminarStockProductos;
-        private Label label3;
         private Label label5;
         private TextBox txtBuscarStockProductos;
         private Button btnBuscarProductos;

@@ -32,8 +32,6 @@
             label2 = new Label();
             txtNombreMetodoDePago = new TextBox();
             lblNombreMetodoDePago = new Label();
-            txtEliminarMetodoDePago = new TextBox();
-            lblEliminarProducto = new Label();
             label4 = new Label();
             txtBuscarMetodoDePago = new TextBox();
             btnBuscarMetodoDePago = new Button();
@@ -78,24 +76,6 @@
             lblNombreMetodoDePago.Size = new Size(162, 15);
             lblNombreMetodoDePago.TabIndex = 112;
             lblNombreMetodoDePago.Text = "Nombre del Metodo De Pago";
-            // 
-            // txtEliminarMetodoDePago
-            // 
-            txtEliminarMetodoDePago.Location = new Point(1127, 571);
-            txtEliminarMetodoDePago.Name = "txtEliminarMetodoDePago";
-            txtEliminarMetodoDePago.Size = new Size(134, 23);
-            txtEliminarMetodoDePago.TabIndex = 111;
-            // 
-            // lblEliminarProducto
-            // 
-            lblEliminarProducto.AutoSize = true;
-            lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(1065, 574);
-            lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
-            lblEliminarProducto.Name = "lblEliminarProducto";
-            lblEliminarProducto.Size = new Size(50, 15);
-            lblEliminarProducto.TabIndex = 110;
-            lblEliminarProducto.Text = "Eliminar";
             // 
             // label4
             // 
@@ -204,8 +184,6 @@
             ClientSize = new Size(1482, 663);
             Controls.Add(txtNombreMetodoDePago);
             Controls.Add(lblNombreMetodoDePago);
-            Controls.Add(txtEliminarMetodoDePago);
-            Controls.Add(lblEliminarProducto);
             Controls.Add(label4);
             Controls.Add(txtBuscarMetodoDePago);
             Controls.Add(btnBuscarMetodoDePago);
@@ -219,6 +197,7 @@
             Cursor = Cursors.Hand;
             Name = "FormRegistroMetodoDePago";
             Text = "Metodo De Pago";
+            Load += FormRegistroMetodoDePago_Load;
             ((System.ComponentModel.ISupportInitialize)dgvMetodoDePago).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -229,8 +208,6 @@
         private Label label2;
         private TextBox txtNombreMetodoDePago;
         private Label lblNombreMetodoDePago;
-        private TextBox txtEliminarMetodoDePago;
-        private Label lblEliminarProducto;
         private Label label4;
         private TextBox txtBuscarMetodoDePago;
         private Button btnBuscarMetodoDePago;

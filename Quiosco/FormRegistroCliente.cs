@@ -31,38 +31,18 @@ namespace Quiosco
 
             LlenarDGVCliente();
 
+
+
         }
 
 
-        private void LlenarDGVCliente()
-        {
-            dgvCliente.Rows.Clear();
-            DataSet ds = new DataSet();
-            ds = objNegCliente.listadoCliente("Todos");
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    dgvCliente.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2], dr[3].ToString());
-                }
-            }
-        }
 
-        private void LlenarDgClienteBuscar()
-        {
-            string cual = txtBuscarCliente.Text;
-            dgvCliente.Rows.Clear();
-            DataSet ds = new DataSet();
-            ds = objNegCliente.listarClienteBuscar(cual);
 
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    dgvCliente.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2], dr[3]);
-                }
-            }
-        }
+
+
+        public Cliente objEntCliente = new Cliente();
+
+        public ClienteNegocio objNegCliente = new ClienteNegocio();
 
 
         private void TxtBox_a_ObjCliente()
@@ -96,13 +76,40 @@ namespace Quiosco
 
         }
 
+        private void LlenarDGVCliente()
+        {
+            dgvCliente.Rows.Clear();
+            DataSet ds = new DataSet();
+            ds = objNegCliente.listadoCliente("Todos");
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    dgvCliente.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2], dr[3].ToString());
+                }
+            }
+        }
+
+        private void LlenarDgClienteBuscar()
+        {
+            string cual = txtBuscarCliente.Text;
+            dgvCliente.Rows.Clear();
+            DataSet ds = new DataSet();
+            ds = objNegCliente.listarClienteBuscar(cual);
+
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    dgvCliente.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2], dr[3]);
+                }
+            }
+        }
 
 
 
 
-        public Cliente objEntCliente = new Cliente();
 
-        public ClienteNegocio objNegCliente = new ClienteNegocio();
 
 
 
@@ -172,6 +179,7 @@ namespace Quiosco
                     LlenarDGVCliente();
                     LimpiarCliente();
 
+
                 }
             }
         }
@@ -192,11 +200,13 @@ namespace Quiosco
                     btnModificarCliente.Visible = false;
                     btnCargarCliente.Visible = true;
                     btnCancelarCliente.Visible = false;
+
                 }
                 else
                 {
                     MessageBox.Show("Se produjo un error al intentar modificar el Cliente");
                 }
+
             }
         }
 
@@ -215,6 +225,7 @@ namespace Quiosco
                 btnCargarCliente.Visible = false;
                 btnModificarCliente.Visible = true;
                 btnCancelarCliente.Visible = true;
+
             }
         }
 
@@ -279,51 +290,53 @@ namespace Quiosco
 
 
 
-
         private void btnEliminarCliente_Click(object sender, EventArgs e)
         {
-            if (true)
+            // Verificar si hay una fila seleccionada
+            if (dgvCliente.CurrentRow == null)
             {
-
-                DgEliminarClienteId();
-
-                LlenarDGVCliente();
-
-                MessageBox.Show("Se elimino el Cliente");
+                MessageBox.Show("Seleccione un cliente para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-        }
 
+            // Obtener el IdCliente de la fila seleccionada
+            if (!int.TryParse(dgvCliente.CurrentRow.Cells[0].Value.ToString(), out int idCliente))
+            {
+                MessageBox.Show("El IdCliente seleccionado no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-        public void DgEliminarClienteId()
-        {
-            string id = txtEliminarCliente.Text;
-            dgvCliente.Rows.Clear();
-            DataSet ds = new DataSet();
+            // Confirmar eliminación
+            var resultado = MessageBox.Show("¿Está seguro de eliminar este cliente?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (resultado != DialogResult.Yes) return;
 
             try
             {
-                ds = objNegCliente.ListarClienteEliminar(id);
+                // Limpiar grilla y eliminar cliente usando tu método existente
+                dgvCliente.Rows.Clear();
+                DataSet ds = objNegCliente.ListarClienteEliminar(idCliente.ToString());
 
-                if (ds.Tables.Count >= 0)
+                if (ds != null && ds.Tables.Count > 0)
                 {
-                    try
+                    foreach (DataRow dr in ds.Tables[0].Rows)
                     {
-                        foreach (DataRow dr in ds.Tables)
-                        {
-                            dgvCliente.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3]);
-                        }
+                        dgvCliente.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3]);
                     }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
+
+                    MessageBox.Show("Cliente eliminado correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró el cliente o no se pudo eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Error al eliminar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
 
 
 
@@ -338,6 +351,7 @@ namespace Quiosco
             btnModificarCliente.Visible = true;
             btnCancelarCliente.Visible = true;
             LlenarDGVCliente();
+
         }
 
 
@@ -355,12 +369,22 @@ namespace Quiosco
             txtTelefonoCliente.Text = string.Empty;
             txtAdeudaCliente.Text = string.Empty;
             txtBuscarCliente.Clear();
-            txtEliminarCliente.Clear();
+
         }
+
 
         private void dgvCliente_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void FormRegistroCliente_Load(object sender, EventArgs e)
+        {
+
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnEliminarCliente.Visible = false;
+            }
         }
     }
 }

@@ -37,10 +37,13 @@ namespace Quiosco
             dgvDeudor.Columns[3].HeaderText = "Adeuda Cliente";
 
 
+
+            // Carga inicial
             LlenarDGVDeudor();
             CargarValoresPieChartDesdeBD();
             MostrarPieSkiaEnPictureBox();
 
+            lblSaludo.Text = "¡ Bienvenido " + Sesion.UsuarioActual.NombreUsuario + " !";
 
 
 
@@ -48,6 +51,8 @@ namespace Quiosco
 
 
         }
+
+
 
         private int hoveredSegment = -1;
         private readonly string[] labels = { "Ventas", "Compras", "Ganancias" };
@@ -271,7 +276,7 @@ namespace Quiosco
         {
             Bitmap bmp = CreatePieBitmapSkia(400, 300);
 
-            // Crear PictureBox si no existe
+
             pictureBox1.Image?.Dispose();
             pictureBox1.Image = bmp;
 
@@ -292,6 +297,7 @@ namespace Quiosco
         private void FormInicio_Load(object sender, EventArgs e)
         {
             CargarDetalleVenta();
+            CargarValoresPieChartDesdeBD();
             CargarProductosEnStock();
             MostrarPieSkiaEnPictureBox();
             RedibujarGrafico();
@@ -326,11 +332,21 @@ namespace Quiosco
                 return;
             }
 
-          //  lblUsuario.Text = "Hola, " + Sesion.UsuarioActual.NombreUsuario;
 
             if (Sesion.UsuarioActual.Rol != "Admin")
             {
                 btnGestionUsuarios.Visible = false;
+            }
+
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnEliminarProductos.Visible = false;
+            }
+
+
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnEliminarDeudor.Visible = false;
             }
 
         }
@@ -512,111 +528,7 @@ namespace Quiosco
             }
         }
 
-        /* private void TxtBox_a_ObjDeudor()
-        {
-            objEntDeudor.NombreCliente = txtNombreDeudor.Text;
-            objEntDeudor.TelefonoCliente = txtTelefonoDeudor.Text;
-            objEntDeudor.AdeudaCliente = int.Parse(txtAdeudaDeudor.Text);
 
-
-        }
-
-        private void Ds_a_TxtBoxDeudor(DataSet ds)
-        {
-            txtNombreDeudor.Text = ds.Tables[0].Rows[0]["NombreCliente"].ToString();
-            txtTelefonoDeudor.Text = ds.Tables[0].Rows[0]["TelefonoCliente"].ToString();
-            txtAdeudaDeudor.Text = ds.Tables[0].Rows[0]["AdeudaCliente"].ToString();
-
-        }
-        */
-
-        /*
-        public bool ValidacionCamposDeudor()
-        {
-
-            //Nombre
-            if (txtNombreDeudor.Text == string.Empty)
-            {
-                MessageBox.Show("Ingrese un Nombre de Deudor ", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            else if (txtNombreDeudor.Text.Length > 90 || txtNombreDeudor.Text.Length < 2)
-            {
-                MessageBox.Show("Solo se permiten nombre de 90 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-
-            //Telefono
-            if (txtTelefonoDeudor.Text == string.Empty)
-            {
-                MessageBox.Show("Ingrese un Telefono de Deudor", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            else if (txtTelefonoDeudor.Text.Length > 50 || txtTelefonoDeudor.Text.Length < 2)
-            {
-                MessageBox.Show("Solo se permiten nombres entre 2 y 50 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-
-            //Adeuda
-            if (txtAdeudaDeudor.Text == string.Empty)
-            {
-                MessageBox.Show("Ingrese si Adeuda un monto el Deudor", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            else if (txtAdeudaDeudor.Text.Length > 50 || txtAdeudaDeudor.Text.Length < 0)
-            {
-                MessageBox.Show("Solo se permiten precio entre 0 y 50 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-
-            return true;
-
-
-        } */
-
-
-        /*  private void btnModificarDeudor_Click(object sender, EventArgs e)
-          {
-              //bool validar = ValidacionCamposDeudor();
-              int nResultado = -1;
-              // if (validar == true)
-              {
-                  TxtBox_a_ObjDeudor();
-                  nResultado = objNegDeudor.abmCliente("Modificar", objEntDeudor);
-                  if (nResultado != -1)
-                  {
-                      MessageBox.Show("El Deudor fue modificado con éxito");
-                      LimpiarDeudor();
-                      LlenarDGVDeudor();
-                      btnModificarDeudor.Visible = false;
-                      // btnCargarCliente.Visible = true;
-                      btnCancelarDeudor.Visible = false;
-                  }
-                  else
-                  {
-                      MessageBox.Show("Se produjo un error al intentar modificar el Deudor");
-                  }
-              }
-          }
-        */
-
-        /*  private void dgvDeudor_CellClick(object sender, DataGridViewCellEventArgs e)
-          {
-
-              DataSet ds = new DataSet();
-              objEntDeudor.IdCliente = Convert.ToInt32(dgvDeudor.CurrentRow.Cells[0].Value);
-              ds = objNegDeudor.listadoCliente(objEntDeudor.IdCliente.ToString());
-              if (ds.Tables[0].Rows.Count > 0)
-              {
-                  Ds_a_TxtBoxDeudor(ds);
-                  // btnCargarDeudor.Visible = false;
-                  btnModificarDeudor.Visible = true;
-                  btnCancelarDeudor.Visible = true;
-              }
-          }*/
 
 
         private int selectedIdCliente = 0;
@@ -656,93 +568,45 @@ namespace Quiosco
             selectedDeuda = Convert.ToDecimal(row.Cells[3].Value);
         }
 
-        /*
 
-        private void txtNombreDeudor_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(char.IsLetter(e.KeyChar) || char.IsWhiteSpace(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permiten letras", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
-        }
-
-        private void txtTelefonoDeudor_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
-        }
-
-
-        private void txtAdeudaDeudor_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
-        }
-        */
 
         private void btnEliminarDeudor_Click(object sender, EventArgs e)
         {
-            if (true)
+            if (selectedIdCliente == 0)
             {
-
-                DgEliminarDeudorId();
-
-                LlenarDGVDeudor();
-
-                MessageBox.Show("Se elimino el Deudor");
+                MessageBox.Show("Seleccione un deudor para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-        }
 
-
-
-
-        public void DgEliminarDeudorId()
-        {
-            string id = txtEliminarDeudor.Text;
-            dgvDeudor.Rows.Clear();
-            DataSet ds = new DataSet();
+            var confirm = MessageBox.Show($"¿Está seguro de eliminar al deudor {selectedNombre}?",
+                                          "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes) return;
 
             try
             {
-                ds = objNegDeudor.ListarClienteEliminar(id);
+                objNegDeudor.ListarClienteEliminar(selectedIdCliente.ToString());
+                MessageBox.Show("Deudor eliminado correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                if (ds.Tables.Count >= 0)
-                {
-                    try
-                    {
-                        foreach (DataRow dr in ds.Tables)
-                        {
-                            dgvDeudor.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3]);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                }
+                // Limpiar selección y refrescar grilla
+                selectedIdCliente = 0;
+                selectedNombre = "";
+                selectedDeuda = 0;
+                LlenarDGVDeudor();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Error al eliminar el deudor: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+
+
 
 
         private void btnCancelarDeudor_Click(object sender, EventArgs e)
         {
             LimpiarDeudor();
-            // btnCargarDeudor.Visible = true;
-            //btnModificarDeudor.Visible = true;
             btnCancelarDeudor.Visible = true;
             LlenarDGVDeudor();
         }
@@ -758,11 +622,8 @@ namespace Quiosco
 
         private void LimpiarDeudor()
         {
-            // txtNombreDeudor.Text = string.Empty;
-            // txtTelefonoDeudor.Text = string.Empty;
-            // txtAdeudaDeudor.Text = string.Empty;
             txtBuscarDeudor.Clear();
-            txtEliminarDeudor.Clear();
+
         }
 
 
@@ -827,6 +688,8 @@ namespace Quiosco
 
                     // refrescar la grilla
                     LlenarDGVDeudor();
+
+
                 }
             }
         }
@@ -922,7 +785,6 @@ namespace Quiosco
         {
             dgvDetalleVenta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
             dgvDetalleVenta.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
-
             dgvDetalleVenta.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
         }
 
@@ -974,6 +836,9 @@ namespace Quiosco
 
             // auto size
             dgvStockProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvStockProductos.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvStockProductos.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
         }
 
 
@@ -1040,6 +905,73 @@ namespace Quiosco
             }
 
             new FormAdminUsuarios().ShowDialog();
+        }
+
+
+        private void ActualizarDatos()
+        {
+            // Esto refresca todos los DataGridView que dependen de la BD
+            LlenarDGVDeudor();
+            CargarDetalleVenta();
+            CargarProductosEnStock();
+        }
+
+        private void pictureBox1_MouseEnter(object sender, EventArgs e)
+        {
+            CargarDetalleVenta();
+            CargarValoresPieChartDesdeBD();
+            CargarProductosEnStock();
+            MostrarPieSkiaEnPictureBox();
+            RedibujarGrafico();
+        }
+
+        private void FormInicio_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Cierra toda la aplicación de manera limpia
+            Application.Exit();
+        }
+
+
+        private void btnEliminarProductos_Click(object sender, EventArgs e)
+        {
+            if (dgvStockProductos.CurrentRow == null || dgvStockProductos.CurrentRow.IsNewRow)
+            {
+                MessageBox.Show("Seleccione un producto para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            int idProducto;
+            try
+            {
+                idProducto = Convert.ToInt32(dgvStockProductos.CurrentRow.Cells["IdProducto"].Value);
+            }
+            catch
+            {
+                MessageBox.Show("El Id del producto seleccionado no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var nombreProducto = dgvStockProductos.CurrentRow.Cells["NombreProducto"].Value.ToString();
+
+            var confirm = MessageBox.Show($"¿Está seguro de eliminar el producto {nombreProducto}?",
+                                          "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirm != DialogResult.Yes) return;
+
+            try
+            {
+                ListaProductos lp = new ListaProductos();
+                lp.ListarProductoEliminar(idProducto);  // <-- aquí llamás al método de negocio para eliminar
+
+                MessageBox.Show("Producto eliminado correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Refrescar grilla
+                // Refrescar grilla
+                CargarProductosEnStock();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar el producto: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
     }

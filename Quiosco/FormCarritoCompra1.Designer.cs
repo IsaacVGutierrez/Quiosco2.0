@@ -36,6 +36,7 @@
             label1 = new Label();
             dgvResumen = new DataGridView();
             lblTotal = new Label();
+            label3 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvResumen).BeginInit();
             SuspendLayout();
             // 
@@ -101,21 +102,33 @@
             dgvResumen.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvResumen.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvResumen.Cursor = Cursors.Hand;
-            dgvResumen.Location = new Point(111, 149);
+            dgvResumen.Location = new Point(517, 165);
             dgvResumen.Name = "dgvResumen";
-            dgvResumen.Size = new Size(1299, 408);
+            dgvResumen.Size = new Size(387, 408);
             dgvResumen.TabIndex = 69;
             // 
             // lblTotal
             // 
             lblTotal.AutoSize = true;
             lblTotal.BackColor = Color.Wheat;
-            lblTotal.Location = new Point(1208, 496);
+            lblTotal.Location = new Point(953, 538);
             lblTotal.Margin = new Padding(4, 0, 4, 0);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(39, 15);
             lblTotal.TabIndex = 85;
             lblTotal.Text = "TOTAL";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.BackColor = Color.Wheat;
+            label3.ForeColor = SystemColors.ActiveCaptionText;
+            label3.Location = new Point(906, 538);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(39, 15);
+            label3.TabIndex = 103;
+            label3.Text = "TOTAL";
             // 
             // FormCarritoCompra1
             // 
@@ -124,6 +137,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1474, 660);
+            Controls.Add(label3);
             Controls.Add(lblTotal);
             Controls.Add(btnEliminarVenta);
             Controls.Add(btnCancelar);
@@ -147,5 +161,6 @@
         private Label label1;
         private DataGridView dgvResumen;
         private Label lblTotal;
+        private Label label3;
     }
 }

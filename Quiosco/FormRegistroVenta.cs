@@ -41,6 +41,7 @@ namespace Quiosco
 
             dgvVenta.Columns.AddRange(new DataGridViewColumn[] { cId, cNombre, cPrecio, cCantidad, cSubtotal });
 
+
             // Inicializar combos
             LlenarCombosVentaProducto();
             LlenarCombosVentaCliente();
@@ -49,6 +50,9 @@ namespace Quiosco
             ActualizarGrillaCarrito();
             txtSubtotalVenta.Text = "0,00";
         }
+
+
+
 
         #region Llenar Combos
         private void LlenarCombosVentaProducto()
@@ -137,6 +141,8 @@ namespace Quiosco
 
             ActualizarGrillaCarrito();
             txtCantidadVenta.Text = "1";
+
+           
         }
 
         private void btnQuitarDelCarrito_Click(object sender, EventArgs e)
@@ -148,6 +154,7 @@ namespace Quiosco
             {
                 carrito.Remove(item);
                 ActualizarGrillaCarrito();
+           
             }
         }
 
@@ -158,6 +165,7 @@ namespace Quiosco
             {
                 carrito.Clear();
                 ActualizarGrillaCarrito();
+           
             }
         }
 
@@ -231,6 +239,7 @@ namespace Quiosco
                 carrito.Clear();
                 ActualizarGrillaCarrito();
                 MessageBox.Show("Venta confirmada y registrada correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+           
             }
             else
             {
@@ -289,6 +298,8 @@ namespace Quiosco
             form3.Show();
         }
 
+      
+
         private void cmbProductoVenta_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -299,9 +310,29 @@ namespace Quiosco
 
         }
 
+        private void cmbMedioPagoVenta_Click(object sender, EventArgs e)
+        {
+            LlenarCombosVentaMetodoDePago();
+        }
+
+
+        private void cmbProductoVenta_Click(object sender, EventArgs e)
+        {
+            LlenarCombosVentaProducto();
+        }
+
+        private void cmbClienteVenta_Click(object sender, EventArgs e)
+        {
+            LlenarCombosVentaCliente();
+        }
+
         private void FormRegistroVenta_Load(object sender, EventArgs e)
         {
 
         }
+
+
+
+
     }
 }

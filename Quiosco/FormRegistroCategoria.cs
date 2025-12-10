@@ -28,14 +28,31 @@ namespace Quiosco
 
             LlenarDGVCategoria();
 
-           
+
 
         }
+
+
 
         public Categoria objEntCategoria = new Categoria();
 
         public CategoriaNegocio objNegCategoria = new CategoriaNegocio();
 
+
+
+        private void TxtBox_a_ObjCategoria()
+        {
+            objEntCategoria.NombreCategoria = txtNombreCategoria.Text;
+
+        }
+
+        private void Ds_a_TxtBoxCategoria(DataSet ds)
+        {
+
+            txtNombreCategoria.Text = ds.Tables[0].Rows[0]["NombreCategoria"].ToString();
+
+
+        }
 
         public bool ValidacionCamposCategoria()
         {
@@ -54,37 +71,23 @@ namespace Quiosco
             return true;
 
         }
-
-
-        public void DgEliminarCategoriaId()
+        private void txtNombreCategoria_KeyPress(object sender, KeyPressEventArgs e)
         {
-            string id = txtEliminarCategoria.Text;
-            dgvCategoria.Rows.Clear();
-            DataSet ds = new DataSet();
+            // Permitir letras
+            if (char.IsLetter(e.KeyChar))
+                return;
 
-            try
-            {
-                ds = objNegCategoria.ListarCategoriaEliminar(id);
+            // Permitir Backspace
+            if (e.KeyChar == (char)Keys.Back)
+                return;
 
-                if (ds.Tables.Count >= 0)
-                {
-                    try
-                    {
-                        foreach (DataRow dr in ds.Tables)
-                        {
-                            dgvCategoria.Rows.Add(dr[0].ToString(), dr[1]);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+            // Permitir espacio
+            if (e.KeyChar == ' ')
+                return;
+
+            // Si llegó acá, es un caracter no permitido
+            MessageBox.Show("Solo se permiten letras", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            e.Handled = true;
         }
 
         private void LlenarDgCategoriaBuscar()
@@ -104,7 +107,6 @@ namespace Quiosco
 
         }
 
-
         private void LlenarDGVCategoria()
         {
 
@@ -119,50 +121,6 @@ namespace Quiosco
                 }
             }
         }
-
-        private void dgvCategoria_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-
-            DataSet ds = new DataSet();
-            objEntCategoria.IdCategoria = Convert.ToInt32(dgvCategoria.CurrentRow.Cells[0].Value);
-            ds = objNegCategoria.listadoCategoria(objEntCategoria.IdCategoria.ToString());
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                Ds_a_TxtBoxCategoria(ds);
-                btnCargaCategoria.Visible = false;
-                btnModificarCategoria.Visible = true;
-                btnCancelarCategoria.Visible = true;
-            }
-        }
-
-
-        private void TxtBox_a_ObjCategoria()
-        {
-            objEntCategoria.NombreCategoria = txtNombreCategoria.Text;
-
-        }
-
-
-
-
-
-
-        private void LimpiarCategoria()
-        {
-            txtNombreCategoria.Text = string.Empty;
-            txtBuscarCategoria.Clear();
-            txtEliminarCategoria.Clear();
-
-        }
-        private void Ds_a_TxtBoxCategoria(DataSet ds)
-        {
-
-            txtNombreCategoria.Text = ds.Tables[0].Rows[0]["NombreCategoria"].ToString();
-
-
-        }
-
 
 
         private void btnCargarCategoria_Click(object sender, EventArgs e)
@@ -182,10 +140,32 @@ namespace Quiosco
                     MessageBox.Show("Se logró agregar la Categoria con éxito");
                     LlenarDGVCategoria();
                     LimpiarCategoria();
-                    // tabControl1.SelectTab(tabCategoria);
+
                 }
             }
         }
+
+
+
+
+
+        private void dgvCategoria_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+
+            DataSet ds = new DataSet();
+            objEntCategoria.IdCategoria = Convert.ToInt32(dgvCategoria.CurrentRow.Cells[0].Value);
+            ds = objNegCategoria.listadoCategoria(objEntCategoria.IdCategoria.ToString());
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                Ds_a_TxtBoxCategoria(ds);
+                btnCargaCategoria.Visible = false;
+                btnModificarCategoria.Visible = true;
+                btnCancelarCategoria.Visible = true;
+
+            }
+        }
+
 
 
 
@@ -205,6 +185,7 @@ namespace Quiosco
                     btnModificarCategoria.Visible = false;
                     btnCargaCategoria.Visible = true;
                     btnCancelarCategoria.Visible = false;
+
                 }
                 else
                 {
@@ -221,6 +202,7 @@ namespace Quiosco
             btnModificarCategoria.Visible = true;
             btnCancelarCategoria.Visible = true;
             LlenarDGVCategoria();
+
         }
 
         private void btnBuscarCategoria_Click_1(object sender, EventArgs e)
@@ -229,37 +211,76 @@ namespace Quiosco
             LlenarDgCategoriaBuscar();
         }
 
-
         private void btnEliminarCategoria_Click_1(object sender, EventArgs e)
         {
+            // Verificar si hay una fila seleccionada
+            if (dgvCategoria.CurrentRow == null)
             {
+                MessageBox.Show("Seleccione una fila para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            // Obtener el IdCategoria de la fila seleccionada
+            if (!int.TryParse(dgvCategoria.CurrentRow.Cells[0].Value.ToString(), out int idCategoria))
+            {
+                MessageBox.Show("El IdCategoria seleccionado no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-                if (true)
+            // Confirmar eliminación
+            var resultado = MessageBox.Show("¿Está seguro de eliminar esta categoría?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (resultado != DialogResult.Yes) return;
+
+            try
+            {
+                // Llamamos a tu método para eliminar y actualizar la grilla
+                dgvCategoria.Rows.Clear();
+                DataSet ds = objNegCategoria.ListarCategoriaEliminar(idCategoria.ToString());
+
+                if (ds != null && ds.Tables.Count > 0)
                 {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        dgvCategoria.Rows.Add(dr[0].ToString(), dr[1].ToString());
+                    }
 
-                    DgEliminarCategoriaId();
-
-                    LlenarDGVCategoria();
-
-                    MessageBox.Show("Se eliminaron los detalles de Categoria");
+                    MessageBox.Show("Categoría eliminada correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+                else
+                {
+                    MessageBox.Show("No se encontró la categoría o no se pudo eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private void txtNombreCategoria_KeyPress(object sender, KeyPressEventArgs e)
+
+
+
+
+        private void LimpiarCategoria()
         {
-            if (!(char.IsLetter(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permiten letras", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
+            txtNombreCategoria.Text = string.Empty;
+            txtBuscarCategoria.Clear();
+
+
         }
 
         private void dgvCategoria_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void FormRegistroCategoria_Load(object sender, EventArgs e)
+        {
+
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnEliminarCategoria.Visible = false;
+            }
         }
     }
 }

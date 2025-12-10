@@ -35,8 +35,6 @@
             lblNombreProducto = new Label();
             txtDireccionProveedor = new TextBox();
             lblPrecio = new Label();
-            txtEliminarProveedor = new TextBox();
-            lblEliminarProducto = new Label();
             label4 = new Label();
             txtBuscarProveedor = new TextBox();
             btnBuscarProveedor = new Button();
@@ -56,6 +54,7 @@
             // 
             // txtTelefonoProveedor
             // 
+            txtTelefonoProveedor.Cursor = Cursors.Hand;
             txtTelefonoProveedor.Location = new Point(276, 216);
             txtTelefonoProveedor.Margin = new Padding(4);
             txtTelefonoProveedor.Name = "txtTelefonoProveedor";
@@ -65,6 +64,7 @@
             // 
             // txtNombreProveedor
             // 
+            txtNombreProveedor.Cursor = Cursors.Hand;
             txtNombreProveedor.Location = new Point(276, 170);
             txtNombreProveedor.Margin = new Padding(4);
             txtNombreProveedor.Name = "txtNombreProveedor";
@@ -97,6 +97,7 @@
             // 
             // txtDireccionProveedor
             // 
+            txtDireccionProveedor.Cursor = Cursors.Hand;
             txtDireccionProveedor.Location = new Point(276, 266);
             txtDireccionProveedor.Margin = new Padding(4);
             txtDireccionProveedor.Name = "txtDireccionProveedor";
@@ -115,24 +116,6 @@
             lblPrecio.TabIndex = 78;
             lblPrecio.Text = "Direccion";
             // 
-            // txtEliminarProveedor
-            // 
-            txtEliminarProveedor.Location = new Point(1152, 570);
-            txtEliminarProveedor.Name = "txtEliminarProveedor";
-            txtEliminarProveedor.Size = new Size(134, 23);
-            txtEliminarProveedor.TabIndex = 77;
-            // 
-            // lblEliminarProducto
-            // 
-            lblEliminarProducto.AutoSize = true;
-            lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(1090, 573);
-            lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
-            lblEliminarProducto.Name = "lblEliminarProducto";
-            lblEliminarProducto.Size = new Size(50, 15);
-            lblEliminarProducto.TabIndex = 76;
-            lblEliminarProducto.Text = "Eliminar";
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -146,6 +129,7 @@
             // 
             // txtBuscarProveedor
             // 
+            txtBuscarProveedor.Cursor = Cursors.Hand;
             txtBuscarProveedor.Location = new Point(824, 571);
             txtBuscarProveedor.Name = "txtBuscarProveedor";
             txtBuscarProveedor.Size = new Size(155, 23);
@@ -154,6 +138,7 @@
             // btnBuscarProveedor
             // 
             btnBuscarProveedor.BackColor = Color.Gold;
+            btnBuscarProveedor.Cursor = Cursors.Hand;
             btnBuscarProveedor.Location = new Point(985, 562);
             btnBuscarProveedor.Name = "btnBuscarProveedor";
             btnBuscarProveedor.Size = new Size(84, 36);
@@ -165,6 +150,7 @@
             // btnEliminarProveedor
             // 
             btnEliminarProveedor.BackColor = Color.Gold;
+            btnEliminarProveedor.Cursor = Cursors.Hand;
             btnEliminarProveedor.Location = new Point(1299, 564);
             btnEliminarProveedor.Name = "btnEliminarProveedor";
             btnEliminarProveedor.Size = new Size(84, 36);
@@ -176,6 +162,7 @@
             // btnCancelarProveedor
             // 
             btnCancelarProveedor.BackColor = Color.Gold;
+            btnCancelarProveedor.Cursor = Cursors.Hand;
             btnCancelarProveedor.Location = new Point(273, 545);
             btnCancelarProveedor.Name = "btnCancelarProveedor";
             btnCancelarProveedor.Size = new Size(84, 36);
@@ -187,6 +174,7 @@
             // btnModificarProveedor
             // 
             btnModificarProveedor.BackColor = Color.Gold;
+            btnModificarProveedor.Cursor = Cursors.Hand;
             btnModificarProveedor.Location = new Point(332, 485);
             btnModificarProveedor.Name = "btnModificarProveedor";
             btnModificarProveedor.Size = new Size(84, 39);
@@ -198,6 +186,7 @@
             // btnCargaProveedor
             // 
             btnCargaProveedor.BackColor = Color.Gold;
+            btnCargaProveedor.Cursor = Cursors.Hand;
             btnCargaProveedor.Location = new Point(222, 486);
             btnCargaProveedor.Name = "btnCargaProveedor";
             btnCargaProveedor.Size = new Size(84, 36);
@@ -208,6 +197,7 @@
             // 
             // txtHorarioProveedor
             // 
+            txtHorarioProveedor.Cursor = Cursors.Hand;
             txtHorarioProveedor.Location = new Point(276, 318);
             txtHorarioProveedor.Margin = new Padding(4);
             txtHorarioProveedor.Name = "txtHorarioProveedor";
@@ -216,6 +206,7 @@
             // 
             // txtDiasAtencionProveedor
             // 
+            txtDiasAtencionProveedor.Cursor = Cursors.Hand;
             txtDiasAtencionProveedor.Location = new Point(276, 373);
             txtDiasAtencionProveedor.Margin = new Padding(4);
             txtDiasAtencionProveedor.Name = "txtDiasAtencionProveedor";
@@ -297,8 +288,6 @@
             Controls.Add(lblNombreProducto);
             Controls.Add(txtDireccionProveedor);
             Controls.Add(lblPrecio);
-            Controls.Add(txtEliminarProveedor);
-            Controls.Add(lblEliminarProducto);
             Controls.Add(label4);
             Controls.Add(txtBuscarProveedor);
             Controls.Add(btnBuscarProveedor);
@@ -323,15 +312,13 @@
 
 
         #endregion
-    
+
         private TextBox txtTelefonoProveedor;
         private TextBox txtNombreProveedor;
         private Label lblMarcaProducto;
         private Label lblNombreProducto;
         private TextBox txtDireccionProveedor;
         private Label lblPrecio;
-        private TextBox txtEliminarProveedor;
-        private Label lblEliminarProducto;
         private Label label4;
         private TextBox txtBuscarProveedor;
         private Button btnBuscarProveedor;

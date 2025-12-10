@@ -35,6 +35,11 @@ namespace Quiosco
 
         private void CargarResumen()
         {
+
+            dgvResumen.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
+            dgvResumen.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dgvResumen.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+
             dgvResumen.AutoGenerateColumns = false;
             dgvResumen.Columns.Clear();
 

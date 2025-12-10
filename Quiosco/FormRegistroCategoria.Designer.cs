@@ -31,8 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRegistroCategoria));
             txtNombreCategoria = new TextBox();
             lblNombreProducto = new Label();
-            txtEliminarCategoria = new TextBox();
-            lblEliminarProducto = new Label();
             label4 = new Label();
             txtBuscarCategoria = new TextBox();
             btnBuscarCategoria = new Button();
@@ -48,6 +46,7 @@
             // 
             // txtNombreCategoria
             // 
+            txtNombreCategoria.Cursor = Cursors.Hand;
             txtNombreCategoria.Location = new Point(256, 276);
             txtNombreCategoria.Margin = new Padding(4);
             txtNombreCategoria.Name = "txtNombreCategoria";
@@ -67,24 +66,6 @@
             lblNombreProducto.TabIndex = 98;
             lblNombreProducto.Text = "Nombre de la Categoria";
             // 
-            // txtEliminarCategoria
-            // 
-            txtEliminarCategoria.Location = new Point(1132, 573);
-            txtEliminarCategoria.Name = "txtEliminarCategoria";
-            txtEliminarCategoria.Size = new Size(134, 23);
-            txtEliminarCategoria.TabIndex = 95;
-            // 
-            // lblEliminarProducto
-            // 
-            lblEliminarProducto.AutoSize = true;
-            lblEliminarProducto.BackColor = Color.Wheat;
-            lblEliminarProducto.Location = new Point(1070, 576);
-            lblEliminarProducto.Margin = new Padding(4, 0, 4, 0);
-            lblEliminarProducto.Name = "lblEliminarProducto";
-            lblEliminarProducto.Size = new Size(50, 15);
-            lblEliminarProducto.TabIndex = 94;
-            lblEliminarProducto.Text = "Eliminar";
-            // 
             // label4
             // 
             label4.AutoSize = true;
@@ -98,6 +79,7 @@
             // 
             // txtBuscarCategoria
             // 
+            txtBuscarCategoria.Cursor = Cursors.Hand;
             txtBuscarCategoria.Location = new Point(804, 574);
             txtBuscarCategoria.Name = "txtBuscarCategoria";
             txtBuscarCategoria.Size = new Size(155, 23);
@@ -106,6 +88,7 @@
             // btnBuscarCategoria
             // 
             btnBuscarCategoria.BackColor = Color.Gold;
+            btnBuscarCategoria.Cursor = Cursors.Hand;
             btnBuscarCategoria.Location = new Point(965, 565);
             btnBuscarCategoria.Name = "btnBuscarCategoria";
             btnBuscarCategoria.Size = new Size(84, 36);
@@ -117,6 +100,7 @@
             // btnEliminarCategoria
             // 
             btnEliminarCategoria.BackColor = Color.Gold;
+            btnEliminarCategoria.Cursor = Cursors.Hand;
             btnEliminarCategoria.Location = new Point(1279, 567);
             btnEliminarCategoria.Name = "btnEliminarCategoria";
             btnEliminarCategoria.Size = new Size(84, 36);
@@ -128,6 +112,7 @@
             // btnCancelarCategoria
             // 
             btnCancelarCategoria.BackColor = Color.Gold;
+            btnCancelarCategoria.Cursor = Cursors.Hand;
             btnCancelarCategoria.Location = new Point(207, 520);
             btnCancelarCategoria.Name = "btnCancelarCategoria";
             btnCancelarCategoria.Size = new Size(84, 36);
@@ -139,6 +124,7 @@
             // btnModificarCategoria
             // 
             btnModificarCategoria.BackColor = Color.Gold;
+            btnModificarCategoria.Cursor = Cursors.Hand;
             btnModificarCategoria.Location = new Point(295, 422);
             btnModificarCategoria.Name = "btnModificarCategoria";
             btnModificarCategoria.Size = new Size(84, 39);
@@ -150,6 +136,7 @@
             // btnCargaCategoria
             // 
             btnCargaCategoria.BackColor = Color.Gold;
+            btnCargaCategoria.Cursor = Cursors.Hand;
             btnCargaCategoria.Location = new Point(129, 425);
             btnCargaCategoria.Name = "btnCargaCategoria";
             btnCargaCategoria.Size = new Size(84, 36);
@@ -204,8 +191,6 @@
             ClientSize = new Size(1486, 662);
             Controls.Add(txtNombreCategoria);
             Controls.Add(lblNombreProducto);
-            Controls.Add(txtEliminarCategoria);
-            Controls.Add(lblEliminarProducto);
             Controls.Add(label4);
             Controls.Add(txtBuscarCategoria);
             Controls.Add(btnBuscarCategoria);
@@ -218,6 +203,7 @@
             Controls.Add(dgvCategoria);
             Name = "FormRegistroCategoria";
             Text = "Registrar Categoria";
+            Load += FormRegistroCategoria_Load;
             ((System.ComponentModel.ISupportInitialize)dgvCategoria).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -227,8 +213,6 @@
 
         private TextBox txtNombreCategoria;
         private Label lblNombreProducto;
-        private TextBox txtEliminarCategoria;
-        private Label lblEliminarProducto;
         private Label label4;
         private TextBox txtBuscarCategoria;
         private Button btnBuscarCategoria;

@@ -28,13 +28,15 @@ namespace Quiosco
             dgvProveedor.Columns[4].HeaderText = "Horario Proveedor";
             dgvProveedor.Columns[5].HeaderText = "Dias de atencion";
 
-                LlenarDGVProveedor();
 
-                // LlenarCombos();
-                // LlenarCombos2();
-                            
+
+            LlenarDGVProveedor();
+
+
 
         }
+
+
 
         public Proveedor objEntProveedor = new Proveedor();
 
@@ -127,34 +129,179 @@ namespace Quiosco
         }
 
 
-        public void DgEliminarProveedorId()
+
+
+
+        private void TxtBox_a_ObjProveedor()
         {
-            string id = txtEliminarProveedor.Text;
+            objEntProveedor.NombreProveedor = txtNombreProveedor.Text;
+            objEntProveedor.TelefonoProveedor = txtTelefonoProveedor.Text;
+            objEntProveedor.DireccionProveedor = txtDireccionProveedor.Text;
+            objEntProveedor.HorarioProveedor = txtHorarioProveedor.Text;
+            objEntProveedor.DiasProveedor = txtDiasAtencionProveedor.Text;
+        }
+
+
+        private void Ds_a_TxtBoxProveedor(DataSet ds)
+        {
+
+            txtNombreProveedor.Text = ds.Tables[0].Rows[0]["NombreProveedor"].ToString();
+            txtTelefonoProveedor.Text = ds.Tables[0].Rows[0]["TelefonoProveedor"].ToString();
+            txtDireccionProveedor.Text = ds.Tables[0].Rows[0]["DireccionProveedor"].ToString();
+            txtHorarioProveedor.Text = ds.Tables[0].Rows[0]["HorarioProveedor"].ToString();
+            txtDiasAtencionProveedor.Text = ds.Tables[0].Rows[0]["DiasProveedor"].ToString();
+
+        }
+
+        private void LlenarDGVProveedor()
+        {
+
             dgvProveedor.Rows.Clear();
             DataSet ds = new DataSet();
-
-            try
+            ds = objNegProveedor.listadoProveedor("Todos");
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                ds = objNegProveedor.ListarProveedorEliminar(id);
-
-                if (ds.Tables.Count >= 0)
+                foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    try
+                    dgvProveedor.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4], dr[5].ToString());
+                }
+            }
+        }
+
+        private void btnCargarProveedor_Click(object sender, EventArgs e)
+        {
+            bool validar = ValidacionCamposProveedor();
+            int nGrabados = -1;
+            if (validar == true)
+            {
+                TxtBox_a_ObjProveedor();
+                nGrabados = objNegProveedor.abmProveedor("Alta", objEntProveedor);
+                if (nGrabados == -1)
+                {
+                    MessageBox.Show("No se logró agregar el Proveedor al sistema");
+                }
+                else
+                {
+                    MessageBox.Show("Se logró agregar al Proveedor con éxito");
+                    LlenarDGVProveedor();
+                    LimpiarProveedor();
+
+
+                }
+            }
+        }
+
+        private void BtnModificarProveedor_Click(object sender, EventArgs e)
+        {
+            bool validar = ValidacionCamposProveedor();
+            int nResultado = -1;
+            if (validar == true)
+            {
+                TxtBox_a_ObjProveedor();
+                nResultado = objNegProveedor.abmProveedor("Modificar", objEntProveedor);
+                if (nResultado != -1)
+                {
+                    MessageBox.Show("el Proveedor fue modificada con éxito");
+                    LimpiarProveedor();
+                    LlenarDGVProveedor();
+                    btnModificarProveedor.Visible = false;
+                    btnCargaProveedor.Visible = true;
+                    btnCancelarProveedor.Visible = false;
+
+                }
+                else
+                {
+                    MessageBox.Show("Se produjo un error al intentar modificar la Proveedor");
+                }
+            }
+
+        }
+
+
+
+        private void btnCancelarProveedor_Click(object sender, EventArgs e)
+        {
+            LimpiarProveedor();
+            btnCargaProveedor.Visible = true;
+            btnModificarProveedor.Visible = true;
+            btnCancelarProveedor.Visible = true;
+            LlenarDGVProveedor();
+
+        }
+
+        private void btnBuscarProveedor_Click(object sender, EventArgs e)
+        {
+            LlenarDgProveedorBuscar();
+        }
+
+        
+            private void btnEliminarProveedor_Click(object sender, EventArgs e)
+            {
+                // Verificar si hay una fila seleccionada
+                if (dgvProveedor.CurrentRow == null)
+                {
+                    MessageBox.Show("Seleccione una fila para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Obtener el IdProveedor de la fila seleccionada
+                if (!int.TryParse(dgvProveedor.CurrentRow.Cells[0].Value.ToString(), out int idProveedor))
+                {
+                    MessageBox.Show("El IdProveedor seleccionado no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                // Confirmar eliminación
+                var resultado = MessageBox.Show("¿Está seguro de eliminar este proveedor?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (resultado != DialogResult.Yes) return;
+
+                try
+                {
+                    // Limpiar grilla y eliminar proveedor usando tu método existente
+                    dgvProveedor.Rows.Clear();
+                    DataSet ds = objNegProveedor.ListarProveedorEliminar(idProveedor.ToString());
+
+                    if (ds != null && ds.Tables.Count > 0)
                     {
-                        foreach (DataRow dr in ds.Tables)
+                        foreach (DataRow dr in ds.Tables[0].Rows)
                         {
                             dgvProveedor.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4], dr[5]);
                         }
+
+                        MessageBox.Show("Proveedor eliminado correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch (Exception e)
+                    else
                     {
-                        MessageBox.Show(e.Message);
+                        MessageBox.Show("No se encontró el proveedor o no se pudo eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error al eliminar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
-            catch (Exception e)
+
+
+
+            private void txtTelefonoProveedor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
             {
-                MessageBox.Show(e.Message);
+                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                e.Handled = true;
+                return;
+            }
+        }
+
+
+
+        private void txtDiasAtencionProveedor_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!(char.IsLetter(e.KeyChar) || char.IsWhiteSpace(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
+            {
+                MessageBox.Show("Solo se permiten letras ", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                e.Handled = true;
+                return;
             }
         }
 
@@ -176,47 +323,7 @@ namespace Quiosco
         }
 
 
-        private void LlenarDGVProveedor()
-        {
 
-            dgvProveedor.Rows.Clear();
-            DataSet ds = new DataSet();
-            ds = objNegProveedor.listadoProveedor("Todos");
-            if (ds.Tables[0].Rows.Count > 0)
-            {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    dgvProveedor.Rows.Add(dr[0].ToString(), dr[1], dr[2], dr[3], dr[4], dr[5].ToString());
-                }
-            }
-        }
-
-
-
-        private void dgvProveedor_CellClick(object sender, DataGridViewCellEventArgs e)
-         {
-
-          
-             DataSet ds = new DataSet();
-             objEntProveedor.IdProveedor = Convert.ToInt32(dgvProveedor.CurrentRow.Cells[0].Value);
-             ds = objNegProveedor.listadoProveedor(objEntProveedor.IdProveedor.ToString());
-             if (ds.Tables[0].Rows.Count > 0)
-             {
-                 Ds_a_TxtBoxProveedor(ds);
-                 btnCargaProveedor.Visible = false;
-                 btnModificarProveedor.Visible = true;
-                 btnCancelarProveedor.Visible = true;
-             }
-         }
-
-        private void TxtBox_a_ObjProveedor()
-        {
-            objEntProveedor.NombreProveedor = txtNombreProveedor.Text;
-            objEntProveedor.TelefonoProveedor = txtTelefonoProveedor.Text;
-            objEntProveedor.DireccionProveedor = txtDireccionProveedor.Text;
-            objEntProveedor.HorarioProveedor = txtHorarioProveedor.Text;
-            objEntProveedor.DiasProveedor = txtDiasAtencionProveedor.Text;
-        }
 
         private void LimpiarProveedor()
         {
@@ -226,129 +333,37 @@ namespace Quiosco
             txtHorarioProveedor.Text = string.Empty;
             txtDiasAtencionProveedor.Text = string.Empty;
             txtBuscarProveedor.Clear();
-            txtEliminarProveedor.Clear();
-        }
-        private void Ds_a_TxtBoxProveedor(DataSet ds)
-        {
-
-            txtNombreProveedor.Text = ds.Tables[0].Rows[0]["NombreProveedor"].ToString();
-            txtTelefonoProveedor.Text = ds.Tables[0].Rows[0]["TelefonoProveedor"].ToString();
-            txtDireccionProveedor.Text = ds.Tables[0].Rows[0]["DireccionProveedor"].ToString();
-            txtHorarioProveedor.Text = ds.Tables[0].Rows[0]["HorarioProveedor"].ToString();
-            txtDiasAtencionProveedor.Text = ds.Tables[0].Rows[0]["DiasProveedor"].ToString();
-
+           
         }
 
-        private void btnCargarProveedor_Click(object sender, EventArgs e)
+        private void dgvProveedor_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            bool validar = ValidacionCamposProveedor();
-            int nGrabados = -1;
-            if (validar == true)
+
+
+            DataSet ds = new DataSet();
+            objEntProveedor.IdProveedor = Convert.ToInt32(dgvProveedor.CurrentRow.Cells[0].Value);
+            ds = objNegProveedor.listadoProveedor(objEntProveedor.IdProveedor.ToString());
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                TxtBox_a_ObjProveedor();
-                nGrabados = objNegProveedor.abmProveedor("Alta", objEntProveedor);
-                if (nGrabados == -1)
-                {
-                    MessageBox.Show("No se logró agregar el Proveedor al sistema");
-                }
-                else
-                {
-                    MessageBox.Show("Se logró agregar al Proveedor con éxito");
-                    LlenarDGVProveedor();
-                    LimpiarProveedor();
-                   // tabControl1.SelectTab(tabProveedor);
-                }
+                Ds_a_TxtBoxProveedor(ds);
+                btnCargaProveedor.Visible = false;
+                btnModificarProveedor.Visible = true;
+                btnCancelarProveedor.Visible = true;
+
             }
         }
-
-        private void BtnModificarProveedor_Click(object sender, EventArgs e)
-        {
-            bool validar = ValidacionCamposProveedor();
-            int nResultado = -1;
-            if (validar == true)
-            {
-                TxtBox_a_ObjProveedor();
-                nResultado = objNegProveedor.abmProveedor("Modificar", objEntProveedor);
-                if (nResultado != -1)
-                {
-                    MessageBox.Show("el Proveedor fue modificada con éxito");
-                    LimpiarProveedor();
-                    LlenarDGVProveedor();
-                    btnModificarProveedor.Visible = false;
-                    btnCargaProveedor.Visible = true;
-                    btnCancelarProveedor.Visible = false;
-                }
-                else
-                {
-                    MessageBox.Show("Se produjo un error al intentar modificar la Proveedor");
-                }
-            }
-
-        }
-
-
-
-        private void btnCancelarProveedor_Click(object sender, EventArgs e)
-        {
-            LimpiarProveedor();
-            btnCargaProveedor.Visible = true;
-            btnModificarProveedor.Visible = true;
-            btnCancelarProveedor.Visible = true;
-            LlenarDGVProveedor();
-        }
-
-        private void btnBuscarProveedor_Click(object sender, EventArgs e)
-        {
-            LlenarDgProveedorBuscar();
-        }
-
-        private void btnEliminarProveedor_Click(object sender, EventArgs e)
-        {
-
-
-            if (true)
-            {
-
-                DgEliminarProveedorId();
-
-                LlenarDGVProveedor();
-
-                MessageBox.Show("Se eliminaron los detalles de Proveedor");
-            }
-        }
-
-
-        private void txtTelefonoProveedor_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(char.IsNumber(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permite numeros", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
-        }
-
-
-
-         private void txtDiasAtencionProveedor_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            if (!(char.IsLetter(e.KeyChar) || char.IsWhiteSpace(e.KeyChar)) && (e.KeyChar != (char)Keys.Back))
-            {
-                MessageBox.Show("Solo se permiten letras ", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                e.Handled = true;
-                return;
-            }
-         }
-
-      
 
 
         private void FormRegistroProveedores_Load(object sender, EventArgs e)
         {
 
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnEliminarProveedor.Visible = false;
+            }
         }
-           
-   
+
+
         private void label2_Click(object sender, EventArgs e)
         {
 
@@ -358,5 +373,7 @@ namespace Quiosco
         {
 
         }
+
+
     }
 }

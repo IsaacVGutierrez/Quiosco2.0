@@ -30,63 +30,49 @@ namespace Quiosco
 
 
 
-
         }
+
+
 
         public MetodoDePago objEntMetodoDePago = new MetodoDePago();
 
         public MetodoDePagoNegocio objNegMetodoDePago = new MetodoDePagoNegocio();
 
 
-        public bool ValidacionCamposMetodoDePago()
+        private void TxtBox_a_ObjMetodoDePago()
         {
-
-            //Nombre MetodoDePago
-            if (txtNombreMetodoDePago.Text == string.Empty)
-            {
-                MessageBox.Show("Ingrese un Nombre de Metodo De Pago", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            else if (txtNombreMetodoDePago.Text.Length > 100 || txtNombreMetodoDePago.Text.Length < 2)
-            {
-                MessageBox.Show("Solo se permiten nombres de 100 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return false;
-            }
-            return true;
+            objEntMetodoDePago.NombreMetodoDePago = txtNombreMetodoDePago.Text;
 
         }
 
 
-        public void DgEliminarMetodoDePagoId()
+
+
+
+
+        private void Ds_a_TxtBoxMetodoDePago(DataSet ds)
         {
-            string id = txtEliminarMetodoDePago.Text;
+
+            txtNombreMetodoDePago.Text = ds.Tables[0].Rows[0]["NombreMetodoDePago"].ToString();
+
+
+        }
+        private void LlenarDGVMetodoDePago()
+        {
+
             dgvMetodoDePago.Rows.Clear();
             DataSet ds = new DataSet();
-
-            try
+            ds = objNegMetodoDePago.listadoMetodoDePago("Todos");
+            if (ds.Tables[0].Rows.Count > 0)
             {
-                ds = objNegMetodoDePago.ListarMetodoDePagoEliminar(id);
-
-                if (ds.Tables.Count >= 0)
+                foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    try
-                    {
-                        foreach (DataRow dr in ds.Tables)
-                        {
-                            dgvMetodoDePago.Rows.Add(dr[0].ToString(), dr[1]);
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        MessageBox.Show(e.Message);
-                    }
+                    dgvMetodoDePago.Rows.Add(dr[0].ToString(), dr[1].ToString());
                 }
             }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
         }
+
+
 
         private void LlenarDgMetodoDePagoBuscar()
         {
@@ -106,61 +92,28 @@ namespace Quiosco
         }
 
 
-        private void LlenarDGVMetodoDePago()
+
+
+
+
+
+
+
+        public bool ValidacionCamposMetodoDePago()
         {
 
-            dgvMetodoDePago.Rows.Clear();
-            DataSet ds = new DataSet();
-            ds = objNegMetodoDePago.listadoMetodoDePago("Todos");
-            if (ds.Tables[0].Rows.Count > 0)
+            //Nombre MetodoDePago
+            if (txtNombreMetodoDePago.Text == string.Empty)
             {
-                foreach (DataRow dr in ds.Tables[0].Rows)
-                {
-                    dgvMetodoDePago.Rows.Add(dr[0].ToString(), dr[1].ToString());
-                }
+                MessageBox.Show("Ingrese un Nombre de Metodo De Pago", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
             }
-        }
-
-        private void dgvMetodoDePago_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-
-            DataSet ds = new DataSet();
-            objEntMetodoDePago.IdMetodoDePago = Convert.ToInt32(dgvMetodoDePago.CurrentRow.Cells[0].Value);
-            ds = objNegMetodoDePago.listadoMetodoDePago(objEntMetodoDePago.IdMetodoDePago.ToString());
-            if (ds.Tables[0].Rows.Count > 0)
+            else if (txtNombreMetodoDePago.Text.Length > 100 || txtNombreMetodoDePago.Text.Length < 2)
             {
-                Ds_a_TxtBoxMetodoDePago(ds);
-                btnCargaMetodoDePago.Visible = false;
-                btnModificarMetodoDePago.Visible = true;
-                btnCancelarMetodoDePago.Visible = true;
+                MessageBox.Show("Solo se permiten nombres de 100 caracteres", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return false;
             }
-        }
-
-
-        private void TxtBox_a_ObjMetodoDePago()
-        {
-            objEntMetodoDePago.NombreMetodoDePago = txtNombreMetodoDePago.Text;
-
-        }
-
-
-
-
-
-
-        private void LimpiarMetodoDePago()
-        {
-            txtNombreMetodoDePago.Text = string.Empty;
-            txtBuscarMetodoDePago.Clear();
-            txtEliminarMetodoDePago.Clear();
-
-        }
-        private void Ds_a_TxtBoxMetodoDePago(DataSet ds)
-        {
-
-            txtNombreMetodoDePago.Text = ds.Tables[0].Rows[0]["NombreMetodoDePago"].ToString();
-
+            return true;
 
         }
 
@@ -185,6 +138,7 @@ namespace Quiosco
                     LimpiarMetodoDePago();
 
                 }
+
             }
         }
 
@@ -206,14 +160,17 @@ namespace Quiosco
                     btnModificarMetodoDePago.Visible = false;
                     btnCargaMetodoDePago.Visible = true;
                     btnCancelarMetodoDePago.Visible = false;
+
                 }
                 else
                 {
                     MessageBox.Show("Se produjo un error al intentar modificar el Metodo De Pago");
                 }
+
             }
 
         }
+
 
         private void btnCancelarMetodoDePago_Click_1(object sender, EventArgs e)
         {
@@ -222,6 +179,7 @@ namespace Quiosco
             btnModificarMetodoDePago.Visible = true;
             btnCancelarMetodoDePago.Visible = true;
             LlenarDGVMetodoDePago();
+
         }
 
         private void btnBuscarMetodoDePago_Click_1(object sender, EventArgs e)
@@ -230,23 +188,52 @@ namespace Quiosco
             LlenarDgMetodoDePagoBuscar();
         }
 
-
         private void btnEliminarMetodoDePago_Click_1(object sender, EventArgs e)
         {
+            // Verificar si hay una fila seleccionada
+            if (dgvMetodoDePago.CurrentRow == null)
             {
+                MessageBox.Show("Seleccione un método de pago para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
+            // Obtener el IdMetodoDePago de la fila seleccionada
+            if (!int.TryParse(dgvMetodoDePago.CurrentRow.Cells[0].Value.ToString(), out int idMetodo))
+            {
+                MessageBox.Show("El Id del método de pago seleccionado no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-                if (true)
+            // Confirmar eliminación
+            var resultado = MessageBox.Show("¿Está seguro de eliminar este método de pago?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (resultado != DialogResult.Yes) return;
+
+            try
+            {
+                // Limpiar grilla y eliminar usando tu método existente
+                dgvMetodoDePago.Rows.Clear();
+                DataSet ds = objNegMetodoDePago.ListarMetodoDePagoEliminar(idMetodo.ToString());
+
+                if (ds != null && ds.Tables.Count > 0)
                 {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        dgvMetodoDePago.Rows.Add(dr[0].ToString(), dr[1]);
+                    }
 
-                    DgEliminarMetodoDePagoId();
-
-                    LlenarDGVMetodoDePago();
-
-                    MessageBox.Show("Se eliminaron los detalles de Metodo De Pago");
+                    MessageBox.Show("Método de pago eliminado correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    MessageBox.Show("No se encontró el método de pago o no se pudo eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al eliminar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
         private void txtNombreMetodoDePago_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -267,10 +254,47 @@ namespace Quiosco
             e.Handled = true;
         }
 
+        private void dgvMetodoDePago_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+
+            DataSet ds = new DataSet();
+            objEntMetodoDePago.IdMetodoDePago = Convert.ToInt32(dgvMetodoDePago.CurrentRow.Cells[0].Value);
+            ds = objNegMetodoDePago.listadoMetodoDePago(objEntMetodoDePago.IdMetodoDePago.ToString());
+            if (ds.Tables[0].Rows.Count > 0)
+            {
+                Ds_a_TxtBoxMetodoDePago(ds);
+                btnCargaMetodoDePago.Visible = false;
+                btnModificarMetodoDePago.Visible = true;
+                btnCancelarMetodoDePago.Visible = true;
+
+            }
+        }
+        private void LimpiarMetodoDePago()
+        {
+            txtNombreMetodoDePago.Text = string.Empty;
+            txtBuscarMetodoDePago.Clear();
+
+
+        }
 
         private void dgvMetodoDePago_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
+        }
+
+        private void ActualizarDatos()
+        {
+            LlenarDGVMetodoDePago();
+        }
+
+        private void FormRegistroMetodoDePago_Load(object sender, EventArgs e)
+        {
+
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnEliminarMetodoDePago.Visible = false;
+            }
         }
     }
 }

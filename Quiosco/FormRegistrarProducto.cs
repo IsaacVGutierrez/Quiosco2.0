@@ -26,9 +26,9 @@ namespace Quiosco
             dgvProducto.Columns[0].HeaderText = "Codigo Producto";
             dgvProducto.Columns[1].HeaderText = "Nombre Producto";
             dgvProducto.Columns[2].HeaderText = "Marca Producto";
-            dgvProducto.Columns[3].HeaderText = "Precio Producto";
+            dgvProducto.Columns[3].HeaderText = "Precio Total de Compra";
             dgvProducto.Columns[4].HeaderText = "Categoria";
-            dgvProducto.Columns[5].HeaderText = "Cantidad Producto";
+            dgvProducto.Columns[5].HeaderText = "Stock Producto";
             dgvProducto.Columns[6].HeaderText = "Distribuidor";
             dgvProducto.Columns[7].HeaderText = "Precio Compra";
             dgvProducto.Columns[8].HeaderText = "Precio Venta";
@@ -41,13 +41,19 @@ namespace Quiosco
             txtPrecioVentaProducto.Text = "";
             txtPrecioTotalProducto.Text = "";
 
+
+            LlenarDGVProducto();
+            FormatearColumnasDGV();
             LlenarCombos();
             LlenarCombos2();
             LlenarCombos3();
-            LlenarDGVProducto();
-            FormatearColumnasDGV();
+
 
         }
+
+
+
+
 
         // Entidades / Negocios
         public Producto objEntProducto = new Producto();
@@ -68,6 +74,40 @@ namespace Quiosco
 
         public CategoriaNegocio objNegCategoria = new CategoriaNegocio();
         public ProveedorNegocio objNegProveedor = new ProveedorNegocio();
+
+
+        private void Ds_a_TxtBoxProducto(DataSet ds)
+        {
+            var r = ds.Tables[0].Rows[0];
+            txtNombreProducto.Text = r["NombreProducto"].ToString();
+            txtMarcaProducto.Text = r["MarcaProducto"].ToString();
+
+            // Algunos nombres de columnas varían, intentamos fallbacks
+            if (ds.Tables[0].Columns.Contains("PrecioProducto"))
+                txtPrecioTotalProducto.Text = Convert.ToDecimal(r["PrecioProducto"]).ToString("#,##0.00");
+            if (ds.Tables[0].Columns.Contains("PrecioCompra"))
+                txtPrecioCompraProducto.Text = Convert.ToDecimal(r["PrecioCompra"]).ToString("#,##0.00");
+            if (ds.Tables[0].Columns.Contains("PrecioVenta"))
+                txtPrecioVentaProducto.Text = Convert.ToDecimal(r["PrecioVenta"]).ToString("#,##0.00");
+
+            if (ds.Tables[0].Columns.Contains("CantidadProducto"))
+                txtCantidadProducto.Text = r["CantidadProducto"].ToString();
+
+            if (ds.Tables[0].Columns.Contains("IdCategoria"))
+                cmbCategoriaProducto.SelectedValue = Convert.ToInt32(r["IdCategoria"]);
+
+            if (ds.Tables[0].Columns.Contains("IdMetodoDePago"))
+                cmbMetodoPago.SelectedValue = Convert.ToInt32(r["IdMetodoDePago"]);
+
+            // Si venís guardando DistribuidorId en producto, setear; sino no hace nada
+            if (ds.Tables[0].Columns.Contains("IdProveedor"))
+                cmbDistribuidorProducto.SelectedValue = Convert.ToInt32(r["IdProveedor"]);
+
+            if (ds.Tables[0].Columns.Contains("IdCompraProducto"))
+                objEntCompra.IdCompraProducto = Convert.ToInt32(r["IdCompraProducto"]);
+
+        }
+
 
 
         #region Validaciones
@@ -221,20 +261,6 @@ namespace Quiosco
         }
 
 
-        private void LimpiarProducto()
-        {
-            txtNombreProducto.Text = string.Empty;
-            txtMarcaProducto.Text = string.Empty;
-            txtPrecioTotalProducto.Text = string.Empty;
-            cmbCategoriaProducto.SelectedIndex = -1;
-            txtCantidadProducto.Text = string.Empty;
-            cmbDistribuidorProducto.SelectedIndex = -1;
-            cmbMetodoPago.SelectedIndex = -1;
-            txtPrecioCompraProducto.Text = string.Empty;
-            txtPrecioVentaProducto.Text = string.Empty;
-            txtBuscarProducto.Clear();
-            txtEliminarProducto.Clear();
-        }
 
         #endregion
 
@@ -278,41 +304,10 @@ namespace Quiosco
                 btnCargarProducto.Visible = false;
                 btnModificarProducto.Visible = true;
                 btnCancelarProducto.Visible = true;
+
             }
         }
 
-
-        private void Ds_a_TxtBoxProducto(DataSet ds)
-        {
-            var r = ds.Tables[0].Rows[0];
-            txtNombreProducto.Text = r["NombreProducto"].ToString();
-            txtMarcaProducto.Text = r["MarcaProducto"].ToString();
-
-            // Algunos nombres de columnas varían, intentamos fallbacks
-            if (ds.Tables[0].Columns.Contains("PrecioProducto"))
-                txtPrecioTotalProducto.Text = Convert.ToDecimal(r["PrecioProducto"]).ToString("#,##0.00");
-            if (ds.Tables[0].Columns.Contains("PrecioCompra"))
-                txtPrecioCompraProducto.Text = Convert.ToDecimal(r["PrecioCompra"]).ToString("#,##0.00");
-            if (ds.Tables[0].Columns.Contains("PrecioVenta"))
-                txtPrecioVentaProducto.Text = Convert.ToDecimal(r["PrecioVenta"]).ToString("#,##0.00");
-
-            if (ds.Tables[0].Columns.Contains("CantidadProducto"))
-                txtCantidadProducto.Text = r["CantidadProducto"].ToString();
-
-            if (ds.Tables[0].Columns.Contains("IdCategoria"))
-                cmbCategoriaProducto.SelectedValue = Convert.ToInt32(r["IdCategoria"]);
-
-            if (ds.Tables[0].Columns.Contains("IdMetodoDePago"))
-                cmbMetodoPago.SelectedValue = Convert.ToInt32(r["IdMetodoDePago"]);
-
-            // Si venís guardando DistribuidorId en producto, setear; sino no hace nada
-            if (ds.Tables[0].Columns.Contains("IdProveedor"))
-                cmbDistribuidorProducto.SelectedValue = Convert.ToInt32(r["IdProveedor"]);
-
-            if (ds.Tables[0].Columns.Contains("IdCompraProducto"))
-                objEntCompra.IdCompraProducto = Convert.ToInt32(r["IdCompraProducto"]);
-
-        }
 
         #endregion
 
@@ -432,6 +427,23 @@ namespace Quiosco
 
         #endregion
 
+
+
+        private void LimpiarProducto()
+        {
+            txtNombreProducto.Text = string.Empty;
+            txtMarcaProducto.Text = string.Empty;
+            txtPrecioTotalProducto.Text = string.Empty;
+            cmbCategoriaProducto.SelectedIndex = -1;
+            txtCantidadProducto.Text = string.Empty;
+            cmbDistribuidorProducto.SelectedIndex = -1;
+            cmbMetodoPago.SelectedIndex = -1;
+            txtPrecioCompraProducto.Text = string.Empty;
+            txtPrecioVentaProducto.Text = string.Empty;
+            txtBuscarProducto.Clear();
+
+        }
+
         #region Busqueda / Eliminación
 
         private void btnBuscarProducto_Click(object sender, EventArgs e)
@@ -469,36 +481,49 @@ namespace Quiosco
         }
 
 
+
+
         private void btnEliminarProducto_Click_1(object sender, EventArgs e)
         {
-            DgEliminarProductoId();
-            LlenarDGVProducto();
-            MessageBox.Show("Se eliminaron los detalles de Producto");
-        }
-
-
-        public void DgEliminarProductoId()
-        {
-            if (!int.TryParse(txtEliminarProducto.Text, out int id))
+            if (dgvProducto.CurrentRow == null)
             {
-                MessageBox.Show("Ingrese un ID válido", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Seleccione una fila para eliminar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
+            // Obtener IdProducto de la primera celda de la fila seleccionada
+            int idProducto;
+            if (!int.TryParse(dgvProducto.CurrentRow.Cells[0].Value.ToString(), out idProducto))
+            {
+                MessageBox.Show("El IdProducto seleccionado no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            // Confirmar antes de eliminar
+            var resultado = MessageBox.Show("¿Está seguro de eliminar este producto?", "Confirmar eliminación", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (resultado != DialogResult.Yes) return;
+
             try
             {
-                bool eliminado = objNegProducto.ListarProductoEliminar(id);
-
+                bool eliminado = objNegProducto.ListarProductoEliminar(idProducto);
                 if (eliminado)
-                    MessageBox.Show("Producto y registros asociados eliminados correctamente.");
+                {
+                    MessageBox.Show("Producto eliminado correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    LlenarDGVProducto(); // Actualizar grilla
+                }
                 else
-                    MessageBox.Show("No se encontró el producto o no se pudo eliminar.");
+                {
+                    MessageBox.Show("No se pudo eliminar el producto o no se encontró.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al eliminar: " + ex.Message);
+                MessageBox.Show("Error al eliminar: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+
 
 
         #endregion
@@ -719,6 +744,7 @@ namespace Quiosco
                     btnModificarProducto.Visible = false;
                     btnCargarProducto.Visible = true;
                     btnCancelarProducto.Visible = false;
+
                 }
                 else
                 {
@@ -743,6 +769,49 @@ namespace Quiosco
         {
             Form form3 = new FormRegistroMetodoDePago();
             form3.Show();
+        }
+
+
+        private void ActualizarDatos()
+        {
+            FormatearColumnasDGV();
+            LlenarCombos();
+            LlenarCombos2();
+            LlenarCombos3();
+        }
+
+
+        private void cmbCategoriaProducto_Click(object sender, EventArgs e)
+        {
+            LlenarCombos();
+
+
+        }
+
+        private void cmbDistribuidorProducto_Click(object sender, EventArgs e)
+        {
+
+            LlenarCombos2();
+
+        }
+        private void cmbMetodoPago_Click(object sender, EventArgs e)
+        {
+
+            LlenarCombos3();
+        }
+
+        private void cmbCategoriaProducto_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormRegistrarProducto_Load(object sender, EventArgs e)
+        {
+
+            if (Sesion.UsuarioActual.Rol != "Admin")
+            {
+                btnEliminarProducto.Visible = false;
+            }
         }
     }
 
