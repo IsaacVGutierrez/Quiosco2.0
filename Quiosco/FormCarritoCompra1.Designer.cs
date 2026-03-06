@@ -34,9 +34,20 @@
             btnAceptar = new Button();
             label2 = new Label();
             label1 = new Label();
-            dgvResumen = new DataGridView();
             lblTotal = new Label();
             label3 = new Label();
+            cmbMedioPago = new ComboBox();
+            txtMontoPago = new TextBox();
+            dgvPagos = new DataGridView();
+            dgvResumen = new DataGridView();
+            lblDeuda = new Label();
+            lblTotalPagado = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            button1 = new Button();
+            btnQuitarPago = new Button();
+            btnAgregarPago = new Button();
+            ((System.ComponentModel.ISupportInitialize)dgvPagos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvResumen).BeginInit();
             SuspendLayout();
             // 
@@ -95,18 +106,6 @@
             label1.TabIndex = 70;
             label1.Text = "PRODUCTOS";
             // 
-            // dgvResumen
-            // 
-            dgvResumen.BackgroundColor = SystemColors.GradientActiveCaption;
-            dgvResumen.BorderStyle = BorderStyle.Fixed3D;
-            dgvResumen.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
-            dgvResumen.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvResumen.Cursor = Cursors.Hand;
-            dgvResumen.Location = new Point(517, 165);
-            dgvResumen.Name = "dgvResumen";
-            dgvResumen.Size = new Size(387, 408);
-            dgvResumen.TabIndex = 69;
-            // 
             // lblTotal
             // 
             lblTotal.AutoSize = true;
@@ -130,6 +129,107 @@
             label3.TabIndex = 103;
             label3.Text = "TOTAL";
             // 
+            // cmbMedioPago
+            // 
+            cmbMedioPago.FormattingEnabled = true;
+            cmbMedioPago.Location = new Point(288, 132);
+            cmbMedioPago.Name = "cmbMedioPago";
+            cmbMedioPago.Size = new Size(121, 23);
+            cmbMedioPago.TabIndex = 104;
+            // 
+            // txtMontoPago
+            // 
+            txtMontoPago.Location = new Point(316, 215);
+            txtMontoPago.Name = "txtMontoPago";
+            txtMontoPago.Size = new Size(100, 23);
+            txtMontoPago.TabIndex = 105;
+            // 
+            // dgvPagos
+            // 
+            dgvPagos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvPagos.Location = new Point(1096, 88);
+            dgvPagos.Name = "dgvPagos";
+            dgvPagos.RowTemplate.Height = 25;
+            dgvPagos.Size = new Size(240, 150);
+            dgvPagos.TabIndex = 106;
+            // 
+            // dgvResumen
+            // 
+            dgvResumen.BackgroundColor = SystemColors.GradientActiveCaption;
+            dgvResumen.BorderStyle = BorderStyle.Fixed3D;
+            dgvResumen.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
+            dgvResumen.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvResumen.Cursor = Cursors.Hand;
+            dgvResumen.Location = new Point(498, 145);
+            dgvResumen.Name = "dgvResumen";
+            dgvResumen.Size = new Size(387, 408);
+            dgvResumen.TabIndex = 69;
+            // 
+            // lblDeuda
+            // 
+            lblDeuda.AutoSize = true;
+            lblDeuda.Location = new Point(325, 375);
+            lblDeuda.Name = "lblDeuda";
+            lblDeuda.Size = new Size(41, 15);
+            lblDeuda.TabIndex = 107;
+            lblDeuda.Text = "Deuda";
+            // 
+            // lblTotalPagado
+            // 
+            lblTotalPagado.AutoSize = true;
+            lblTotalPagado.Location = new Point(316, 326);
+            lblTotalPagado.Name = "lblTotalPagado";
+            lblTotalPagado.Size = new Size(75, 15);
+            lblTotalPagado.TabIndex = 108;
+            lblTotalPagado.Text = "Total Pagado";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(191, 132);
+            label4.Name = "label4";
+            label4.Size = new Size(71, 15);
+            label4.TabIndex = 109;
+            label4.Text = "Medio Pago";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(208, 218);
+            label5.Name = "label5";
+            label5.Size = new Size(73, 15);
+            label5.TabIndex = 110;
+            label5.Text = "Monto Pago";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(313, 91);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 111;
+            button1.Text = "button1";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // btnQuitarPago
+            // 
+            btnQuitarPago.Location = new Point(337, 49);
+            btnQuitarPago.Name = "btnQuitarPago";
+            btnQuitarPago.Size = new Size(75, 23);
+            btnQuitarPago.TabIndex = 112;
+            btnQuitarPago.Text = "QuitarPago";
+            btnQuitarPago.UseVisualStyleBackColor = true;
+            btnQuitarPago.Click += btnQuitarPago_Click;
+            // 
+            // btnAgregarPago
+            // 
+            btnAgregarPago.Location = new Point(358, 19);
+            btnAgregarPago.Name = "btnAgregarPago";
+            btnAgregarPago.Size = new Size(113, 23);
+            btnAgregarPago.TabIndex = 113;
+            btnAgregarPago.Text = "AgregarPago";
+            btnAgregarPago.UseVisualStyleBackColor = true;
+            btnAgregarPago.Click += btnAgregarPago_Click;
+            // 
             // FormCarritoCompra1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -137,6 +237,16 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1474, 660);
+            Controls.Add(btnAgregarPago);
+            Controls.Add(btnQuitarPago);
+            Controls.Add(button1);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(lblTotalPagado);
+            Controls.Add(lblDeuda);
+            Controls.Add(dgvPagos);
+            Controls.Add(txtMontoPago);
+            Controls.Add(cmbMedioPago);
             Controls.Add(label3);
             Controls.Add(lblTotal);
             Controls.Add(btnEliminarVenta);
@@ -148,6 +258,7 @@
             Name = "FormCarritoCompra1";
             Text = "Carrito";
             Load += FormCarritoCompra1_Load;
+            ((System.ComponentModel.ISupportInitialize)dgvPagos).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvResumen).EndInit();
             ResumeLayout(false);
             PerformLayout();
@@ -159,8 +270,18 @@
         private Button btnAceptar;
         private Label label2;
         private Label label1;
-        private DataGridView dgvResumen;
         private Label lblTotal;
         private Label label3;
+        private ComboBox cmbMedioPago;
+        private TextBox txtMontoPago;
+        private DataGridView dgvPagos;
+        private DataGridView dgvResumen;
+        private Label lblDeuda;
+        private Label lblTotalPagado;
+        private Label label4;
+        private Label label5;
+        private Button button1;
+        private Button btnQuitarPago;
+        private Button btnAgregarPago;
     }
 }

@@ -230,7 +230,8 @@ namespace Quiosco
                 Cantidad = c.Cantidad
             }).ToList();
 
-            FormCarritoCompra1 frmConfirmar = new FormCarritoCompra1(carritoCopia, idCliente, idMetodoPago, subtotal);
+            FormCarritoCompra1 frmConfirmar = new FormCarritoCompra1(carritoCopia, idCliente, subtotal);
+
             var res = frmConfirmar.ShowDialog();
 
             if (res == DialogResult.OK)
