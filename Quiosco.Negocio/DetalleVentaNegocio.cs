@@ -40,16 +40,15 @@ namespace Quiosco.Negocio
             return objDatosDetalleVenta.ListarDetalleVentaEliminar(id);
         }
 
-        public double ObtenerTotalVentas()
+        public double ObtenerTotalVentas(DateTime desde, DateTime hasta)
         {
-            return objDatosDetalleVenta.ObtenerTotalVentas();
+            return objDatosDetalleVenta.ObtenerTotalVentas(desde, hasta);
         }
 
-        public double ObtenerTotalCompras()
+        public double ObtenerTotalCompras(DateTime desde, DateTime hasta)
         {
-            return objDatosDetalleVenta.ObtenerTotalCompras();
+            return objDatosDetalleVenta.ObtenerTotalCompras(desde, hasta);
         }
-       
 
         public DataSet Union()
         {

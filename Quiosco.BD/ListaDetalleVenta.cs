@@ -205,15 +205,22 @@ namespace Quiosco.BD
         }
 
 
-        public double ObtenerTotalVentas()
+     
+
+        public double ObtenerTotalVentas(DateTime desde, DateTime hasta)
         {
             double totalVentas = 0;
             string sql = @"
-        SELECT ISNULL(SUM(dv.CantidadProducto * p.PrecioVenta),0) AS TotalVentas
+        SELECT ISNULL(SUM(dv.CantidadProducto * p.PrecioVenta), 0)
         FROM DetalleVenta dv
-        INNER JOIN Producto p ON dv.IdProducto = p.IdProducto";
+        INNER JOIN Producto p ON dv.IdProducto = p.IdProducto
+        INNER JOIN Venta v ON dv.IdVenta = v.IdVenta
+        WHERE v.FechaVenta BETWEEN @desde AND @hasta";
 
             SqlCommand cmd = new SqlCommand(sql, conexion);
+            cmd.Parameters.AddWithValue("@desde", desde);
+            cmd.Parameters.AddWithValue("@hasta", hasta);
+
             try
             {
                 Abrirconexion();
@@ -221,28 +228,28 @@ namespace Quiosco.BD
                 if (result != null && result != DBNull.Value)
                     totalVentas = Convert.ToDouble(result);
             }
-            catch (Exception e)
-            {
-                throw new Exception("Error al calcular total de ventas", e);
-            }
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
-
             return totalVentas;
         }
 
-        public double ObtenerTotalCompras()
+        public double ObtenerTotalCompras(DateTime desde, DateTime hasta)
         {
             double totalCompras = 0;
             string sql = @"
-        SELECT ISNULL(SUM(p.PrecioCompra * dv.CantidadProducto),0) AS TotalCompras
+        SELECT ISNULL(SUM(p.PrecioCompra * dv.CantidadProducto), 0)
         FROM DetalleVenta dv
-        INNER JOIN Producto p ON dv.IdProducto = p.IdProducto";
+        INNER JOIN Producto p ON dv.IdProducto = p.IdProducto
+        INNER JOIN Venta v ON dv.IdVenta = v.IdVenta
+        WHERE v.FechaVenta BETWEEN @desde AND @hasta";
 
             SqlCommand cmd = new SqlCommand(sql, conexion);
+            cmd.Parameters.AddWithValue("@desde", desde);
+            cmd.Parameters.AddWithValue("@hasta", hasta);
+
             try
             {
                 Abrirconexion();
@@ -250,16 +257,11 @@ namespace Quiosco.BD
                 if (result != null && result != DBNull.Value)
                     totalCompras = Convert.ToDouble(result);
             }
-            catch (Exception e)
-            {
-                throw new Exception("Error al calcular total de compras", e);
-            }
             finally
             {
                 Cerrarconexion();
                 cmd.Dispose();
             }
-
             return totalCompras;
         }
 

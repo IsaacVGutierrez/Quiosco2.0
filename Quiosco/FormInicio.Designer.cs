@@ -33,6 +33,12 @@ namespace Quiosco
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormInicio));
             tabControl1 = new TabControl();
             tabInicio = new TabPage();
+            groupBox1 = new GroupBox();
+            label2 = new Label();
+            label3 = new Label();
+            dtpHasta = new DateTimePicker();
+            dtpDesde = new DateTimePicker();
+            btnFiltrar = new Button();
             btnGestionUsuarios = new Button();
             pictureBox1 = new PictureBox();
             btnRegistrarVenta = new Button();
@@ -62,6 +68,7 @@ namespace Quiosco
             btnCancelarDeudor = new Button();
             tabControl1.SuspendLayout();
             tabInicio.SuspendLayout();
+            groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             tabMisProductos.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvStockProductos).BeginInit();
@@ -87,8 +94,11 @@ namespace Quiosco
             // 
             // tabInicio
             // 
+            tabInicio.BackColor = Color.Transparent;
             tabInicio.BackgroundImage = (Image)resources.GetObject("tabInicio.BackgroundImage");
             tabInicio.BackgroundImageLayout = ImageLayout.Stretch;
+            tabInicio.Controls.Add(groupBox1);
+            tabInicio.Controls.Add(btnFiltrar);
             tabInicio.Controls.Add(btnGestionUsuarios);
             tabInicio.Controls.Add(pictureBox1);
             tabInicio.Controls.Add(btnRegistrarVenta);
@@ -100,7 +110,68 @@ namespace Quiosco
             tabInicio.Size = new Size(1513, 671);
             tabInicio.TabIndex = 3;
             tabInicio.Text = "Inicio";
-            tabInicio.UseVisualStyleBackColor = true;
+            // 
+            // groupBox1
+            // 
+            groupBox1.BackColor = Color.Transparent;
+            groupBox1.Controls.Add(label2);
+            groupBox1.Controls.Add(label3);
+            groupBox1.Controls.Add(dtpHasta);
+            groupBox1.Controls.Add(dtpDesde);
+            groupBox1.Location = new Point(47, 77);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(275, 118);
+            groupBox1.TabIndex = 18;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Filtro por Rango de Fechas";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(19, 20);
+            label2.Name = "label2";
+            label2.Size = new Size(42, 15);
+            label2.TabIndex = 19;
+            label2.Text = "Desde:";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(19, 68);
+            label3.Name = "label3";
+            label3.Size = new Size(40, 15);
+            label3.TabIndex = 20;
+            label3.Text = "Hasta:";
+            // 
+            // dtpHasta
+            // 
+            dtpHasta.Location = new Point(17, 86);
+            dtpHasta.Name = "dtpHasta";
+            dtpHasta.Size = new Size(234, 23);
+            dtpHasta.TabIndex = 16;
+            // 
+            // dtpDesde
+            // 
+            dtpDesde.Location = new Point(19, 38);
+            dtpDesde.Name = "dtpDesde";
+            dtpDesde.Size = new Size(232, 23);
+            dtpDesde.TabIndex = 15;
+            dtpDesde.ValueChanged += dtpDesde_ValueChanged;
+            // 
+            // btnFiltrar
+            // 
+            btnFiltrar.BackColor = Color.Gold;
+            btnFiltrar.BackgroundImageLayout = ImageLayout.Center;
+            btnFiltrar.Cursor = Cursors.Hand;
+            btnFiltrar.FlatStyle = FlatStyle.Popup;
+            btnFiltrar.ForeColor = Color.Black;
+            btnFiltrar.Location = new Point(361, 97);
+            btnFiltrar.Name = "btnFiltrar";
+            btnFiltrar.Size = new Size(75, 23);
+            btnFiltrar.TabIndex = 17;
+            btnFiltrar.Text = "FILTRAR";
+            btnFiltrar.UseVisualStyleBackColor = false;
+            btnFiltrar.Click += btnFiltrar_Click;
             // 
             // btnGestionUsuarios
             // 
@@ -119,9 +190,9 @@ namespace Quiosco
             // pictureBox1
             // 
             pictureBox1.Cursor = Cursors.Hand;
-            pictureBox1.Location = new Point(77, 127);
+            pictureBox1.Location = new Point(131, 163);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(792, 552);
+            pictureBox1.Size = new Size(851, 603);
             pictureBox1.TabIndex = 13;
             pictureBox1.TabStop = false;
             pictureBox1.MouseEnter += pictureBox1_MouseEnter;
@@ -166,7 +237,7 @@ namespace Quiosco
             lblSaludo.BackColor = Color.MintCream;
             lblSaludo.BorderStyle = BorderStyle.Fixed3D;
             lblSaludo.Font = new Font("High Tower Text", 20.25F, FontStyle.Bold, GraphicsUnit.Point);
-            lblSaludo.Location = new Point(595, 30);
+            lblSaludo.Location = new Point(604, 16);
             lblSaludo.Name = "lblSaludo";
             lblSaludo.Size = new Size(218, 34);
             lblSaludo.TabIndex = 10;
@@ -454,6 +525,8 @@ namespace Quiosco
             tabControl1.ResumeLayout(false);
             tabInicio.ResumeLayout(false);
             tabInicio.PerformLayout();
+            groupBox1.ResumeLayout(false);
+            groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             tabMisProductos.ResumeLayout(false);
             tabMisProductos.PerformLayout();
@@ -498,5 +571,11 @@ namespace Quiosco
         private DataGridView dgvDetalleVenta;
         private PictureBox pictureBox1;
         private Button btnGestionUsuarios;
+        private Button btnFiltrar;
+        private DateTimePicker dtpHasta;
+        private DateTimePicker dtpDesde;
+        private GroupBox groupBox1;
+        private Label label2;
+        private Label label3;
     }
 }

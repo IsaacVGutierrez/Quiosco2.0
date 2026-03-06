@@ -248,25 +248,26 @@ namespace Quiosco
 
         private void CargarValoresPieChartDesdeBD()
         {
-            double totalVentas = 0;
-            double totalCompras = 0;
-            double totalGanancias = 0;
+            // Obtenemos las fechas de los controles
+            DateTime inicio = dtpDesde.Value.Date; // .Date para que empiece a las 00:00:00
+            DateTime fin = dtpHasta.Value.Date.AddDays(1).AddSeconds(-1); // Hasta el final del día elegido
 
             try
             {
-                totalVentas = objNegDetalle.ObtenerTotalVentas();
-                totalCompras = objNegDetalle.ObtenerTotalCompras();
+                // IMPORTANTE: Tus métodos de negocio deben aceptar estos parámetros DateTime
+                double totalVentas = objNegDetalle.ObtenerTotalVentas(inicio, fin);
+                double totalCompras = objNegDetalle.ObtenerTotalCompras(inicio, fin);
 
-                totalGanancias = totalVentas - totalCompras;
+                double totalGanancias = totalVentas - totalCompras;
+
+                // Actualizamos los valores que usa el gráfico
+                valuesDynamic = new double[] { totalVentas, totalCompras, totalGanancias };
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar valores del pie chart: " + ex.Message);
+                MessageBox.Show("Error al cargar valores filtrados: " + ex.Message);
             }
-
-            valuesDynamic = new double[] { totalVentas, totalCompras, totalGanancias };
         }
-
 
 
 
@@ -296,6 +297,11 @@ namespace Quiosco
 
         private void FormInicio_Load(object sender, EventArgs e)
         {
+
+            // Inicializar filtros: desde hace un mes hasta hoy
+            dtpDesde.Value = DateTime.Now.AddMonths(-1);
+            dtpHasta.Value = DateTime.Now;
+
             CargarDetalleVenta();
             CargarValoresPieChartDesdeBD();
             CargarProductosEnStock();
@@ -978,5 +984,31 @@ namespace Quiosco
             }
         }
 
+        private void btnFiltrar_Click(object sender, EventArgs e)
+        {
+            // 1. Capturar las fechas de los controles
+            DateTime fechaInicio = dtpDesde.Value.Date;
+            // Para la fecha de fin, sumamos un día y restamos un segundo para incluir todo el día elegido
+            DateTime fechaFin = dtpHasta.Value.Date.AddDays(1).AddSeconds(-1);
+
+            // 2. Llamar a la lógica de negocio con los parámetros
+            double ventas = objNegDetalle.ObtenerTotalVentas(fechaInicio, fechaFin);
+            double compras = objNegDetalle.ObtenerTotalCompras(fechaInicio, fechaFin);
+            double ganancias = ventas - compras;
+
+            // 3. Actualizar los datos del gráfico (Suponiendo que usas valuesDynamic)
+            valuesDynamic = new double[] { ventas, compras, ganancias };
+
+            // 4. Refrescar la animación y el dibujo
+            animProgress = 0f;
+            if (animTimer != null) animTimer.Start();
+
+            pictureBox1.Invalidate();
+        }
+        private void dtpDesde_ValueChanged(object sender, EventArgs e)
+        {
+            // El selector "Hasta" no permitirá elegir una fecha menor a la de "Desde"
+            dtpHasta.MinDate = dtpDesde.Value;
+        }
     }
 }
