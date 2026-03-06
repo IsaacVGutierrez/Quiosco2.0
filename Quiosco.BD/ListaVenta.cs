@@ -11,17 +11,22 @@ namespace Quiosco.BD
         public int abmVenta(string accion, Venta objVenta)
         {
             int resultado = -1;
-
             if (accion == "Alta")
             {
                 string sql = @"
-                    INSERT INTO Venta (SubtotalVenta, FechaVenta, IdMetodoDePago, IdCliente, SaldoVenta)
-                    OUTPUT INSERTED.IdVenta
-                    VALUES (@subtotal, @fecha, @idMetodoPago, @idCliente, @saldo)";
+        INSERT INTO Venta (SubtotalVenta, FechaVenta, IdMetodoDePago, IdCliente, SaldoVenta)
+        OUTPUT INSERTED.IdVenta
+        VALUES (@subtotal, @fecha, @idMetodoPago, @idCliente, @saldo)";
+
                 SqlCommand cmd = new SqlCommand(sql, conexion);
                 cmd.Parameters.AddWithValue("@subtotal", objVenta.SubtotalVenta);
                 cmd.Parameters.AddWithValue("@fecha", objVenta.FechaVenta);
-                cmd.Parameters.AddWithValue("@idMetodoPago", objVenta.IdMetodoDePagoVenta);
+
+                // Si IdMetodoDePagoVenta es 0, usamos el ID 1 (Efectivo) por defecto 
+                // para cumplir con el 'NOT NULL' de la tabla Venta.
+                int idPagoParaVenta = objVenta.IdMetodoDePagoVenta > 0 ? objVenta.IdMetodoDePagoVenta : 1;
+                cmd.Parameters.AddWithValue("@idMetodoPago", idPagoParaVenta);
+
                 cmd.Parameters.AddWithValue("@idCliente", objVenta.IdCliente);
                 cmd.Parameters.AddWithValue("@saldo", objVenta.SaldoVenta);
 

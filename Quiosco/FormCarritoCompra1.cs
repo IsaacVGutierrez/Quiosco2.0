@@ -2,6 +2,7 @@
 using Quiosco.Negocio;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -35,6 +36,9 @@ namespace Quiosco
             CargarResumen();
             CargarComboMetodosPago();
             ActualizarTotales();
+
+            dgvPagos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvResumen.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
         }
 
         private void CargarResumen()
@@ -74,7 +78,8 @@ namespace Quiosco
                 return;
             }
 
-            if (!decimal.TryParse(txtMontoPago.Text.Replace(".", "").Replace(",", "."), out decimal monto) || monto <= 0)
+            // Cambiamos el parseo para que acepte decimales correctamente
+            if (!decimal.TryParse(txtMontoPago.Text.Replace(",", "."), System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal monto) || monto <= 0)
             {
                 MessageBox.Show("Ingrese un monto válido.");
                 return;
@@ -82,7 +87,6 @@ namespace Quiosco
 
             int idMetodo = Convert.ToInt32(cmbMedioPago.SelectedValue);
 
-            // Evitamos duplicados: sumamos si ya existe
             var existente = pagos.Find(p => p.IdMetodoDePago == idMetodo);
             if (existente != null)
                 existente.Monto += monto;
@@ -99,57 +103,71 @@ namespace Quiosco
             dgvPagos.DataSource = null;
             dgvPagos.DataSource = pagos.Select(p => new
             {
+                IdMetodo = p.IdMetodoDePago, // Sigue estando aquí para que el código no falle
                 Metodo = objNegMetodoPago.ObtenerMetodoDePago().Find(m => m.IdMetodoDePago == p.IdMetodoDePago)?.NombreMetodoDePago,
                 Monto = p.Monto.ToString("#,##0.00")
             }).ToList();
+
+            // Verificamos que existan columnas y ocultamos la del ID (que es la 0)
+            if (dgvPagos.Columns.Count > 0)
+            {
+                dgvPagos.Columns["IdMetodo"].Visible = false;
+
+                // Opcional: Mejorar los encabezados de las columnas visibles
+                dgvPagos.Columns["Metodo"].HeaderText = "Medio de Pago";
+                dgvPagos.Columns["Monto"].HeaderText = "Monto Cargado";
+            }
         }
 
         private decimal TotalPagado() => pagos.Sum(p => p.Monto);
-
         private decimal Deuda() => subtotal - TotalPagado();
 
         private void ActualizarTotales()
         {
             lblTotalPagado.Text = TotalPagado().ToString("#,##0.00");
-            lblDeuda.Text = Deuda() > 0 ? Deuda().ToString("#,##0.00") : "0,00";
+            decimal deudaActual = Deuda();
+
+            // Si la deuda es negativa, mostramos el valor para que el usuario vea cuánto sobra
+            lblDeuda.Text = deudaActual.ToString("#,##0.00");
         }
 
         private void btnAceptar_Click(object sender, EventArgs e)
         {
-            // VALIDACIÓN FINAL: STOCK
-            foreach (var item in carrito)
+            // 1. Validar montos
+            decimal diferencia = subtotal - TotalPagado();
+            if (Math.Abs(diferencia) > 0.01m) // Usamos un margen pequeño por decimales
             {
-                var prod = objNegProducto.ObtenerProducto().Find(p => p.IdProducto == item.IdProducto);
-                if (prod == null)
-                {
-                    MessageBox.Show($"Producto {item.NombreProducto} no encontrado.", "Error");
-                    this.DialogResult = DialogResult.None;
-                    return;
-                }
-                if (prod.CantidadProducto < item.Cantidad)
-                {
-                    MessageBox.Show($"Stock insuficiente para {item.NombreProducto}. Disponible: {prod.CantidadProducto}");
-                    this.DialogResult = DialogResult.None;
-                    return;
-                }
+                string msj = diferencia > 0 ? $"Faltan: ${diferencia:N2}" : $"{diferencia:N2}";
+                MessageBox.Show(msj, "Validación de Pago");
+                return;
             }
 
             try
             {
-                // Crear VENTA
+                // 2. Crear objeto Venta
+                // Crear objeto VENTA
+
                 Venta v = new Venta
                 {
                     SubtotalVenta = subtotal,
                     FechaVenta = DateTime.Now,
                     IdCliente = idCliente,
-                    SaldoVenta = Deuda() > 0 ? Deuda() : 0
+                    SaldoVenta = 0, // Como validamos diferencia == 0, el saldo es 0
+                                    // Tomamos el primer método de la lista de pagos para cumplir con el NOT NULL de la DB
+                    IdMetodoDePagoVenta = pagos.Count > 0 ? pagos[0].IdMetodoDePago : 1
                 };
 
+                // 3. Grabar Venta y obtener ID
+                // IMPORTANTE: Tu Negocio/Datos debe retornar el ID generado
                 int idVentaCreada = objNegVenta.abmVenta("Alta", v);
-                if (idVentaCreada <= 0)
-                    throw new Exception("No se pudo crear la venta.");
 
-                // Insertar DETALLES y descontar stock
+                if (idVentaCreada <= 0)
+                {
+                    MessageBox.Show("La base de datos no devolvió un ID de venta válido. Revise el procedimiento almacenado.", "Error de BD");
+                    return;
+                }
+
+                // 4. Grabar Detalles
                 foreach (var item in carrito)
                 {
                     objNegDetalle.abmDetalleVenta("Alta", new DetalleVenta
@@ -158,10 +176,12 @@ namespace Quiosco
                         IdProducto = item.IdProducto,
                         CantidadProducto = item.Cantidad
                     });
+
+                    // 5. Descontar Stock
                     objNegProducto.ReducirStock(item.IdProducto, item.Cantidad);
                 }
 
-                // Guardar PAGOS
+                // 6. Grabar Pagos
                 foreach (var pago in pagos)
                 {
                     objNegVentaMetodoPago.AgregarPago(new VentaMetodoPago
@@ -177,8 +197,8 @@ namespace Quiosco
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al confirmar la venta: " + ex.Message);
-                this.DialogResult = DialogResult.Cancel;
+                // Este mensaje te dirá la verdad de por qué falla
+                MessageBox.Show("ERROR DETALLADO: " + ex.Message + "\n\n" + ex.StackTrace, "Falla al grabar");
             }
         }
 
@@ -191,13 +211,22 @@ namespace Quiosco
         private void btnQuitarPago_Click(object sender, EventArgs e)
         {
             if (dgvPagos.CurrentRow == null) return;
-            string metodo = dgvPagos.CurrentRow.Cells["Metodo"].Value.ToString();
-            var pago = pagos.Find(p => objNegMetodoPago.ObtenerMetodoDePago().Find(m => m.IdMetodoDePago == p.IdMetodoDePago)?.NombreMetodoDePago == metodo);
-            if (pago != null)
-                pagos.Remove(pago);
+
+            // Obtenemos el ID del pago de la lista anónima de la grilla
+            var filaElegida = dgvPagos.CurrentRow.DataBoundItem;
+            // Usamos reflexión simple para sacar el ID sin importar la columna
+            int idMetodo = (int)filaElegida.GetType().GetProperty("IdMetodo").GetValue(filaElegida, null);
+
+            var pago = pagos.Find(p => p.IdMetodoDePago == idMetodo);
+            if (pago != null) pagos.Remove(pago);
 
             ActualizarGrillaPagos();
             ActualizarTotales();
+        }
+
+        private void dgvPagos_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 

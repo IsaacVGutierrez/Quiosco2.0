@@ -16,13 +16,12 @@ namespace Quiosco
 
         #region DeclaracionVariables
 
-
         public ProductoNegocio objNegProducto = new ProductoNegocio();
         public ClienteNegocio objNegCliente = new ClienteNegocio();
         public MetodoDePagoNegocio objNegMetodoDePago = new MetodoDePagoNegocio();
 
-
         #endregion
+
         public FormRegistroVenta()
         {
             InitializeComponent();
@@ -41,18 +40,13 @@ namespace Quiosco
 
             dgvVenta.Columns.AddRange(new DataGridViewColumn[] { cId, cNombre, cPrecio, cCantidad, cSubtotal });
 
-
             // Inicializar combos
             LlenarCombosVentaProducto();
             LlenarCombosVentaCliente();
-            LlenarCombosVentaMetodoDePago();
 
             ActualizarGrillaCarrito();
             txtSubtotalVenta.Text = "0,00";
         }
-
-
-
 
         #region Llenar Combos
         private void LlenarCombosVentaProducto()
@@ -70,20 +64,9 @@ namespace Quiosco
             cmbClienteVenta.ValueMember = "IdCliente";
             cmbClienteVenta.SelectedIndex = -1;
         }
-
-        private void LlenarCombosVentaMetodoDePago()
-        {
-            cmbMedioPagoVenta.DataSource = objNegMetodoDePago.ObtenerMetodoDePago();
-            cmbMedioPagoVenta.DisplayMember = "NombreMetodoDePago";
-            cmbMedioPagoVenta.ValueMember = "IdMetodoDePago"; // fijate que tu BD use exactamente este nombre
-            cmbMedioPagoVenta.SelectedIndex = -1;
-        }
         #endregion
 
         #region Carrito - Add / Remove / Clear / Update
-
-
-
 
         private void btnAgregarAlCarrito_Click(object sender, EventArgs e)
         {
@@ -109,18 +92,22 @@ namespace Quiosco
                 return;
             }
 
-            // Comprobación de stock disponible (no descontamos aún, solo comprobamos)
+            // Comprobación de stock disponible
             if (producto.CantidadProducto < cantidad)
             {
                 MessageBox.Show($"Stock insuficiente. Disponible: {producto.CantidadProducto}", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
+            // --- CAMBIO: BLOQUEO DE CLIENTE ---
+            cmbClienteVenta.Enabled = false;
+            btnAgregarCliente.Enabled = false;
+            // ----------------------------------
+
             // Si el producto ya está en el carrito, sumar cantidades
             var existente = carrito.Find(x => x.IdProducto == idProducto);
             if (existente != null)
             {
-                // verificar que la suma no exceda stock
                 if (producto.CantidadProducto < existente.Cantidad + cantidad)
                 {
                     MessageBox.Show($"No se puede agregar. Stock insuficiente para la cantidad total ({existente.Cantidad + cantidad}).", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -141,8 +128,6 @@ namespace Quiosco
 
             ActualizarGrillaCarrito();
             txtCantidadVenta.Text = "1";
-
-           
         }
 
         private void btnQuitarDelCarrito_Click(object sender, EventArgs e)
@@ -154,7 +139,13 @@ namespace Quiosco
             {
                 carrito.Remove(item);
                 ActualizarGrillaCarrito();
-           
+            }
+
+            // --- CAMBIO: DESBLOQUEO SI QUEDA VACÍO ---
+            if (carrito.Count == 0)
+            {
+                cmbClienteVenta.Enabled = true;
+                btnAgregarCliente.Enabled = true;
             }
         }
 
@@ -165,13 +156,15 @@ namespace Quiosco
             {
                 carrito.Clear();
                 ActualizarGrillaCarrito();
-           
+
+                // --- CAMBIO: DESBLOQUEO AL VACIAR ---
+                cmbClienteVenta.Enabled = true;
+                btnAgregarCliente.Enabled = true;
             }
         }
 
         private void ActualizarGrillaCarrito()
         {
-            // Para refrescar DataSource, clonamos la lista
             dgvVenta.DataSource = null;
             dgvVenta.DataSource = carrito.Select(c => new
             {
@@ -210,18 +203,10 @@ namespace Quiosco
                 return;
             }
 
-            if (cmbMedioPagoVenta.SelectedIndex < 0)
-            {
-                MessageBox.Show("Seleccione un medio de pago.", "Advertencia", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
 
-            // Preparamos info a pasar
             int idCliente = Convert.ToInt32(cmbClienteVenta.SelectedValue);
-            int idMetodoPago = Convert.ToInt32(cmbMedioPagoVenta.SelectedValue);
             decimal subtotal = decimal.Parse(txtSubtotalVenta.Text.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
-            // Abrimos form confirmar y le pasamos el carrito (copia) y datos del cliente/metodo
             var carritoCopia = carrito.Select(c => new CarritoItem
             {
                 IdProducto = c.IdProducto,
@@ -231,47 +216,22 @@ namespace Quiosco
             }).ToList();
 
             FormCarritoCompra1 frmConfirmar = new FormCarritoCompra1(carritoCopia, idCliente, subtotal);
-
             var res = frmConfirmar.ShowDialog();
 
             if (res == DialogResult.OK)
             {
-                // Si la venta fue confirmada y guardada en la BD, vaciamos el carrito local
                 carrito.Clear();
                 ActualizarGrillaCarrito();
+
+                // --- CAMBIO: DESBLOQUEO POST VENTA ---
+                cmbClienteVenta.Enabled = true;
+                btnAgregarCliente.Enabled = true;
+
                 MessageBox.Show("Venta confirmada y registrada correctamente.", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
-           
-            }
-            else
-            {
-                // si el usuario canceló o falló, no tocamos el carrito
             }
         }
 
         #endregion
-
-
-
-
-
-        private void dgvVenta_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-        }
-
-
-
-
-
-
-        #region Validaciones y utilitarios (tus validaciones adaptadas)
-
-
-
-        private void txtCantidadVenta_TextChanged(object sender, EventArgs e)
-        {
-            // Si querés mantener formato, lo podés adaptar - por ahora dejamos tal cual entrada entera.
-        }
-
 
         private void txtCantidadVenta_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -282,10 +242,6 @@ namespace Quiosco
                 return;
             }
         }
-
-
-        #endregion
-
 
         private void btnAgregarCliente_Click(object sender, EventArgs e)
         {
@@ -299,24 +255,6 @@ namespace Quiosco
             form3.Show();
         }
 
-      
-
-        private void cmbProductoVenta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmbClienteVenta_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void cmbMedioPagoVenta_Click(object sender, EventArgs e)
-        {
-            LlenarCombosVentaMetodoDePago();
-        }
-
-
         private void cmbProductoVenta_Click(object sender, EventArgs e)
         {
             LlenarCombosVentaProducto();
@@ -327,13 +265,11 @@ namespace Quiosco
             LlenarCombosVentaCliente();
         }
 
-        private void FormRegistroVenta_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
-
-
+        // Otros eventos vacíos se mantienen para no romper referencias del Designer
+        private void dgvVenta_CellClick(object sender, DataGridViewCellEventArgs e) { }
+        private void txtCantidadVenta_TextChanged(object sender, EventArgs e) { }
+        private void cmbProductoVenta_SelectedIndexChanged(object sender, EventArgs e) { }
+        private void cmbClienteVenta_SelectedIndexChanged(object sender, EventArgs e) { }
+        private void FormRegistroVenta_Load(object sender, EventArgs e) { }
     }
 }

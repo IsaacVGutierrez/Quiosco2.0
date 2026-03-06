@@ -253,9 +253,9 @@ namespace Quiosco
             dgvStockProductos.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvStockProductos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvStockProductos.Cursor = Cursors.Hand;
-            dgvStockProductos.Location = new Point(389, 101);
+            dgvStockProductos.Location = new Point(362, 101);
             dgvStockProductos.Name = "dgvStockProductos";
-            dgvStockProductos.Size = new Size(570, 408);
+            dgvStockProductos.Size = new Size(639, 408);
             dgvStockProductos.TabIndex = 54;
             // 
             // tabMisVentas

@@ -35,15 +35,12 @@
             label2 = new Label();
             label1 = new Label();
             dgvVenta = new DataGridView();
-            label5 = new Label();
             cmbProductoVenta = new ComboBox();
             txtSubtotalVenta = new TextBox();
             label3 = new Label();
             label6 = new Label();
             btnAgregarCliente = new Button();
             cmbClienteVenta = new ComboBox();
-            cmbMedioPagoVenta = new ComboBox();
-            btnAgregarMetodoDePago = new Button();
             btnAgregarAlCarrito = new Button();
             btnQuitarDelCarrito = new Button();
             btnVaciarCarrito = new Button();
@@ -122,17 +119,6 @@
             dgvVenta.TabIndex = 69;
             dgvVenta.CellClick += dgvVenta_CellClick;
             // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.BackColor = Color.Wheat;
-            label5.Location = new Point(117, 338);
-            label5.Margin = new Padding(4, 0, 4, 0);
-            label5.Name = "label5";
-            label5.Size = new Size(87, 15);
-            label5.TabIndex = 99;
-            label5.Text = "Medio de Pago";
-            // 
             // cmbProductoVenta
             // 
             cmbProductoVenta.Cursor = Cursors.Hand;
@@ -198,27 +184,6 @@
             cmbClienteVenta.SelectedIndexChanged += cmbClienteVenta_SelectedIndexChanged;
             cmbClienteVenta.Click += cmbClienteVenta_Click;
             // 
-            // cmbMedioPagoVenta
-            // 
-            cmbMedioPagoVenta.Cursor = Cursors.Hand;
-            cmbMedioPagoVenta.FormattingEnabled = true;
-            cmbMedioPagoVenta.Location = new Point(248, 330);
-            cmbMedioPagoVenta.Name = "cmbMedioPagoVenta";
-            cmbMedioPagoVenta.Size = new Size(176, 23);
-            cmbMedioPagoVenta.TabIndex = 108;
-            cmbMedioPagoVenta.Click += cmbMedioPagoVenta_Click;
-            // 
-            // btnAgregarMetodoDePago
-            // 
-            btnAgregarMetodoDePago.BackColor = Color.Gold;
-            btnAgregarMetodoDePago.Location = new Point(440, 330);
-            btnAgregarMetodoDePago.Name = "btnAgregarMetodoDePago";
-            btnAgregarMetodoDePago.Size = new Size(31, 24);
-            btnAgregarMetodoDePago.TabIndex = 109;
-            btnAgregarMetodoDePago.Text = "+";
-            btnAgregarMetodoDePago.UseVisualStyleBackColor = false;
-            btnAgregarMetodoDePago.Click += btnAgregarMetodoDePago_Click;
-            // 
             // btnAgregarAlCarrito
             // 
             btnAgregarAlCarrito.BackColor = Color.Gold;
@@ -278,15 +243,12 @@
             Controls.Add(btnVaciarCarrito);
             Controls.Add(btnQuitarDelCarrito);
             Controls.Add(btnAgregarAlCarrito);
-            Controls.Add(btnAgregarMetodoDePago);
-            Controls.Add(cmbMedioPagoVenta);
             Controls.Add(cmbClienteVenta);
             Controls.Add(btnAgregarCliente);
             Controls.Add(label6);
             Controls.Add(txtSubtotalVenta);
             Controls.Add(label3);
             Controls.Add(cmbProductoVenta);
-            Controls.Add(label5);
             Controls.Add(lblNombreProducto);
             Controls.Add(txtCantidadVenta);
             Controls.Add(lblCantidadProducto);
@@ -308,15 +270,12 @@
         private Label label2;
         private Label label1;
         private DataGridView dgvVenta;
-        private Label label5;
         private ComboBox cmbProductoVenta;
         private TextBox txtSubtotalVenta;
         private Label label3;
         private Label label6;
         private Button btnAgregarCliente;
         private ComboBox cmbClienteVenta;
-        private ComboBox cmbMedioPagoVenta;
-        private Button btnAgregarMetodoDePago;
         private Button btnAgregarAlCarrito;
         private Button btnQuitarDelCarrito;
         private Button btnVaciarCarrito;

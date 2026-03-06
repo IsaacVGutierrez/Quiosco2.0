@@ -302,6 +302,10 @@ namespace Quiosco
             MostrarPieSkiaEnPictureBox();
             RedibujarGrafico();
 
+            dgvDetalleVenta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvDeudor.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dgvStockProductos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
             pictureBox1.MouseMove += PictureBox1_MouseMove;
             pictureBox1.MouseLeave += PictureBox1_MouseLeave;
 

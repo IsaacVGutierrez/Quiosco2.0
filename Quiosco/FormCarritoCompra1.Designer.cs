@@ -47,6 +47,8 @@
             button1 = new Button();
             btnQuitarPago = new Button();
             btnAgregarPago = new Button();
+            label6 = new Label();
+            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)dgvPagos).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvResumen).BeginInit();
             SuspendLayout();
@@ -100,7 +102,7 @@
             label1.AutoSize = true;
             label1.BackColor = SystemColors.ActiveCaption;
             label1.Font = new Font("Gill Sans Ultra Bold", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(664, 113);
+            label1.Location = new Point(216, 79);
             label1.Name = "label1";
             label1.Size = new Size(119, 20);
             label1.TabIndex = 70;
@@ -110,7 +112,7 @@
             // 
             lblTotal.AutoSize = true;
             lblTotal.BackColor = Color.Wheat;
-            lblTotal.Location = new Point(953, 538);
+            lblTotal.Location = new Point(635, 506);
             lblTotal.Margin = new Padding(4, 0, 4, 0);
             lblTotal.Name = "lblTotal";
             lblTotal.Size = new Size(39, 15);
@@ -122,24 +124,24 @@
             label3.AutoSize = true;
             label3.BackColor = Color.Wheat;
             label3.ForeColor = SystemColors.ActiveCaptionText;
-            label3.Location = new Point(906, 538);
+            label3.Location = new Point(522, 506);
             label3.Margin = new Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new Size(39, 15);
+            label3.Size = new Size(96, 15);
             label3.TabIndex = 103;
-            label3.Text = "TOTAL";
+            label3.Text = "TOTAL A PAGAR :";
             // 
             // cmbMedioPago
             // 
             cmbMedioPago.FormattingEnabled = true;
-            cmbMedioPago.Location = new Point(288, 132);
+            cmbMedioPago.Location = new Point(921, 137);
             cmbMedioPago.Name = "cmbMedioPago";
             cmbMedioPago.Size = new Size(121, 23);
             cmbMedioPago.TabIndex = 104;
             // 
             // txtMontoPago
             // 
-            txtMontoPago.Location = new Point(316, 215);
+            txtMontoPago.Location = new Point(932, 169);
             txtMontoPago.Name = "txtMontoPago";
             txtMontoPago.Size = new Size(100, 23);
             txtMontoPago.TabIndex = 105;
@@ -147,11 +149,12 @@
             // dgvPagos
             // 
             dgvPagos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvPagos.Location = new Point(1096, 88);
+            dgvPagos.Location = new Point(811, 221);
             dgvPagos.Name = "dgvPagos";
             dgvPagos.RowTemplate.Height = 25;
-            dgvPagos.Size = new Size(240, 150);
+            dgvPagos.Size = new Size(328, 217);
             dgvPagos.TabIndex = 106;
+            dgvPagos.CellContentClick += dgvPagos_CellContentClick;
             // 
             // dgvResumen
             // 
@@ -160,15 +163,15 @@
             dgvResumen.CellBorderStyle = DataGridViewCellBorderStyle.Sunken;
             dgvResumen.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvResumen.Cursor = Cursors.Hand;
-            dgvResumen.Location = new Point(498, 145);
+            dgvResumen.Location = new Point(46, 113);
             dgvResumen.Name = "dgvResumen";
-            dgvResumen.Size = new Size(387, 408);
+            dgvResumen.Size = new Size(454, 408);
             dgvResumen.TabIndex = 69;
             // 
             // lblDeuda
             // 
             lblDeuda.AutoSize = true;
-            lblDeuda.Location = new Point(325, 375);
+            lblDeuda.Location = new Point(1318, 354);
             lblDeuda.Name = "lblDeuda";
             lblDeuda.Size = new Size(41, 15);
             lblDeuda.TabIndex = 107;
@@ -177,7 +180,7 @@
             // lblTotalPagado
             // 
             lblTotalPagado.AutoSize = true;
-            lblTotalPagado.Location = new Point(316, 326);
+            lblTotalPagado.Location = new Point(1304, 295);
             lblTotalPagado.Name = "lblTotalPagado";
             lblTotalPagado.Size = new Size(75, 15);
             lblTotalPagado.TabIndex = 108;
@@ -186,7 +189,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(191, 132);
+            label4.Location = new Point(811, 140);
             label4.Name = "label4";
             label4.Size = new Size(71, 15);
             label4.TabIndex = 109;
@@ -195,7 +198,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(208, 218);
+            label5.Location = new Point(824, 172);
             label5.Name = "label5";
             label5.Size = new Size(73, 15);
             label5.TabIndex = 110;
@@ -203,7 +206,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(313, 91);
+            button1.Location = new Point(1349, 78);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 111;
@@ -212,7 +215,7 @@
             // 
             // btnQuitarPago
             // 
-            btnQuitarPago.Location = new Point(337, 49);
+            btnQuitarPago.Location = new Point(822, 465);
             btnQuitarPago.Name = "btnQuitarPago";
             btnQuitarPago.Size = new Size(75, 23);
             btnQuitarPago.TabIndex = 112;
@@ -222,13 +225,37 @@
             // 
             // btnAgregarPago
             // 
-            btnAgregarPago.Location = new Point(358, 19);
+            btnAgregarPago.Location = new Point(1015, 465);
             btnAgregarPago.Name = "btnAgregarPago";
             btnAgregarPago.Size = new Size(113, 23);
             btnAgregarPago.TabIndex = 113;
             btnAgregarPago.Text = "AgregarPago";
             btnAgregarPago.UseVisualStyleBackColor = true;
             btnAgregarPago.Click += btnAgregarPago_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.BackColor = Color.Wheat;
+            label6.ForeColor = SystemColors.ActiveCaptionText;
+            label6.Location = new Point(1186, 295);
+            label6.Margin = new Padding(4, 0, 4, 0);
+            label6.Name = "label6";
+            label6.Size = new Size(95, 15);
+            label6.TabIndex = 114;
+            label6.Text = "TOTAL PAGADO :";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.BackColor = Color.Wheat;
+            label7.ForeColor = SystemColors.ActiveCaptionText;
+            label7.Location = new Point(1186, 354);
+            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(53, 15);
+            label7.TabIndex = 115;
+            label7.Text = "FALTAN :";
             // 
             // FormCarritoCompra1
             // 
@@ -237,6 +264,8 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1474, 660);
+            Controls.Add(label7);
+            Controls.Add(label6);
             Controls.Add(btnAgregarPago);
             Controls.Add(btnQuitarPago);
             Controls.Add(button1);
@@ -283,5 +312,7 @@
         private Button button1;
         private Button btnQuitarPago;
         private Button btnAgregarPago;
+        private Label label6;
+        private Label label7;
     }
 }
