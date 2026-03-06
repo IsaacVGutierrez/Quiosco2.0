@@ -264,42 +264,52 @@ namespace Quiosco.BD
             }
             return totalCompras;
         }
-
-
         public DataSet Union()
         {
+            // Usamos FORMAT(vmp.Monto, 'C', 'es-AR') para que SQL devuelva el dinero formateado
             string orden = @"
-                SELECT dv.IdDetalleVenta, dv.IdVenta, dv.IdProducto, dv.CantidadProducto,
-                      p.NombreProducto, p.MarcaProducto, p.PrecioVenta,
-                      v.SubtotalVenta, v.FechaVenta,
-                      c.NombreCliente,
-                      mp.NombreMetodoDePago
-                      FROM DetalleVenta dv
-                     LEFT JOIN Producto p ON dv.IdProducto = p.IdProducto
-                     LEFT JOIN Venta v ON dv.IdVenta = v.IdVenta
-                     LEFT JOIN Cliente c ON v.IdCliente = c.IdCliente
-                     LEFT JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
-                     ORDER BY dv.IdDetalleVenta DESC
-                     ";
-            SqlCommand cmd = new SqlCommand(orden, conexion);
+        SELECT 
+            dv.IdDetalleVenta, 
+            dv.IdVenta, 
+            dv.IdProducto, 
+            dv.CantidadProducto,
+            p.NombreProducto, 
+            p.MarcaProducto, 
+            p.PrecioVenta,
+            (dv.CantidadProducto * p.PrecioVenta) AS SubtotalVenta, 
+            v.FechaVenta,
+            c.NombreCliente,
+            ISNULL((
+                SELECT STRING_AGG(mp_sub.NombreMetodoDePago + ': ' + FORMAT(vmp.Monto, 'C', 'es-AR'), ' | ')
+                FROM VentaMetodoPago vmp
+                JOIN MetodoDePago mp_sub ON vmp.IdMetodoDePago = mp_sub.IdMetodoDePago
+                WHERE vmp.IdVenta = v.IdVenta
+            ), FORMAT(v.SubtotalVenta, 'C', 'es-AR')) AS NombreMetodoDePago 
+        FROM DetalleVenta dv
+        LEFT JOIN Producto p ON dv.IdProducto = p.IdProducto
+        LEFT JOIN Venta v ON dv.IdVenta = v.IdVenta
+        LEFT JOIN Cliente c ON v.IdCliente = c.IdCliente
+        LEFT JOIN MetodoDePago mp ON v.IdMetodoDePago = mp.IdMetodoDePago
+        ORDER BY v.IdVenta DESC, dv.IdDetalleVenta DESC";
+      
+
+        SqlCommand cmd = new SqlCommand(orden, conexion);
             DataSet ds = new DataSet();
-            SqlDataAdapter da = new SqlDataAdapter();
+            SqlDataAdapter da = new SqlDataAdapter(cmd);
             try
             {
                 Abrirconexion();
-                da.SelectCommand = cmd;
                 da.Fill(ds);
+                return ds;
             }
             catch (Exception e)
             {
-                throw new Exception("Error al obtener union DetalleVenta", e);
+                throw new Exception("Error en SQL Union: " + e.Message);
             }
             finally
             {
                 Cerrarconexion();
-                cmd.Dispose();
             }
-            return ds;
         }
     }
 }

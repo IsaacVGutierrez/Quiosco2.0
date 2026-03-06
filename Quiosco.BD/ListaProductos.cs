@@ -463,7 +463,7 @@ CONVERT(VARCHAR(10), cp.FechaCompraProductos, 120) LIKE @buscar OR
               p.MarcaProducto,
                p.PrecioProducto,
               c.NombreCategoria,
-              p.CantidadProducto,
+             dc.CantidadProducto,
               pr.NombreProveedor,
               p.PrecioCompra,
               p.PrecioVenta,

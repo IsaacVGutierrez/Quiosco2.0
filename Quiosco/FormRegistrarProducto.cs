@@ -28,7 +28,7 @@ namespace Quiosco
             dgvProducto.Columns[2].HeaderText = "Marca Producto";
             dgvProducto.Columns[3].HeaderText = "Precio Total de Compra";
             dgvProducto.Columns[4].HeaderText = "Categoria";
-            dgvProducto.Columns[5].HeaderText = "Stock Producto";
+            dgvProducto.Columns[5].HeaderText = "Cantidad Comprada";
             dgvProducto.Columns[6].HeaderText = "Distribuidor";
             dgvProducto.Columns[7].HeaderText = "Precio Compra";
             dgvProducto.Columns[8].HeaderText = "Precio Venta";

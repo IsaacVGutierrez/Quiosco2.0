@@ -42,6 +42,7 @@ namespace Quiosco
             LlenarDGVDeudor();
             CargarValoresPieChartDesdeBD();
             MostrarPieSkiaEnPictureBox();
+            CargarDetalleVenta();
 
             lblSaludo.Text = "¡ Bienvenido " + Sesion.UsuarioActual.NombreUsuario + " !";
 
@@ -715,79 +716,48 @@ namespace Quiosco
 
         private void CargarDetalleVenta()
         {
+    
             try
             {
-                dgvDetalleVenta.DataSource = objNegDetalle.Union().Tables[0];
+                DataTable dt = objNegDetalle.Union().Tables[0];
+                dgvDetalleVenta.DataSource = dt;
 
-                // Ocultar columnas que no querés mostrar
-                dgvDetalleVenta.Columns["IdDetalleVenta"].Visible = false;
-                dgvDetalleVenta.Columns["IdVenta"].Visible = false;
-                dgvDetalleVenta.Columns["IdProducto"].Visible = false;
-
-
-                // Renombrar headers
-                dgvDetalleVenta.Columns["NombreCliente"].HeaderText = "Cliente";
-                dgvDetalleVenta.Columns["NombreProducto"].HeaderText = "Producto";
-                dgvDetalleVenta.Columns["CantidadProducto"].HeaderText = "Cantidad";
-                dgvDetalleVenta.Columns["PrecioVenta"].HeaderText = "Precio Unit.";
-                dgvDetalleVenta.Columns["SubtotalVenta"].HeaderText = "Subtotal";
-                dgvDetalleVenta.Columns["FechaVenta"].HeaderText = "Fecha";
-                dgvDetalleVenta.Columns["NombreMetodoDePago"].HeaderText = "Metodo De Pago";
-
-                /* // Reordenar columnas → NombreCliente primero
-                 dgvDetalleVenta.Columns["NombreCliente"].DisplayIndex = 0;
-                 dgvDetalleVenta.Columns["NombreProducto"].DisplayIndex = 1;
-                 dgvDetalleVenta.Columns["Cantidad"].DisplayIndex = 2;
-                 dgvDetalleVenta.Columns["PrecioUnitario"].DisplayIndex = 3;
-                 dgvDetalleVenta.Columns["Subtotal"].DisplayIndex = 4;
-                 dgvDetalleVenta.Columns["FechaVenta"].DisplayIndex = 5;
-
-                 // Ajustar tamaño automático
-                 dgvDetalleVenta.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
-                */
+                // Ocultar IDs
+                if (dgvDetalleVenta.Columns.Contains("IdDetalleVenta")) dgvDetalleVenta.Columns["IdDetalleVenta"].Visible = false;
+                if (dgvDetalleVenta.Columns.Contains("IdVenta")) dgvDetalleVenta.Columns["IdVenta"].Visible = false;
+                if (dgvDetalleVenta.Columns.Contains("IdProducto")) dgvDetalleVenta.Columns["IdProducto"].Visible = false;
 
 
-                // -------------------------------
-                // FORMATO ESPECIAL
-                // -------------------------------
+                CultureInfo culturaAR = new CultureInfo("es-AR");
+                // Formato de Moneda
+                var estiloDinero = new DataGridViewCellStyle
+                {
+                    Format = "C2",
+                    FormatProvider = culturaAR,
+                    Alignment = DataGridViewContentAlignment.MiddleRight,
+                    ForeColor = Color.DarkGreen,
+                    Font = new Font(dgvDetalleVenta.Font, FontStyle.Bold)
+                };
 
-                // Cantidad: número entero
-                dgvDetalleVenta.Columns["CantidadProducto"].DefaultCellStyle.Format = "N0";
+                dgvDetalleVenta.Columns["PrecioVenta"].DefaultCellStyle = estiloDinero;
+                dgvDetalleVenta.Columns["SubtotalVenta"].DefaultCellStyle = estiloDinero;
 
-                // Precio unitario con 2 decimales
-                dgvDetalleVenta.Columns["PrecioVenta"].DefaultCellStyle.Format = "C2";
-                dgvDetalleVenta.Columns["PrecioVenta"].DefaultCellStyle.FormatProvider =
-                    new CultureInfo("es-AR");
+                // --- AJUSTE PARA MÚLTIPLES PAGOS ---
+                if (dgvDetalleVenta.Columns.Contains("NombreMetodoDePago"))
+                {
+                    dgvDetalleVenta.Columns["NombreMetodoDePago"].HeaderText = "Detalle de Pago";
+                    dgvDetalleVenta.Columns["NombreMetodoDePago"].DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                    dgvDetalleVenta.Columns["NombreMetodoDePago"].DefaultCellStyle.ForeColor = Color.Blue;
+                    dgvDetalleVenta.Columns["NombreMetodoDePago"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
+                }
 
-                // Subtotal con símbolo de moneda (configuración local)
-                dgvDetalleVenta.Columns["SubtotalVenta"].DefaultCellStyle.Format = "C2";
-                dgvDetalleVenta.Columns["SubtotalVenta"].DefaultCellStyle.FormatProvider =
-                    new CultureInfo("es-AR");
-
-                // Fecha formato argentino
-                //dgvDetalleVenta.Columns["FechaVenta"].DefaultCellStyle.Format = "dd/MM/yyyy";
-
-                // ORDENAR columnas manualmente
-                dgvDetalleVenta.Columns["NombreCliente"].DisplayIndex = 2;
-                dgvDetalleVenta.Columns["NombreProducto"].DisplayIndex = 3;
-                dgvDetalleVenta.Columns["MarcaProducto"].DisplayIndex = 4;
-                dgvDetalleVenta.Columns["NombreMetodoDePago"].DisplayIndex = 8;
-                dgvDetalleVenta.Columns["PrecioVenta"].DisplayIndex = 6;
-                dgvDetalleVenta.Columns["SubtotalVenta"].DisplayIndex = 7;
-                dgvDetalleVenta.Columns["CantidadProducto"].DisplayIndex = 5;
-                dgvDetalleVenta.Columns["FechaVenta"].DisplayIndex = 9;
-
-
-
-
-
-
-                // Ajustar tamaño automático
-                AjustarTamañoDGV();
+                dgvDetalleVenta.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells; // Para que la fila crezca si hay muchos pagos
+                                                                                      
+             
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error al cargar detalle de ventas: " + ex.Message);
+                MessageBox.Show("Error: " + ex.Message);
             }
         }
 
@@ -841,7 +811,7 @@ namespace Quiosco
             dgvStockProductos.Columns["IdProducto"].Visible = false;
 
             // formatear precio
-            dgvStockProductos.Columns["PrecioVenta"].DefaultCellStyle.Format = "#,##0.00";
+            dgvStockProductos.Columns["PrecioVenta"].DefaultCellStyle.Format = "C2";
             dgvStockProductos.Columns["PrecioVenta"].DefaultCellStyle.FormatProvider = new CultureInfo("es-AR");
 
             // auto size
